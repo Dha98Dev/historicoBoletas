@@ -1,0 +1,4 @@
+
+    <input type="text" class="form form-control" placeholder="Ingrese la fecha de inicio"  name="" #datepicker  id="datepicker"  (change)="emitirFechaInicio(datepicker.value)" (blur)="marcarTocado(datepicker.value)" [ngClass]="!esCampoValido ? 'error' : ''">
+    <app-label-input-completo [smallIndicador]="smallIndicator" *ngIf="esCampoValido && campoTocado"></app-label-input-completo>
+     <app-label-input-incompleto [smallIndicator]="smallIndicator" *ngIf="!esCampoValido && campoTocado"></app-label-input-incompleto>

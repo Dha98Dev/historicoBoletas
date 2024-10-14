@@ -1,0 +1,31 @@
+
+.nav{
+    padding-top: 15px;
+}
+.nav-item{
+    margin-right: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.nav-item>a{
+    color: #444;
+    padding: 03px 5px
+}
+.nav-link{
+    color: #444;
+}
+.activo{
+    background: #d1d5db;
+    border-radius: 5px;
+}
+.cerrar-sesion{
+    font-size: 20px;
+    list-style-type: none;
+    background: #d1d5db;
+    width:60px;
+    text-align: center;
+}
+
+.cerrar-sesion:hover{
+    background: #fb7185 !important; 
+}

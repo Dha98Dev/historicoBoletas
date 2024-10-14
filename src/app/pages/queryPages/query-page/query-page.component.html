@@ -1,0 +1,96 @@
+<div class="filtrado d-flex flex-column">
+    <div>
+        <p class="lead text-center">Seleccione la opcion por la que desea consultar</p>
+    </div>
+<div class="opciones-consulta  px-3">
+<button class="btn btn-icon btn-lila btn-icon" data-bs-toggle="modal" data-bs-target="#filtroCurp"><i class="fas fa-window-restore"></i> Consulta por curp</button>
+
+<button class="btn btn-orange-dark btn-icon" data-bs-toggle="modal" data-bs-target="#filtroFinCiclo"><i class="fas fa-school"></i> Ciclo escolar y cct</button>
+
+<button class="btn btn-icon btn-red-dark btn-icon"  data-bs-toggle="modal" data-bs-target="#FolioBoleta"><i class="fas fa-graduation-cap"></i> folio de boleta</button>
+
+<button class="btn btn-icon btn-sky-dark btn-icon"  data-bs-toggle="modal" data-bs-target="#Solicitante"><i class="fas fa-user"></i> nombre del solicitante  </button>
+
+<button class="btn btn-icon btn-teal-dark btn-icon"  data-bs-toggle="modal" data-bs-target="#CEscolarNEducativoCct"><i class="fas fa-th"></i> nombre del solicitante  y cct</button>
+
+
+<button class="btn btn-icon btn-stone-dark btn-icon"  data-bs-toggle="modal" data-bs-target="#Localidad"><i class="fas fa-map-marker-alt"></i>Localidad</button>
+
+
+
+
+</div>
+</div>
+
+<app-modal-filtro-consulta  (OnEmitFiltro)="recivirValoresFiltro($event)"  [tipoFiltro]="'1'" [IdModal]="'filtroCurp'" [encabezado]="'Ingrese la curp del solicitante a buscar'"></app-modal-filtro-consulta>
+
+<app-modal-filtro-consulta (OnEmitFiltro)="recivirValoresFiltro($event)" [tipoFiltro]="'2'" [opcionesSelect]="ciclosEscolares" [IdModal]="'filtroFinCiclo'" [encabezado]="'Filtrar por fin de ciclo y clave de centro de trabajo'"></app-modal-filtro-consulta>
+
+<app-modal-filtro-consulta (OnEmitFiltro)="recivirValoresFiltro($event)" [tipoFiltro]="'3'"  [IdModal]="'FolioBoleta'" [encabezado]="'Buscar por Folio de Boleta'"></app-modal-filtro-consulta>
+
+<app-modal-filtro-consulta (OnEmitFiltro)="recivirValoresFiltro($event)" [tipoFiltro]="'4'"  [IdModal]="'CEscolarNEducativoCct'" [encabezado]="'Filtrar por nombre del solicitante y clave del centro de trabajo'"></app-modal-filtro-consulta>
+
+<app-modal-filtro-consulta (OnEmitFiltro)="recivirValoresFiltro($event)" [tipoFiltro]="'5'"  [IdModal]="'Solicitante'" [encabezado]="'Filtrar por nombre del solicitante '"></app-modal-filtro-consulta>
+
+<app-modal-filtro-consulta (OnEmitFiltro)="recivirValoresFiltro($event)" [tipoFiltro]="'6'"  [IdModal]="'Localidad'" [encabezado]="'Filtrar por nombre de Localidad'"></app-modal-filtro-consulta>
+
+
+
+    <app-banner-vacio
+     [texto]="'Aqui le mostraremos los Resultados en cuando realice una busqueda'"
+     [subtexto]="'Prueba alguna de las formas de filtrar'"
+     *ngIf="vacio"
+    ></app-banner-vacio>
+
+
+    <app-loader *ngIf="loader"></app-loader>
+
+<div class="d-flex justify-content-center" *ngIf="!vacio">
+    <div class="col-11">
+        <div class="logo">
+            <img src="./../../../../assets/imagenes/escudoNayarit.png" class="img-logo" alt="">
+            <div class="d-flex justify-content-center">
+                <h2 class="lead fw-semibold mb-5">Información del Egresado</h2>
+            </div>
+        </div>
+
+            <div class="table-responsive">
+                <table class="table" datatable [dtOptions]="dtOptions" id="resultadosBusqueda">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-uppercase text-center">#</th>
+                        <th scope="col" class="text-uppercase text-center">Nombre Completo</th>
+                        <th scope="col" class="text-uppercase text-center">CCT</th>
+                        <th scope="col" class="text-uppercase text-center">Nombre CT</th>
+                        <th scope="col" class="text-uppercase text-center">Nivel</th>
+                        <th scope="col" class="text-uppercase text-center">Ciclo</th>
+                        <th scope="col" class="text-uppercase text-center">Folio</th>
+                        <th scope="col" class="text-uppercase text-center">Grupo</th>
+                        <th scope="col" class="text-uppercase text-center">ver calificaciones</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      <tr *ngFor="let element of datosBoleta; let i = index">
+                        <th class="text-center"  scope="row">{{ i + 1 }}</th>
+                        <td class="text-center" >{{ element.nombre + ' ' + element.apellido_paterno + ' ' + element.apellido_materno }}</td>
+                        <td class="text-center" >{{ element.clave_centro_trabajo }}</td>
+                        <td class="text-center" >{{ element.nombre_cct }}</td>
+                        <td class="text-center" >{{ element.nivel }}</td>
+                        <td class="text-center" >{{ element.ciclo }}</td>
+                        <td class="text-center" >{{ element.folio }}</td>
+                        <td class="text-center" >{{ element.grupo }}</td>
+                        <td class="text-center" >
+                          <div class="d-flex justify-content-center">
+                            <button (click)="filtrarCalificaciones(element.id_boleta, element.nivel)" class="btn-lila btn-icon btn text-uppercase " data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fas fa-eye"></i>calificaciones</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+            </div>
+
+<app-modal-calificaciones [nivel]="nivelSelecionado" [calificacionesPrimaria]="calificacionesSeleccionadaPrimaria" [calificacionesSecundaria]="calificacionesSeleccionadaSecundaria" [capturador]="capturador"></app-modal-calificaciones>
+
+    </div>
+</div>

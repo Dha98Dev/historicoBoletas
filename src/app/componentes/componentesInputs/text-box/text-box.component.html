@@ -1,0 +1,5 @@
+<div>
+    <input [type]="type" [min]="valorMinimo" [max]="valorMaximo" class="form-control" placeholder="{{placeholder}}"  #input (change)="enviarValorIngresado(input.value)" [value]="valorCajaTexto " (input)="convertirMayusculas(input.value)" (blur)="marcarTocado(input.value)" [ngClass]="{'error': !campoValido && mostrarValidacion}" [value]="Valor" [disabled]="disabled">
+<app-label-input-completo   [smallIndicador]="smallIndicator" *ngIf="campoValido && campoTocado && mostrarValidacion"></app-label-input-completo>
+<app-label-input-incompleto  [smallIndicator]="smallIndicator" *ngIf="!campoValido && campoTocado && mostrarValidacion"></app-label-input-incompleto>
+</div>

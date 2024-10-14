@@ -1,0 +1,44 @@
+.opciones-consulta>.btn-stone-dark {
+    margin-right: 20px;
+}
+
+.img-logo {
+    width: 150px;
+}
+
+th {
+    font-size: 13px !important;
+}
+
+td {
+    font-size: 13px !important;
+}
+
+.opciones-consulta {
+    display: flex;
+    justify-content: end;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+@media(max-width:850px) {
+    .opciones-consulta>button {
+        flex-grow: 1;
+    }
+
+    .opciones-consulta>.btn-stone-dark {
+        margin-right: 0px;
+    }
+
+    .img-logo {
+        width: 30%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .logo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}

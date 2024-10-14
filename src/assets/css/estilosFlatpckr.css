@@ -1,0 +1,21 @@
+  /* estilos de los input de tipo date */
+  .flatpickr-months .flatpickr-month {
+    background: #1bbc9b;
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    color: white !important;
+}
+.flatpickr-current-month input.cur-year{
+    color: #eee;
+}
+.flatpickr-weekdays, .flatpickr-monthDropdown-month{
+    background: #1bbc9b !important;
+}
+span.flatpickr-weekday{
+    color: white;
+}
+
+.flatpickr-months .flatpickr-prev-month.flatpickr-prev-month, .flatpickr-months .flatpickr-next-month.flatpickr-next-month{
+  fill: white;
+
+}

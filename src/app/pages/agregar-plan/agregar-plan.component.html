@@ -1,0 +1,42 @@
+<div class=" rounded-bottom border">
+    <form [formGroup]="agregarPlan" class="form-plan p-4 form-add-plan flex-wrap">
+        
+        <div class="par d-flex flex-column gap-2 flex-grow-1 ">
+            <label for="">Ingrese el nombre del plan de estudios</label>
+           <div class="input-val">
+            <input class="form form-control" placeholder="Ingrese el nombre del plan de estudios" type="text" name="" formControlName="nombrePlan" id="">
+            <app-label-input-completo *ngIf="getFieldStatus('nombrePlan')==1 " [smallIndicador]="true" ></app-label-input-completo>
+            <app-label-input-incompleto *ngIf="getFieldStatus('nombrePlan') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+           </div>
+        </div>
+
+        <div class="par d-flex flex-column gap-2 flex-grow-1">
+            <label for="">Seleccione la Fecha Fin</label>
+            <div class="input-val">
+                <app-input-date (OnEmitFecha)="recibirFechas('periodoInicio',$event)"  [smallIndicator]="true" [minDate]="hoy"  [maxDate]="fechaLimite"></app-input-date>
+            </div>
+        </div>
+
+
+        <div class="par d-flex flex-column gap-2 flex-grow-1">
+            <label for="">Seleccione la Fecha Fin</label>
+            <div class="input-val">
+                <app-input-date  (OnEmitFecha)="recibirFechas('periodoFin', $event)" [smallIndicator]="true" [minDate]="hoy"  [maxDate]="fechaLimite"></app-input-date>
+            </div>
+        </div>
+
+    </form>
+<pre> {{agregarPlan.valid}} </pre>
+    <div class="send d-flex justify-content-center mb-4" >
+        <button (click)="guardarPlan()" class="btn btn-sky-dark btn-icon"><i class="fas fa-save"></i> Guardar Plan de Estudio</button>
+    </div>
+
+</div>
+
+<div class="row mt-5 text-center">
+    <p class="lead">Listado de Planes de estudios registrados</p>
+
+    <div class="col-12">
+        <app-card-plan-estudio [listadoPlanes]="listadoPlanesEstudio"></app-card-plan-estudio>
+    </div>
+</div>

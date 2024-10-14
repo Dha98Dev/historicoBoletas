@@ -1,0 +1,314 @@
+<app-loader *ngIf="loader"></app-loader>
+
+<div class="formulario" *ngIf="!boletaGuardada">
+  <div class="d-flex justify-content-center align-items-center " *ngIf="boletaGuardada">
+    <h2 class="lead">Boleta Guardada correctamente</h2>
+  </div>
+
+  <div class=" d-flex justify-content-center">
+    <div class="form-load-calificaciones col-11 d-flex gap-3 mt-3 flex-wrap">
+
+
+
+
+      <!-- esta es la informacion de la escuela como grado, grupo, turno e informacion del centro de trabajo -->
+
+
+
+      <form [formGroup]="datosGeneralesForm" class="accordion accordion-flush w-100 " id="accordionFlushExample">
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
+              type="button" data-bs-toggle="collapse" data-bs-target="#InformacionEscuela" aria-expanded="false"
+              aria-controls="InformacionEscuela">
+              Datos de la Escuela, Grado, Turno <i class="fas fa-arrow-circle-down fs-4"></i>
+            </button>
+          </h2>
+          <div id="InformacionEscuela" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body d-flex gap-3 flex-wrap">
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese la clave del centro de trabajo</label>
+                <div class="input-val w-100">
+                  <input placeholder="clave del centro de trabajo" (change)="filtrarNivel()" (change)="getInfoCct()" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('claveCct')?.value| uppercase" formControlName="claveCct" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'claveCct')==1 " [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'claveCct') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>seleccione el ciclo escolar</label>
+                <div class="input-val">
+                 <select (change)="filtrarPlanEstudioByCiclo()" name=""  formControlName="cicloEscolar" class="form form-select" id="">
+                  <option value="">Seleccione un ciclo escolar</option>
+                  <option *ngFor="let ciclo of ciclosEscolares" [value]="ciclo.valor"> {{ciclo.nombre}} </option>
+                 </select>
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'cicloEscolar')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'cicloEscolar') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>seleccione el nivel</label>
+                <div class="input-val">
+                  <select (change)="getMaterias()" name="" formControlName="nivelEducativo" id="" class="form form-select">
+                    <option value="" selected>Seleccione un nivel educativo</option>
+                    <option *ngFor="let nivel of nivelEducativoSeleccionado" [value]="nivel.valor"> {{nivel.nombre}} </option>
+                  </select>
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'nivelEducativo')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'nivelEducativo') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Seleccione el plan de estudio</label>
+                <div class="input-val">
+                <select  name="" formControlName="planEstudio" class="form form-control" id="">
+                  <option value="" selected>seleccione el plan de estudios</option>
+                  <option *ngFor="let plan of planesEstudio" [value]="plan.valor"> {{plan.nombre}} </option>
+                </select>
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'planEstudio')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'planEstudio') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese zona Escolar</label>
+                <div class="input-val">
+                  <input placeholder="Ingrese la zona escolar" type="number" name="" class="form form-control" [value]="datosGeneralesForm.get('zonaEscolar')?.value" formControlName="zonaEscolar" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'zonaEscolar')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'zonaEscolar') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el nombre del centro de trabajo</label>
+                <div class="input-val">
+                  <input placeholder="Nombre del centro de trabajo" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('nombreCct')?.value | uppercase" formControlName="nombreCct" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'nombreCct')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'nombreCct') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Seleccione el Turno</label>
+                <div class="input-val">
+                  <select name="" formControlName="turno" id="" class="form form-select"  formControlName="turno">
+                    <option value="" selected>seleccione el turno</option>
+                    <option *ngFor="let turno of Turnos" [value]="turno.valor"> {{turno.nombre}} </option>
+                  </select>
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'turno')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'turno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el Grupo</label>
+                <div class="input-val">
+                  <input placeholder="ingrese el grupo" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('grupo')?.value | uppercase" formControlName="grupo" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'grupo')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'grupo') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- Informacion de la persona  que egreso de la escuela de la cual se ingresaran las calificaciones -->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
+              type="button" data-bs-toggle="collapse" data-bs-target="#informacionEgresado" aria-expanded="false"
+              aria-controls="flush-collapseOne">
+              Información del Egresado <i class="fas fa-arrow-circle-down fs-4"></i>
+            </button>
+          </h2>
+          <div id="informacionEgresado" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body d-flex gap-3 flex-wrap">
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el/los nombres</label>
+                <div class="input-val">
+                  <input placeholder="ingrese nombre(s)" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('nombre')?.value | uppercase" formControlName="nombre" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'nombre')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'nombre') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+                
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese su Apellido Paterno</label>
+                <div class="input-val">
+                  <input placeholder="ingrese al apellido paterno" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('apellidoPaterno')?.value | uppercase" formControlName="apellidoPaterno" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'apellidoPaterno')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'apellidoPaterno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+              
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese su Apellido Materno </label>
+                <div class="input-val">
+                  <input placeholder="ingrese el apellido materno" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('apellidoMaterno')?.value | uppercase" formControlName="apellidoMaterno" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'apellidoMaterno')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'apellidoMaterno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+             
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese la Curp</label>
+                <div class="input-val">
+                  <input placeholder="ingrese la curp" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('curp')?.value | uppercase" formControlName="curp" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'curp')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'curp') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+                </div>
+                
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+
+
+
+
+    <!-- esta es la informacion de la persona -->
+
+
+
+
+  </div>
+
+
+
+
+  <!-- informacion de las materias y calificaciones -->
+  <div >
+
+    <h2 class="fw-lighter text-center fs-4 mt-5 mb-3">Agregue las calificaciones correspondientes </h2>
+
+    <!-- este es el encabezado para que agregue un nuevo director en caso de que sea necesario -->
+    <form  [formGroup]="datosGeneralesForm" class="d-flex justify-content-center mt-5">
+      <div class="info-escuela d-flex col-8 gap-4">
+        <div class="input-val w-100">
+          <input placeholder="ingrese el folio de la boleta" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('folioBoleta')?.value | uppercase" formControlName="folioBoleta" id="">
+          <app-label-input-completo *ngIf="getFieldStatus(1,'folioBoleta')==1" [smallIndicador]="true" ></app-label-input-completo>
+          <app-label-input-incompleto *ngIf="getFieldStatus(1,'folioBoleta') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+        </div>
+    
+        <div class="input-val w-100">
+          <select name="" class="form form-select" formControlName="directorCorrespondiente" id="">
+            <option value="">Seleccione al Director Correspondiente</option>
+            <option *ngFor="let director of Directores" [value]="director.valor">{{ director.nombre }}</option>
+          </select>
+          <app-label-input-completo *ngIf="getFieldStatus(1,'directorCorrespondiente')==1" [smallIndicador]="true" ></app-label-input-completo>
+          <app-label-input-incompleto *ngIf="getFieldStatus(1,'directorCorrespondiente') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+        </div>
+
+        <button class="btn btn-lila btn-icon flex-grow-1 justify-content-center w-100" *ngIf="datosGeneralesForm.valid" (click)="agregarDirector()"><i class="fas fa-plus-circle"></i> Agregar Director</button>
+      </div>
+    </form>
+
+
+    <!-- aqui termina el encabezado de agregar nuevo director -->
+
+
+
+    <!-- esto es para agregar las calificaciones de primaria si el nivel educativo fue primaria -->
+
+    <div class="form-calificaciones d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value =='1'">
+
+      <div class="add-calificaciones mt-2 col-11">
+        <div class="calificaciones d-flex ">
+          <div class="materia-header lead text-center w-100 border  fw-bold">Materia</div>
+          <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+        </div>
+        <div class="calificaciones-item d-flex" *ngFor="let materia of materias, trackBy: trackById">
+          <div class="materia border w-100 lead text-center f-6"> {{materia.nombre}} </div>
+          <app-text-box  class="w-100" [type]="'number'"
+            (onEmitValueInput)="recibirCalificacionesPrimaria(materia.valor, $event)" [valorMinimo]="0"
+            [valorMaximo]="10" [smallIndicator]="true"></app-text-box>
+        </div>
+        <div class="calificaciones-item d-flex">
+          <div class="materia border w-100 lead text-center">Promedio Final</div>
+          <app-text-box  class="w-100" [disabled]="true" [type]="'number'" [ngStyle]=""
+            [valorMinimo]="0" [valorMaximo]="10" [smallIndicator]="true" [Valor]="promedioPrimaria"></app-text-box>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- esto es para agregar las calificaciones para agregar en caso de que el nivel seleccionado sea secundaria -->
+    <div class="d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value == '2'">
+      <form [formGroup]="calificacioneSecundaria" class="d-flex flex-column col-11 " >
+        <div class="calificaciones-item d-flex">
+          <div class="materia border w-100 lead text-center fw-semibold">Año</div>
+          <div class="materia border w-100 lead text-center fw-semibold">Calificación</div>
+        </div>
+
+        <div class="calificaciones-item d-flex">
+          <div class="materia border w-100 lead text-center">Promedio de 1er Año</div>
+          <div class="input-val w-100">
+            <input (change)="calcularPromedioSecundaria()" placeholder="Calificacion de Primero" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('curp')?.value | uppercase" formControlName="Primero" id="">
+            <app-label-input-completo *ngIf="getFieldStatus(2,'Primero')==1" [smallIndicador]="true" ></app-label-input-completo>
+            <app-label-input-incompleto *ngIf="getFieldStatus(2,'Primero') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+          </div>
+        </div>
+        <div class="calificaciones-item d-flex">
+          <div class="materia border w-100 lead text-center">Promedio de 2do Año</div>
+          <div class="input-val w-100">
+            <input (change)="calcularPromedioSecundaria()" placeholder="Calificacion de Segundo" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('curp')?.value | uppercase" formControlName="Segundo" id="">
+            <app-label-input-completo *ngIf="getFieldStatus(2,'Segundo')==1" [smallIndicador]="true" ></app-label-input-completo>
+            <app-label-input-incompleto *ngIf="getFieldStatus(2,'Segundo') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+          </div>
+        </div>
+        <div class="calificaciones-item d-flex">
+          <div class="materia border w-100 lead text-center">Promedio de 3er Año</div>
+          <div class="input-val w-100">
+            <input (change)="calcularPromedioSecundaria()" placeholder="Calificacion de Tercero" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('curp')?.value | uppercase" formControlName="Tercero" id="">
+            <app-label-input-completo *ngIf="getFieldStatus(2,'Tercero')==1" [smallIndicador]="true" ></app-label-input-completo>
+            <app-label-input-incompleto *ngIf="getFieldStatus(2,'Tercero') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+          </div>
+        </div>
+        <div class="calificaciones-item d-flex">
+          <div class="materia border w-100 lead text-center">Promedio Final</div>
+          <app-text-box  class="w-100" [disabled]="true" [type]="'number'" [ngStyle]=""
+            [valorMinimo]="0" [valorMaximo]="10" [smallIndicator]="true" [Valor]="PromedioSecundaria"></app-text-box>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <div class="contenedor d-flex justify-content-center">
+    <div class="col-11 d-flex justify-content-center mb-5">
+      <!--  -->
+      <button class="btn-sky btn w-50 mt-5 btn-icon d-flex justify-content-center fs-6"  (click)="enviarInfo()" [disabled]="!datosGeneralesForm.valid" ><i
+          class="fas fa-save"></i> Guardar</button>
+    </div>
+  </div>
+
+</div>

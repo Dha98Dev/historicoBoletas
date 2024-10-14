@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-around gap-2 flex-wrap">
+<!-- 
+    <div class="checkbox-wrapper-44" *ngFor="let opcion of opciones">
+      <div class="checkbox-wrapper-44" >
+        <label class="container">
+          <input  type="checkbox" [value]="opcion.valor" (change)="emitirValor(opcion.valor)">
+          <div class="checkmark"></div>
+          {{opcion.nombre}} 
+        </label>
+        </div>
+      </div>
+
+  -->
+  <div *ngFor="let opcion of opciones" >
+    <label class="container d-flex align-items-center fs-6"  >
+      <input  type="checkbox" (change)="emitirValor(opcion.valor)">
+      <div class="checkmark"></div>
+      {{opcion.nombre}} 
+    </label>
+  </div>
+</div>
+
+
+

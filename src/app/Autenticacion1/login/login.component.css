@@ -1,0 +1,162 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+  }
+  .fondo{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+}
+.banner1{
+width: 100%;
+height: 50%;
+background: #10b981;
+z-index: -100;
+}
+.banner2{
+    width: 100%;
+    height: 50%;
+    background: white;
+z-index: -100;    
+}
+  .contenedor-login{
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* background: #10b981; */
+      /* background: linear-gradient(180deg, rgba(201,179,158,1) 0%, rgba(229,218,208,1) 41%, rgba(238,230,224,1) 41%, rgba(238,232,226,1) 41%, rgba(231,221,212,1) 41%, rgba(241,241,241,1) 41%); */
+    
+  }
+  
+  .form{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 100;
+    box-shadow: 1px 1px 4px #aaa;
+    border-radius: 20px;
+  }
+  .form>form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    
+  }
+  
+  .contenedor-input{
+    width: 90%;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+  
+  }
+  input{
+    border: 1px solid #dfdfdf;
+    padding: 10px 15px;
+    width: 95%;
+    border-radius: 5px;
+    /* border-bottom:1px solid var(--fondo-cafe); */
+  }
+  input::placeholder{
+    color: #aaa;
+    text-transform: capitalize
+  }
+  input:focus{
+    outline: none;
+  }
+  .login-button{
+    width: 60%;
+    padding: 10px 15px;
+    margin-bottom: 40px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    background: #a1a1aa;
+    color: white;
+  }
+  .login-button:hover{
+background: #374151;
+  }
+  p{
+    font-size: 27px;
+    margin-top: 60px;
+    margin-bottom: 10px;
+  }
+  .icono{
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    align-self: center;
+    position: relative;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icono>svg{
+    width: 90px;
+    height: 90px;
+    fill: var(--fondo-cafe);;
+  }
+  
+  .icono>.flecha{
+    position: absolute;
+    width: 30px ;
+    height: 30px;
+    border-right:15px solid white;
+    border-bottom: 15px solid white;
+    rotate:45deg;
+    bottom: -10px;
+    left: 38%; 
+  }
+  .enlaces{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  a{
+    text-decoration: none;
+  
+  }
+  span{
+    align-self: flex-start;
+    padding-left: 25px;
+  }
+  
+  /* estilos del div de los botones de recuperar contraseña y nueva cuenta */
+  
+  .opciones{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding:10px;
+  }
+  .btn-outline-dark{
+    padding: 5px 10px;
+  }
+  label{
+    padding: 5px 10px;
+    background: #f87171;
+  }
+  .outline-success{
+    background: #2dd4bf;
+  }
+  /*fin de los estilos del div de los botones de recuperar contraseña y nueva cuenta */
+  
+  
+  @media(max-width:800px){
+    .form{
+      width: 90%;
+    }
+  }

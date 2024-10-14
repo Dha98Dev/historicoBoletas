@@ -1,0 +1,14 @@
+.contenedor-planes{
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+.card-plan-estudio{
+flex-grow: 1;
+border-left: 5px solid #64748b !important;
+background:#f1f5f9;
+}
+.lead{
+    margin-bottom: 0px !important;
+}

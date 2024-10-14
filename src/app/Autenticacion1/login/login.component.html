@@ -1,0 +1,38 @@
+
+
+<div class="fondo">
+  <div class="banner1"></div>
+  <div class="banner2"></div>
+</div>
+
+<div class="contenedor-login ">
+    <div class="form ">
+      <div class="icono">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill"
+          viewBox="0 0 16 16">
+          <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+        </svg>
+        <div class="flecha"></div>
+      </div>
+      <form action="" [formGroup]="login" (ngSubmit)="iniciarSesion()" autocomplete="off">
+  
+        <p class="text-capitalize lead fw-semibold">Iniciar Sesión</p>
+        <div class="contenedor-input">
+          <input type="text" name="" id="usuario" placeholder="nombre de usuario" formControlName="usuario">
+          <label class="outline-danger  btn-icon text-white rounded px-2" *ngIf="isValidField('usuario')" > <i class="fas fa-exclamation-triangle"></i> {{getFieldError('usuario')!}} </label>
+          <label class="outline-success  text-white rounded px-2 btn-icon" *ngIf="login.get('usuario')?.valid"> <i class="fas fa-check-circle"></i> {{getFieldError('usuario')!}}</label>
+        </div>
+  
+        <div class="contenedor-input">
+          <input type="password" name="" id="password" placeholder="contraseña" formControlName="password">
+          <label class="outline-danger  btn-icon text-white rounded px-2" *ngIf="isValidField('password')" ><i class="fas fa-exclamation-triangle"></i> {{getFieldError('password')!}} </label>
+          <label class="outline-success  text-white rounded px-2 btn-icon" *ngIf="login.get('password')?.valid"> <i class="fas fa-check-circle"></i> {{getFieldError('password')!}}</label>
+        </div>
+  
+        <button class="login-button" type="submit" [disabled]="!login.valid">Ingresar</button>
+       
+     
+      </form>
+   
+    </div>
+  </div>

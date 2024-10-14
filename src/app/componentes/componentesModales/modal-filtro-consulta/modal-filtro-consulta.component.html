@@ -1,0 +1,60 @@
+<div class="modal" tabindex="-1" [id]="IdModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title lead w-100 text-center">{{encabezado}} </p>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex ">
+          <!--  para consulta por curp -->
+          <app-input-text (onEmitValueInput)="recibirCurp($event)" [validadorCurp]="true" [mostrarValidacion]="true"
+            *ngIf="tipoFiltro== '1'" class="w-100" [placeholder]="'Ingrese la curp que desea Buscar'"></app-input-text>
+
+          <!-- para consulta de ciclo escolar y cct -->
+          <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro== '2'">
+            <app-input-text [validadorCct]="true" (onEmitValueInput)="recibirFiltroCicloYCct('cct', $event)"
+              [mostrarValidacion]="true" class="w-100"
+              [placeholder]="'Ingrese la clave de centro de trabajo que desea Buscar'"></app-input-text>
+            <app-select-form (OnEmitValorSelect)="recibirFiltroCicloYCct('idCiclo', $event)" [smallIndicator]="true"
+              class="w-100" [opciones]="opcionesSelect"></app-select-form>
+          </div>
+
+          <!-- para consulata  por folio de boleta -->
+          <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro== '3'">
+            <app-input-text (onEmitValueInput)="recibirFolio($event)" [mostrarValidacion]="false" class="w-100"
+              [placeholder]="'Ingrese el folio de la boleta a buscar'"></app-input-text>
+          </div>
+
+          <!-- para consulta por ciclo escolar nivel educativo y centro de trabajo -->
+
+          <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro== '4'">
+            <app-input-text (onEmitValueInput)="recibirfiltroNombreCct('nombre', $event)" [mostrarValidacion]="false"
+              [placeholder]="'Ingrese el nombre que desea buscar'"></app-input-text>
+            <app-input-text [validadorCct]="true" (onEmitValueInput)="recibirfiltroNombreCct('cct', $event)"
+              [mostrarValidacion]="true" class="w-100"
+              [placeholder]="'Ingrese la clave del centro de trabajo a buscar'"></app-input-text>
+          </div>
+
+          <!-- este es para consulta por nombre -->
+           <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro=='5'">
+          <app-input-text (onEmitValueInput)="recibirNombreSolicitante('nombre', $event)" [mostrarValidacion]="false"
+            [placeholder]="'Ingrese el nombre que desea buscar'"></app-input-text>
+          </div>
+
+          <!-- este es para consulta por nombre de la localidad -->
+          <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro=='6'">
+          <app-input-text (onEmitValueInput)="recibirLocalidad('localidad', $event)" [mostrarValidacion]="false"
+            [placeholder]="'Ingrese el nombre de la localidad que desea buscar'"></app-input-text>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-red" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-sky" data-bs-dismiss="modal" [disabled]="disabled"
+          (click)="realizarBusqueda()">Buscar</button>
+      </div>
+    </div>
+  </div>
+</div>

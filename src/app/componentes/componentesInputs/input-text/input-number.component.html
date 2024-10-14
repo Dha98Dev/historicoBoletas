@@ -1,0 +1,22 @@
+<div>
+    <input class="form-control" 
+           placeholder="{{placeholder}}"  
+           #input 
+           (input)="enviarValorIngresado(input.value)" 
+           [value]="valorCajaTexto"  
+           (blur)="marcarTocado(input.value)" 
+           [ngClass]="!campoValido && campoTocado ? 'error' : ''">
+           
+    <app-label-input-completo
+     [smallIndicador]="smallIndicator" 
+    *ngIf="campoValido && campoTocado"
+    [texto]="'Campo Completado Correctamente'"
+    ></app-label-input-completo>
+                              
+    <app-label-input-incompleto 
+    [smallIndicator]="smallIndicator" 
+    *ngIf="!campoValido && campoTocado"
+    [texto]="'El Campo no Tiene  Formato Valido'"
+    ></app-label-input-incompleto>
+  </div>
+  

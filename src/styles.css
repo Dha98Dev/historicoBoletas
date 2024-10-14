@@ -1,0 +1,12 @@
+@import url('assets/css/estilosBotones.css');
+@import url('assets/css/estilosFlatpckr.css');
+
+h2#swal2-title {
+    font-size: 18px !important;
+    text-transform: uppercase;
+}
+.row{
+    margin-right: 0px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

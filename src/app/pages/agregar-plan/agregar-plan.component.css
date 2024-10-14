@@ -1,0 +1,9 @@
+.form-add-plan{
+    display: flex;
+    flex-grow:1;
+    gap:20px
+}
+
+.input-val{
+ position: relative;   
+}

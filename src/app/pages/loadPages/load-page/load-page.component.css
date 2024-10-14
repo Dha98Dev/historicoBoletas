@@ -1,0 +1,23 @@
+.accordion-flush{
+    background:red;
+}
+.accordion-button::after{
+background: none;
+width: 0px;
+content: none;
+}
+.accordion-item{
+    background: #f5f5f4;
+}
+.habilitado{
+    cursor: not-allowed;
+}
+.deshabilitado{
+    cursor: not-allowed;
+}
+.materia{
+    font-size: 15px;
+}
+.input-val{
+    position: relative;
+}
