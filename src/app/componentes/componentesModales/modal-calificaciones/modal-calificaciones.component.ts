@@ -26,6 +26,9 @@ public calificacionesSecundaria:calificacionesSecundaria = {} as calificacionesS
   @Input()
   public Verificador:string = ''
 
+  @Input()
+  public Estado :string = ''
+
   ngOnChanges(changes: SimpleChanges){
     if(changes['calificacionesPrimaria']){
       let suma =0;

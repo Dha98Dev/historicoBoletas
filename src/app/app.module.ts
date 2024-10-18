@@ -33,6 +33,8 @@ import { TablaCatalogoCalificacionesComponent } from './componentes/componentesT
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AngularMaterialModule } from './componentes/angularMaterial/angular-material/angular-material.module';
 import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-captura.component';
+import { CardDescripcionIconComponent } from './componentes/componentesCards/card-descripcion-icon/card-descripcion-icon.component';
+import { ModalConfirmacionComponent } from './componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-c
     RegisterComponent,
     RevisarPageComponent,
     TablaCatalogoCalificacionesComponent,
-    VerificarCapturaComponent
+    VerificarCapturaComponent,
+    CardDescripcionIconComponent,
+    ModalConfirmacionComponent
   ],
   imports: [
     BrowserModule,

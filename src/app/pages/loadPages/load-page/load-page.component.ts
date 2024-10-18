@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, MinValidator, Validators } from '@angular/forms';
 import { min } from 'rxjs';
 import { userService } from '../../../Autenticacion1/servicios/user-service.service';
+import { Iconos } from '../../../enums/iconos.enum';
 
 @Component({
   selector: 'app-load-page',
@@ -25,6 +26,8 @@ export class LoadPageComponent {
   public PromedioSecundaria:string = ''
   public promedioPrimaria:string = ''
   public boletaGuardada:boolean= false
+  public iconos=Iconos
+  public repetirInformacion:boolean = false
   // variables de datos string o numeros
   
   // variables que son arreglos
@@ -43,6 +46,7 @@ export class LoadPageComponent {
 
   datosGeneralesForm: FormGroup= {}  as FormGroup;
   calificacioneSecundaria:FormGroup= {} as FormGroup
+  egresado:FormGroup= {} as FormGroup
   ngOnInit():void{
 
 
@@ -83,11 +87,7 @@ export class LoadPageComponent {
       nombreCct: ['', Validators.required],
       turno: ['', Validators.required],
       grupo: ['', Validators.required],
-      nombre: ['', Validators.required],
-      apellidoPaterno: ['', Validators.required],
-      apellidoMaterno: ['', Validators.required],
-      curp: ['', [ Validators.pattern(/^([A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]{2})$/)]],
-      folioBoleta: ['', Validators.required],
+      localidad: ['', [Validators.required]],
       directorCorrespondiente: ['', ]
     });
 
@@ -97,6 +97,16 @@ export class LoadPageComponent {
       Tercero:['',[Validators.required,Validators.min(1), Validators.max(10)]],
       calificacionFinal:['',[Validators.required]]
     })
+
+    this.egresado= this.fb.group({
+      nombre: ['', Validators.required],
+      apellidoPaterno: ['', Validators.required],
+      apellidoMaterno: ['', Validators.required],
+      curp: ['', [ Validators.pattern(/^([A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]{2})$/)]],
+      folioBoleta: ['', Validators.required],
+    });  
+
+
   }
 
 
@@ -299,7 +309,7 @@ calcularPromedioSecundaria(){
 
 enviarInfo(){
 
-  if ((this.datosGeneralesForm.valid && this.calificacioneSecundaria.valid) || (this.datosGeneralesForm.valid && this.calificacionesPrimaria.length == this.materias.length)) {
+  if ((this.datosGeneralesForm.valid && this.calificacioneSecundaria.valid && this.egresado.valid) || (this.datosGeneralesForm.valid && this.calificacionesPrimaria.length == this.materias.length && this.egresado.valid)) {
     
   }else{
     this.NotificacionesService.mostrarAlertaSimple("Por favor, complete el formulario correctamente")
@@ -309,23 +319,35 @@ enviarInfo(){
   this.datosFormulario.cicloEscolar=this.NotificacionesService.separarValor(this.datosGeneralesForm.get('cicloEscolar')?.value,' ')
   let data={}
   if (this.datosGeneralesForm.get('nivelEducativo')?.value == 1) {
-    data={...this.datosGeneralesForm.value, "token":this.userService.obtenerToken(),"calPrimaria":this.calificacionesPrimaria, "calSecundaria":""}
+    data={...this.datosGeneralesForm.value,...this.egresado.value, "token":this.userService.obtenerToken(),"calPrimaria":this.calificacionesPrimaria, "calSecundaria":""}
     
   }
   else if(this.datosGeneralesForm.get('nivelEducativo')?.value == 2){
     this.calificacioneSecundaria.patchValue({calificacionFinal:this.PromedioSecundaria} )
-     data={...this.datosGeneralesForm.value,  "token":this.userService.obtenerToken(),"calPrimaria":"", "calSecundaria":this.calificacioneSecundaria.value}
+     data={...this.datosGeneralesForm.value,...this.egresado.value,  "token":this.userService.obtenerToken(),"calPrimaria":"", "calSecundaria":this.calificacioneSecundaria.value}
   }
   console.log(data)
   
   this.historialServiceAdd.cargarBoleta(data).subscribe(response =>{
     if(!response.error){
       this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
-     this.datosGeneralesForm.reset()
-     this.calificacioneSecundaria.reset()
-     this.materias=[]
-     this.calificacionesPrimaria=[]
-     this.Directores=[]
+      if (!this.repetirInformacion) {
+        this.datosGeneralesForm.reset()
+        this.calificacioneSecundaria.reset()
+        this.materias=[]
+        this.calificacionesPrimaria=[]
+        this.Directores=[] 
+        this.egresado.reset()
+        this.promedioPrimaria='0'
+        this.PromedioSecundaria='0'  
+      }
+      else{
+        this.calificacioneSecundaria.reset()
+        this.calificacionesPrimaria=[]
+        this.egresado.reset()
+        this.promedioPrimaria='0'
+        this.PromedioSecundaria='0'
+      }
     }
     else{
       this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
@@ -409,7 +431,10 @@ let  control;
   if(numero==1){
    control = this.datosGeneralesForm.get(field);
 
-}  
+} 
+else if(numero==3){
+control=this.egresado.get(field)
+} 
 else{
    control = this.calificacioneSecundaria.get(field);
 }
@@ -444,6 +469,14 @@ getFieldError(field: string): string | null {
     }
   }
   return 'campo completado correctamente'
+}
+mantenerInfo(){
+  if (this.repetirInformacion) {
+    this.repetirInformacion = false;
+  }
+  else{
+    this.repetirInformacion = true
+  }
 }
 
 

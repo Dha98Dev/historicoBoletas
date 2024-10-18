@@ -17,6 +17,26 @@ mostrarAlertaConIcono(title:string, body:string, icon:SweetAlertIcon ):void{
   });
 }
 
+mostrarConfirmacion(mensaje: string, textConfirm: string, textDeny: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    Swal.fire({
+      title: mensaje,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: textConfirm,
+      denyButtonText: textDeny
+    }).then((result) => {
+      if (result.isConfirmed) {
+        resolve(true);
+      } else if (result.isDenied) {
+        resolve(false);
+      } else {
+        resolve(false); // Si se cancela, o no se confirma ni se niega
+      }
+    });
+  });
+}
+
 separarValor(mensaje:string, sepador:string):string{
   let m=mensaje.split(sepador);
   return m[0];

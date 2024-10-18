@@ -10,6 +10,7 @@ import { AuthLoggedInGuard } from './Autenticacion1/guards/auth-guard.guard';
 import { AuthLoggedOutGuard } from './Autenticacion1/guards/auth-logout.guard';
 import { RegisterComponent } from './Autenticacion1/register/register.component';
 import { RevisarPageComponent } from './pages/loadPages/revisar-page/revisar-page.component';
+import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-captura.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate:[AuthLoggedOutGuard] },
   { path: 'consulta', component: QueryPageComponent,canActivate:[AuthLoggedInGuard]},
   { path: 'cargarInformacion', component: LoadPageComponent, canActivate:[AuthLoggedInGuard]},
+  { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthLoggedInGuard]},
   {
     path: 'planesEstudio',
     component: PlanesEstudiosComponent,

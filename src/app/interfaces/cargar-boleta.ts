@@ -50,11 +50,15 @@ export interface Calificacion {
     folio: string;
     grupo: string;
     turno: string;
+    zona: string;
+    estado_boleta: string;
+    localidad: string;
     verificado:string ;
     calificacionesPrimaria: Calificacion[];
     calificacionesSecundaria: calificacionesSecundaria;
+    [key: string]: any;
   }
-  
+ 
   export interface listadoPlanesEstudios extends opciones{
     numero_materias:number;
     periodo_aplicacion:string

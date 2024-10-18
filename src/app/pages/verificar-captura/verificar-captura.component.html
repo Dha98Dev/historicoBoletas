@@ -1,1 +1,99 @@
-<p>verificar-captura works!</p>
+<app-loader *ngIf="loader"></app-loader>
+<div class="conetenedor-verificar d-flex justify-content-center align-items-center flex-column mt-4">
+    
+    <!-- aqui van a ir las cards de la informacion del egresado y la informacion del centro de trabajo -->
+    <div class="card-escuela col-11 d-flex gap-3 flex-md-nowrap">
+        <div class="w-100">
+            <app-card-descripcion-icon [icono]="iconos.School" [valores]="dataEscuela"
+                [titulo]="'Información del centro de trabajo'"></app-card-descripcion-icon>
+        </div>
+        <div class="w-100 ">
+            <app-card-descripcion-icon [titulo]="'Información del Egresado'" [icono]="iconos.Graduacion" [valores]="dataPersona"></app-card-descripcion-icon>
+        </div>
+    </div>
+
+    <!-- aqui va a ir la informacion de la boleta  -->
+
+    <div class="informacion-boleta mt-5 col-11">
+        <div class="encabezado">
+            <h2 class="text-center">Información de Boleta Capturada</h2>
+        </div>
+        <div class="info-registro d-flex w-100 gap-2">
+            <div class="capturada-por d-flex gap-3 align-items-center py-1 rounded px-3 w-100 shadow bg-light">
+                <p class="fw-semibold">Capturado por: </p>
+                <p>{{datosCaptura.capturado_por}}</p>
+            </div>
+            <div class="verificada-por d-flex gap-3 align-items-center py-1 rounded px-3 w-100 shadow bg-light">
+                <p class="fw-semibold">Verificado por: </p>
+                <p>{{datosCaptura.verificado}}</p>
+            </div>
+
+            <div class="verificada-por d-flex gap-3 align-items-center py-1 rounded px-3 w-100 shadow bg-light">
+                <p class="fw-semibold">Folio Boleta :  </p>
+                <p>{{datosCaptura.folio}}</p>
+            </div>
+
+            <div  matTooltip="Estado de la Captura"
+            [matTooltipPosition]="'above'"
+            aria-label="" [ngClass]="{'captura': datosCaptura.estado_boleta == 'En Captura', 'revisado': datosCaptura.estado_boleta == 'Revisado'}" class="verificada-por d-flex gap-3 align-items-center py-1 rounded px-3 w-100 shadow ">
+                <p class="fw-semibold"  >Estado de Captura :  </p>
+                <p >
+                    {{datosCaptura.estado_boleta}}
+                  </p>
+                  
+            </div>
+        </div>
+
+
+        <!-- informacion de las calificaciones en caso de que sea primaria -->
+        <div class="primaria mt-4 mb-4" *ngIf="datosCaptura.nivel =='PRIMARIA'">
+            <div class="calificaciones d-flex ">
+                <div class="materia-header lead text-center w-100 border  fw-bold">Materia</div>
+                <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+              </div>
+              <div class="calificaciones d-flex " *ngFor="let calificacion of datosCaptura.calificacionesPrimaria">
+                <div class=" fs-6  materia-header lead text-center w-100 border "> {{calificacion.nombre_materia}} </div>
+                <div class=" fs-6calificacion-header lead text-center w-100 border"> {{calificacion.calificacion}} </div>
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border  fw-semibold">Promedio Final</div>
+                <div class="fs-6 lead text-center w-100 border fw-bold"> {{ promedioPrimaria }} </div>
+              </div>
+        </div>
+
+        
+        
+        
+        
+        
+        <!-- informacion de las calificaciones en caso de que sea secundaria -->
+        <div class="SECUNDARIA mt-4 mb-4" *ngIf=" datosCaptura.nivel== 'SECUNDARIA'">
+            <div class="calificaciones d-flex ">
+                <div class="materia-header lead text-center w-100 border  fw-bold">Grado</div>
+                <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border ">1er año</div>
+                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.Primero}} </div>
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border ">2do año</div>
+                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.Segundo}} </div>
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border ">3er año</div>
+                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.Tercero}} </div>
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class=" lead fs-6 text-center w-100 border fw-semibold">Promedio final</div>
+                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.calificacionFinal}} </div>
+              </div>
+        </div>
+        <div class="botones d-flex justify-content-end w-100 gap-4" *ngIf="datosCaptura.estado_boleta != 'Revisado'">
+            <button class="btn-teal" (click)="ConfirmarVerificacion()" mat-raised-button> <i [class]="iconos.Check"></i> Confirmar Vericidad</button>
+            <button class="btn-yellow-dark" (click)="RedireccionarAEditar()" mat-raised-button> <i [class]="iconos.Update"></i> Editar Informacion</button>
+        </div>
+        
+    </div>
+</div>
+

@@ -90,6 +90,16 @@
               </div>
 
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese Localidad de ubicacion</label>
+                <div class="input-val">
+                  <input placeholder="Ingrese la localidad de ubicacion" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('localidad')?.value | uppercase" formControlName="localidad" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(1,'localidad')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'localidad') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese el nombre del centro de trabajo</label>
                 <div class="input-val">
                   <input placeholder="Nombre del centro de trabajo" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('nombreCct')?.value | uppercase" formControlName="nombreCct" id="">
@@ -124,14 +134,29 @@
               </div>
 
 
-            </div>
+<!-- este es el div que va contener el checbox para mantener la informacion del encabezado -->
 
-          </div>
-        </div>
+
+</div>
+
+</div>
+</div>
+
+<div class="mt-4 mb-2 d-flex gap-4 align-items-center">
+  <p class="fst-italic p-info text-uppercase p-mantener small">si la informacion que ingreso se repetirá, ¿desea fijar la informacaion ingresada?</p>
+  <label for="mantener-info" class="label-mantener shadow" [ngClass]=" repetirInformacion ? 'b-green' : 'b-red'">
+    <input type="checkbox" name="" id="mantener-info" class="check-mantener" (click)="mantenerInfo()">
+    <i [class]="iconos.Fijar"></i>
+  </label>
+  <p class="p-info fst-italic text-uppercase small " *ngIf="repetirInformacion">la informacion se encuentra fijada</p>
+</div>
+
+<!-- aqui termina  la parte de fijar la informacion del encabezado -->
+
 
 
         <!-- Informacion de la persona  que egreso de la escuela de la cual se ingresaran las calificaciones -->
-        <div class="accordion-item">
+        <form [formGroup]="egresado" class="accordion-item">
           <h2 class="accordion-header">
             <button
               class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
@@ -146,9 +171,9 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese el/los nombres</label>
                 <div class="input-val">
-                  <input placeholder="ingrese nombre(s)" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('nombre')?.value | uppercase" formControlName="nombre" id="">
-                  <app-label-input-completo *ngIf="getFieldStatus(1,'nombre')==1" [smallIndicador]="true" ></app-label-input-completo>
-                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'nombre') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                  <input placeholder="ingrese nombre(s)" type="text" name="" class="form form-control" [value]="egresado.get('nombre')?.value | uppercase" formControlName="nombre" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(3,'nombre')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'nombre') == 2" [smallIndicator]="true"></app-label-input-incompleto>
                 </div>
                 
               </div>
@@ -156,9 +181,9 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese su Apellido Paterno</label>
                 <div class="input-val">
-                  <input placeholder="ingrese al apellido paterno" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('apellidoPaterno')?.value | uppercase" formControlName="apellidoPaterno" id="">
-                  <app-label-input-completo *ngIf="getFieldStatus(1,'apellidoPaterno')==1" [smallIndicador]="true" ></app-label-input-completo>
-                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'apellidoPaterno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                  <input placeholder="ingrese al apellido paterno" type="text" name="" class="form form-control" [value]="egresado.get('apellidoPaterno')?.value | uppercase" formControlName="apellidoPaterno" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(3,'apellidoPaterno')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'apellidoPaterno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
                 </div>
               
               </div>
@@ -166,9 +191,9 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese su Apellido Materno </label>
                 <div class="input-val">
-                  <input placeholder="ingrese el apellido materno" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('apellidoMaterno')?.value | uppercase" formControlName="apellidoMaterno" id="">
-                  <app-label-input-completo *ngIf="getFieldStatus(1,'apellidoMaterno')==1" [smallIndicador]="true" ></app-label-input-completo>
-                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'apellidoMaterno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
+                  <input placeholder="ingrese el apellido materno" type="text" name="" class="form form-control" [value]="egresado.get('apellidoMaterno')?.value | uppercase" formControlName="apellidoMaterno" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(3,'apellidoMaterno')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'apellidoMaterno') == 2" [smallIndicator]="true"></app-label-input-incompleto>
                 </div>
              
               </div>
@@ -176,9 +201,9 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese la Curp</label>
                 <div class="input-val">
-                  <input placeholder="ingrese la curp" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('curp')?.value | uppercase" formControlName="curp" id="">
-                  <app-label-input-completo *ngIf="getFieldStatus(1,'curp')==1" [smallIndicador]="true" ></app-label-input-completo>
-                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'curp') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+                  <input placeholder="ingrese la curp" type="text" name="" class="form form-control" [value]="egresado.get('curp')?.value | uppercase" formControlName="curp" id="">
+                  <app-label-input-completo *ngIf="getFieldStatus(3,'curp')==1" [smallIndicador]="true" ></app-label-input-completo>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'curp') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
                 </div>
                 
               </div>
@@ -186,7 +211,7 @@
             </div>
 
           </div>
-        </div>
+        </form>
 
       </form>
 
@@ -213,11 +238,11 @@
     <!-- este es el encabezado para que agregue un nuevo director en caso de que sea necesario -->
     <form  [formGroup]="datosGeneralesForm" class="d-flex justify-content-center mt-5">
       <div class="info-escuela d-flex col-8 gap-4">
-        <div class="input-val w-100">
-          <input placeholder="ingrese el folio de la boleta" type="text" name="" class="form form-control" [value]="datosGeneralesForm.get('folioBoleta')?.value | uppercase" formControlName="folioBoleta" id="">
-          <app-label-input-completo *ngIf="getFieldStatus(1,'folioBoleta')==1" [smallIndicador]="true" ></app-label-input-completo>
-          <app-label-input-incompleto *ngIf="getFieldStatus(1,'folioBoleta') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
-        </div>
+        <form [formGroup]="egresado" class="input-val w-100">
+          <input placeholder="ingrese el folio de la boleta" type="text" name="" class="form form-control" [value]="egresado.get('folioBoleta')?.value | uppercase" formControlName="folioBoleta" id="">
+          <app-label-input-completo *ngIf="getFieldStatus(3,'folioBoleta')==1" [smallIndicador]="true" ></app-label-input-completo>
+          <app-label-input-incompleto *ngIf="getFieldStatus(3,'folioBoleta') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
+        </form>
     
         <div class="input-val w-100">
           <select name="" class="form form-select" formControlName="directorCorrespondiente" id="">

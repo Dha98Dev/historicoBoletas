@@ -1,5 +1,6 @@
 @import url('assets/css/estilosBotones.css');
 @import url('assets/css/estilosFlatpckr.css');
+@import url('assets/css/angularMaterial.css');
 
 h2#swal2-title {
     font-size: 18px !important;
@@ -10,3 +11,10 @@ h2#swal2-title {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.shadow{
+    box-shadow: 1px 1px 5px #ddd;
+}
+.transparente{
+    background: none;
+}

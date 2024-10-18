@@ -1,0 +1,21 @@
+p{
+    margin-bottom: 0px !important;
+}
+.capturada-por, .verificada-por{
+
+}
+.captura{
+background: #f59e0b;
+color: white    ;
+}
+.revisado{
+background: #14b8a6;
+color: white;
+}
+
+
+@media(max-width:990px){
+    .card-escuela{
+    display: flex; flex-direction: column;
+    }
+}

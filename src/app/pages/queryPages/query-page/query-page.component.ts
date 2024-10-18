@@ -26,7 +26,8 @@ export class QueryPageComponent {
   public calificacionesSeleccionadaPrimaria: Calificacion[] = []
   public calificacionesSeleccionadaSecundaria: calificacionesSecundaria = {} as calificacionesSecundaria
   public nivelSelecionado: string = ''
-
+  public estadoCaptura:string = ''
+  public verificador:string= ''
   dtOptions: any = {}
   dtTrigger: Subject<any> = new Subject<any>();
   public tablaInicializada: boolean = false
@@ -98,7 +99,7 @@ export class QueryPageComponent {
 
 
   recivirValoresFiltro(event: any) {
-    let data: datosFiltro = { cct: "", idCiclo: "",estado:'', nombre: "", localidad: "", folio: "", curp: "", numeroFiltro: "", "token": this.userService.obtenerToken() }
+    let data: datosFiltro = { cct: "", boleta:"", idCiclo: "",estado:'', nombre: "", localidad: "", folio: "", curp: "", numeroFiltro: "", "token": this.userService.obtenerToken() }
     this.vacio = true;
     // validamos que tipo de filtro se realizo
 
@@ -174,13 +175,19 @@ export class QueryPageComponent {
     if (nivel == 'PRIMARIA') {
       this.calificacionesSeleccionadaPrimaria = calificacionesFiltrdadas[0].calificacionesPrimaria
       this.nivelSelecionado = nivel
+      this.estadoCaptura=calificacionesFiltrdadas[0].estado_boleta
+      // console.log(this.estadoCaptura)
       this.capturador = calificacionesFiltrdadas[0].capturado_por
+      this.verificador=calificacionesFiltrdadas[0].verificado
+      console.log(this.verificador)
     }
     else {
       this.calificacionesSeleccionadaSecundaria = calificacionesFiltrdadas[0].calificacionesSecundaria
       this.nivelSelecionado = nivel
+      this.estadoCaptura=calificacionesFiltrdadas[0].estado_boleta
       this.capturador = calificacionesFiltrdadas[0].capturado_por
-
+      this.verificador=calificacionesFiltrdadas[0].verificado
+      console.log(this.verificador)
     }
   }
 

@@ -1,6 +1,4 @@
-.accordion-flush{
-    background:red;
-}
+
 .accordion-button::after{
 background: none;
 width: 0px;
@@ -20,4 +18,35 @@ content: none;
 }
 .input-val{
     position: relative;
+}
+
+/* estilos de cuando quieran mantener la informacion del encabezado */
+.check-mantener{
+    display: none;
+}
+.label-mantener{
+    padding:8px 20px;
+    border: 1px solid  #ddd;
+    border-radius: 5px;
+    /* box-shadow: inset 1px 1px 1px #aaa; */
+}
+.p-mantener{
+    margin-bottom: 0px !important;
+}
+.label-mantener>i{
+    transform: rotate(25deg);
+    color: #f43f5e;
+    font-size: 20px;
+}
+.label-mantener input:checked ~ i{
+    color: #14b8a6;
+}
+.p-info{
+    margin-bottom: 0px !important;
+}
+.b-red{
+border: 1px solid #f43f5e !important;
+}
+.b-green{
+border:1px solid #14b8a6 !important;
 }

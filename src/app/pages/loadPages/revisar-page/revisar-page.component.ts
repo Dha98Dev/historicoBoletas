@@ -4,6 +4,7 @@ import { NotificacionesService } from '../../../services/notificaciones.service'
 import { userService } from '../../../Autenticacion1/servicios/user-service.service';
 import { Boleta } from '../../../interfaces/cargar-boleta';
 import { datosFiltro } from '../../../interfaces/filtros.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-revisar-page',
@@ -14,14 +15,15 @@ export class RevisarPageComponent {
 
   public registros:Boleta[]=[]
 
-  constructor(private historialGet: HistorialBoletasGetService, private notificaciones:NotificacionesService, private userService:userService){}
+  constructor(private historialGet: HistorialBoletasGetService, private notificaciones:NotificacionesService, private userService:userService, private router:Router){}
 
   ngOnInit(){
     this.getRegistros()
   }
 
   getRegistros(){
-    let data: datosFiltro  = { cct: "", idCiclo: "",estado:'En Captura', nombre: "", localidad: "", folio: "", curp: "", numeroFiltro: "", "token": this.userService.obtenerToken() }
+    let data: datosFiltro  = { cct: "", idCiclo: "", boleta: "",estado:'En Captura', nombre: "", localidad: "", folio: "", curp: "", numeroFiltro: "", "token": this.userService.obtenerToken() }
+    console.log(data)
     // console.log(data)
     this.historialGet.getDatosBoleta(data).subscribe(response =>{
       if(!response.error){
@@ -42,7 +44,7 @@ export class RevisarPageComponent {
   }
 
   redireccionarAVerificarRegistro(event:any){
-    console.log(event)
+    this.router.navigate(['verificarCaptura', event])
   }
 
   verCalificaciones(event:any){

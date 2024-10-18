@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { Subject } from 'rxjs';
 import { Boleta, Calificacion, calificacionesSecundaria } from '../../../interfaces/cargar-boleta';
 import * as bootstrap from 'bootstrap'
+import { Iconos } from '../../../enums/iconos.enum';
 
 @Component({
   selector: 'app-tabla-catalogo-calificaciones',
@@ -17,6 +18,7 @@ export class TablaCatalogoCalificacionesComponent {
   public calificacionesSeleccionadaPrimaria: Calificacion[] = []
   public calificacionesSeleccionadaSecundaria: calificacionesSecundaria = {} as calificacionesSecundaria
   public nivelSelecionado: string = ''
+  public iconos= Iconos
 
 // aqui van los inputs
 @Input()

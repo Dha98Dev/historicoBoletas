@@ -17,4 +17,6 @@ curp:string;
 localidad:string;
 token:string;
 estado:string;
+boleta:string
   }
+

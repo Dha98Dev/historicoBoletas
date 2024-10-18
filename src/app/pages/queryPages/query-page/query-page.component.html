@@ -62,6 +62,7 @@
                         <th scope="col" class="text-uppercase text-center">Nombre Completo</th>
                         <th scope="col" class="text-uppercase text-center">CCT</th>
                         <th scope="col" class="text-uppercase text-center">Nombre CT</th>
+                        <th scope="col" class="text-uppercase text-center">Localidad</th>
                         <th scope="col" class="text-uppercase text-center">Nivel</th>
                         <th scope="col" class="text-uppercase text-center">Ciclo</th>
                         <th scope="col" class="text-uppercase text-center">Folio</th>
@@ -75,6 +76,7 @@
                         <td class="text-center" >{{ element.nombre + ' ' + element.apellido_paterno + ' ' + element.apellido_materno }}</td>
                         <td class="text-center" >{{ element.clave_centro_trabajo }}</td>
                         <td class="text-center" >{{ element.nombre_cct }}</td>
+                        <td class="text-center" >{{ element.localidad }}</td>
                         <td class="text-center" >{{ element.nivel }}</td>
                         <td class="text-center" >{{ element.ciclo }}</td>
                         <td class="text-center" >{{ element.folio }}</td>
@@ -90,7 +92,7 @@
                   
             </div>
 
-<app-modal-calificaciones [nivel]="nivelSelecionado" [calificacionesPrimaria]="calificacionesSeleccionadaPrimaria" [calificacionesSecundaria]="calificacionesSeleccionadaSecundaria" [capturador]="capturador"></app-modal-calificaciones>
+<app-modal-calificaciones [nivel]="nivelSelecionado" [calificacionesPrimaria]="calificacionesSeleccionadaPrimaria" [calificacionesSecundaria]="calificacionesSeleccionadaSecundaria" [capturador]="capturador" [Estado]="estadoCaptura" [Verificador]="verificador"></app-modal-calificaciones>
 
     </div>
 </div>

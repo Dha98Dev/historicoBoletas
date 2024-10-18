@@ -6,11 +6,11 @@
             <th scope="col" class="text-uppercase text-center">Nombre Completo</th>
             <th scope="col" class="text-uppercase text-center">CCT</th>
             <th scope="col" class="text-uppercase text-center">Nombre CT</th>
+            <th scope="col" class="text-uppercase text-center">Localidad</th>
             <th scope="col" class="text-uppercase text-center">Nivel</th>
             <th scope="col" class="text-uppercase text-center">Ciclo</th>
             <th scope="col" class="text-uppercase text-center">Folio</th>
             <th scope="col" class="text-uppercase text-center">Grupo</th>
-            <th scope="col" class="text-uppercase text-center" >calificaciones</th>
             <th scope="col" class="text-uppercase text-center" >verificar</th>
           </tr>
         </thead>
@@ -20,19 +20,13 @@
             <td class="text-center" >{{ element.nombre + ' ' + element.apellido_paterno + ' ' + element.apellido_materno }}</td>
             <td class="text-center" >{{ element.clave_centro_trabajo }}</td>
             <td class="text-center" >{{ element.nombre_cct }}</td>
+            <td class="text-center" >{{ element.localidad }}</td>
             <td class="text-center" >{{ element.nivel }}</td>
             <td class="text-center" >{{ element.ciclo }}</td>
             <td class="text-center" >{{ element.folio }}</td>
             <td class="text-center" >{{ element.grupo }}</td>
             <!-- este es el boton de ver las calificaciones -->
-            <td class="text-center"  >
-              <button class="" mat-raised-button
-              matTooltip="Ver Calificaciones"
-              [matTooltipPosition]="'above'"
-              aria-label="Button that displays a tooltip when focused or hovered over">
-              <i class="fas fa-eye"></i>
-      </button>
-            </td>
+
             
             <!-- boton para verificar la informacion -->
            
@@ -40,11 +34,11 @@
             <td class="text-center"  >
               <button
               (click)="redireccionarAVerificar(element.id_boleta)"
-              [ngClass]="element.verificado==null ? 'show-verificar' : 'hideen-verificar'" class="btn-teal" mat-raised-button
+              [ngClass]="element.verificado=='  ' ? 'show-verificar' : 'hideen-verificar'" class="btn-teal" mat-raised-button
               matTooltip="Verificar Captura"
               [matTooltipPosition]="'above'"
               aria-label="Button that displays a tooltip when focused or hovered over">
-              <i class="fas fa-check-circle"></i>
+              <i [class]="iconos.Check"></i>
       </button>
           </tr>
         </tbody>

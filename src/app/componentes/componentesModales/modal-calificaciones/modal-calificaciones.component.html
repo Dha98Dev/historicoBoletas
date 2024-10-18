@@ -7,6 +7,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+
+          <div class="estado d-flex gap-3 px-2 py-2 mb-3 " [ngClass]="{'captura': Estado == 'En Captura', 'revisado': Estado == 'Revisado'}">
+          <div class="fw-semibold">Estado:</div>
+          <div class=""> {{Estado}} </div>  
+          </div>
           
             <div class="primaria" *ngIf="nivel =='PRIMARIA'">
                 <div class="calificaciones d-flex ">
