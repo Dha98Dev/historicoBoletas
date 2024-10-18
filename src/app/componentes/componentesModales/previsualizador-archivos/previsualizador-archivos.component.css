@@ -1,0 +1,54 @@
+
+.offcanvas-top{
+    height: 100vh !important;
+  }
+  .offcanvas-body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .offcanvas-body>iframe{
+    width: 80%;
+    height: 100vh;
+    padding: 20px;
+  }
+  .boton{
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    z-index: 100;
+  }
+  .btn-close{
+    margin:5px 40px;
+    width: 100px;
+    height: 35px;
+    padding: 5px ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:  white;
+    gap: 10px;
+    background: none;
+    background: #dc2626;
+    opacity: 1;
+  }
+  
+  .offcanvas{
+    background: rgba(91, 91, 91,0.5);
+  }
+
+  img{ 
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .contenedor-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75%; /* ajusta el tamaño según tus necesidades */
+    height: 100vh; /* ajusta el tamaño según tus necesidades */
+    overflow: hidden;
+  }

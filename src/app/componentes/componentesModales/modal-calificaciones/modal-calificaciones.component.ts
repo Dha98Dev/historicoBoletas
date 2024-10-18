@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { Calificacion, calificacionesPrimaria, calificacionesSecundaria } from '../../../interfaces/cargar-boleta';
+import { Boleta, Calificacion, calificacionesPrimaria, calificacionesSecundaria } from '../../../interfaces/cargar-boleta';
 
 @Component({
   selector: 'app-modal-calificaciones',
@@ -9,33 +9,19 @@ import { Calificacion, calificacionesPrimaria, calificacionesSecundaria } from '
 export class ModalCalificacionesComponent {
 
 
-@Input()
-public calificacionesPrimaria:Calificacion[] = [];
 
 public promedioPrimaria:number = 0;
 
-@Input()
-public calificacionesSecundaria:calificacionesSecundaria = {} as calificacionesSecundaria;
-
-@Input()
-  public nivel:string = ''
-
   @Input()
-  public capturador:string = ''
-
-  @Input()
-  public Verificador:string = ''
-
-  @Input()
-  public Estado :string = ''
+  public boletaSeleccionada:Boleta= {} as Boleta
 
   ngOnChanges(changes: SimpleChanges){
-    if(changes['calificacionesPrimaria']){
+    if(changes['boletaSeleccionada']  && this.boletaSeleccionada.calificacionesPrimaria){
       let suma =0;
-      this.calificacionesPrimaria.forEach(cal =>{
+      this.boletaSeleccionada.calificacionesPrimaria.forEach(cal =>{
       suma +=parseFloat(cal.calificacion)
       })
-      this.promedioPrimaria = suma/this.calificacionesPrimaria.length;
+      this.promedioPrimaria = suma/this.boletaSeleccionada.calificacionesPrimaria.length;
     }
   }
 

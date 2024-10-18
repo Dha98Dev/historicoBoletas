@@ -35,6 +35,7 @@ import { AngularMaterialModule } from './componentes/angularMaterial/angular-mat
 import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-captura.component';
 import { CardDescripcionIconComponent } from './componentes/componentesCards/card-descripcion-icon/card-descripcion-icon.component';
 import { ModalConfirmacionComponent } from './componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
+import { PrevisualizadorArchivosComponent } from './componentes/componentesModales/previsualizador-archivos/previsualizador-archivos.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { ModalConfirmacionComponent } from './componentes/componentesModales/mod
     TablaCatalogoCalificacionesComponent,
     VerificarCapturaComponent,
     CardDescripcionIconComponent,
-    ModalConfirmacionComponent
+    ModalConfirmacionComponent,
+    PrevisualizadorArchivosComponent
   ],
   imports: [
     BrowserModule,

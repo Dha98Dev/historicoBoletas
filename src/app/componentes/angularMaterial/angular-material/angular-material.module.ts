@@ -7,7 +7,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import {MatMenuModule} from '@angular/material/menu';
 @NgModule({
   declarations: [],
   imports: [
@@ -18,7 +18,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatTooltipModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   exports: [
     // Importar componentes y modulos de Material Angular
@@ -29,7 +30,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatTooltipModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
 ]
 })
 export class AngularMaterialModule { 

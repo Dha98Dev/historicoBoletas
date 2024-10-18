@@ -67,7 +67,7 @@
                         <th scope="col" class="text-uppercase text-center">Ciclo</th>
                         <th scope="col" class="text-uppercase text-center">Folio</th>
                         <th scope="col" class="text-uppercase text-center">Grupo</th>
-                        <th scope="col" class="text-uppercase text-center">ver calificaciones</th>
+                        <th scope="col" class="text-uppercase text-center">acciones</th>
                       </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -83,7 +83,12 @@
                         <td class="text-center" >{{ element.grupo }}</td>
                         <td class="text-center" >
                           <div class="d-flex justify-content-center">
-                            <button (click)="filtrarCalificaciones(element.id_boleta, element.nivel)" class="btn-lila btn-icon btn text-uppercase " data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fas fa-eye"></i>calificaciones</button>
+                            <button mat-button [matMenuTriggerFor]="menu"><i class="fas fa-ellipsis-h"></i></button>
+                            <mat-menu #menu="matMenu">
+                              <button   mat-menu-item (click)="filtrarCalificaciones(element.id_boleta, element.nivel)" class="btn-lila btn-icon btn text-uppercase " data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fas fa-eye"></i>calificaciones</button>
+                              <!-- <button mat-menu-item>Item 1</button> -->
+                              <button mat-menu-item   data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" (click)="redireccionarAVerificarRegistro(element.id_boleta)">Detalles</button>
+                            </mat-menu>
                           </div>
                         </td>
                       </tr>
@@ -92,7 +97,7 @@
                   
             </div>
 
-<app-modal-calificaciones [nivel]="nivelSelecionado" [calificacionesPrimaria]="calificacionesSeleccionadaPrimaria" [calificacionesSecundaria]="calificacionesSeleccionadaSecundaria" [capturador]="capturador" [Estado]="estadoCaptura" [Verificador]="verificador"></app-modal-calificaciones>
-
+<app-modal-calificaciones [boletaSeleccionada]="boletaSeleccionada"></app-modal-calificaciones>
+<app-previsualizador-archivos [pdfUrl]="'http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta=25'" ></app-previsualizador-archivos>
     </div>
 </div>

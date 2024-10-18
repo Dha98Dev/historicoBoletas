@@ -25,6 +25,8 @@ export class VerificarCapturaComponent {
   public dataEscuela: opciones[] = []
   public iconos=Iconos
   public promedioPrimaria:number=0
+  public pdfUrlSolicitud:string='http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta='
+  public pdfSeleccionado:string=''
 
   public loader: boolean = true;
   constructor(private route: ActivatedRoute, private userService: userService, private _route: Router, private historialGet: HistorialBoletasGetService,private dialogo: MatDialog, private notificacionesService:NotificacionesService, private serviceUpdate:HistorialBoletasUpdateService) { }
@@ -153,5 +155,11 @@ else{
 }
 })
 }
+
+descargarSolicitudServicios(){
+  this.pdfSeleccionado=this.pdfUrlSolicitud+this.datosCaptura.boletaSolicitudServicio
+  console.log(this.pdfSeleccionado)
+}
+
 RedireccionarAEditar(){}
 }

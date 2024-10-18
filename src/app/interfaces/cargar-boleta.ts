@@ -54,6 +54,7 @@ export interface Calificacion {
     estado_boleta: string;
     localidad: string;
     verificado:string ;
+    boletaSolicitudServicio:string;
     calificacionesPrimaria: Calificacion[];
     calificacionesSecundaria: calificacionesSecundaria;
     [key: string]: any;

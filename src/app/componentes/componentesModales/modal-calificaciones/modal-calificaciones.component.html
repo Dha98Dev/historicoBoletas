@@ -3,24 +3,24 @@
     <div class="modal-dialog  modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Calificaciones del Egresado</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Calificaciones de {{boletaSeleccionada.nombre + ' '+ boletaSeleccionada.apellido_paterno +' '+ boletaSeleccionada.apellido_materno}} </h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
 
-          <div class="estado d-flex gap-3 px-2 py-2 mb-3 " [ngClass]="{'captura': Estado == 'En Captura', 'revisado': Estado == 'Revisado'}">
+          <div class="estado d-flex gap-3 px-2 py-2 mb-3 rounded fs-6 " [ngClass]="{'captura': boletaSeleccionada.estado_boleta == 'En Captura', 'revisado': boletaSeleccionada.estado_boleta == 'Revisado'}">
           <div class="fw-semibold">Estado:</div>
-          <div class=""> {{Estado}} </div>  
+          <div class=""> {{boletaSeleccionada.estado_boleta}} </div>  
           </div>
           
-            <div class="primaria" *ngIf="nivel =='PRIMARIA'">
+            <div class="primaria" *ngIf="boletaSeleccionada.nivel =='PRIMARIA'">
                 <div class="calificaciones d-flex ">
                     <div class="materia-header lead text-center w-100 border  fw-bold">Materia</div>
                     <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
                   </div>
-                  <div class="calificaciones d-flex " *ngFor="let calificacion of calificacionesPrimaria">
-                    <div class=" fs-6  materia-header lead text-center w-100 border "> {{calificacion.nombre_materia}} </div>
-                    <div class=" fs-6calificacion-header lead text-center w-100 border"> {{calificacion.calificacion}} </div>
+                  <div class="calificaciones d-flex " *ngFor="let calificacion of boletaSeleccionada.calificacionesPrimaria">
+                    <div class=" fs-6  materia-header lead text-center w-100 border  py-2"> {{calificacion.nombre_materia}} </div>
+                    <div class=" fs-6 calificacion-header lead text-center w-100 border py-2"> {{calificacion.calificacion}} </div>
                   </div>
                   <div class="calificaciones d-flex ">
                     <div class="fs-6 lead text-center w-100 border  fw-semibold">Promedio Final</div>
@@ -28,37 +28,37 @@
                   </div>
             </div>
 
-            <div class="SECUNDARIA" *ngIf="nivel== 'SECUNDARIA'">
+            <div class="SECUNDARIA" *ngIf="boletaSeleccionada.nivel== 'SECUNDARIA'">
                 <div class="calificaciones d-flex ">
                     <div class="materia-header lead text-center w-100 border  fw-bold">Grado</div>
                     <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
                   </div>
                   <div class="calificaciones d-flex ">
                     <div class="fs-6 lead text-center w-100 border ">1er año</div>
-                    <div class="fs-6 lead text-center w-100 border">{{calificacionesSecundaria.Primero}} </div>
+                    <div class="fs-6 lead text-center w-100 border">{{boletaSeleccionada.calificacionesSecundaria.Primero}} </div>
                   </div>
                   <div class="calificaciones d-flex ">
                     <div class="fs-6 lead text-center w-100 border ">2do año</div>
-                    <div class="fs-6 lead text-center w-100 border">{{calificacionesSecundaria.Segundo}} </div>
+                    <div class="fs-6 lead text-center w-100 border">{{boletaSeleccionada.calificacionesSecundaria.Segundo}} </div>
                   </div>
                   <div class="calificaciones d-flex ">
                     <div class="fs-6 lead text-center w-100 border ">3er año</div>
-                    <div class="fs-6 lead text-center w-100 border">{{calificacionesSecundaria.Tercero}} </div>
+                    <div class="fs-6 lead text-center w-100 border">{{boletaSeleccionada.calificacionesSecundaria.Tercero}} </div>
                   </div>
                   <div class="calificaciones d-flex ">
                     <div class=" lead fs-6 text-center w-100 border fw-semibold">Promedio final</div>
-                    <div class="fs-6 lead text-center w-100 border">{{calificacionesSecundaria.calificacionFinal}} </div>
+                    <div class="fs-6 lead text-center w-100 border">{{boletaSeleccionada.calificacionesSecundaria.calificacionFinal}} </div>
                   </div>
             </div>
 
         </div>
         <div class=" d-flex align-items-center gap-3 px-3"> 
           <p class=" fs-6 fw-semibold">Capturado por: </p>
-          <p a-ngfor >{{capturador}}</p>  
+          <p a-ngfor >{{boletaSeleccionada.capturado_por}}</p>  
         </div>
         <div class=" d-flex align-items-center gap-3 px-3"> 
           <p class=" fs-6 fw-semibold">Verificada por: </p>
-          <p>{{Verificador}}</p>  
+          <p>{{boletaSeleccionada.verificado}}</p>  
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-red " data-bs-dismiss="modal">Cerrar</button>

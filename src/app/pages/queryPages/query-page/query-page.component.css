@@ -20,6 +20,9 @@ td {
     flex-wrap: wrap;
     gap: 20px;
 }
+.mat-mdc-menu-item-text{
+    font-size: 12px !important;
+} 
 
 @media(max-width:850px) {
     .opciones-consulta>button {

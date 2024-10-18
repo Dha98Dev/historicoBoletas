@@ -1,4 +1,7 @@
 <app-loader *ngIf="loader"></app-loader>
+<div class="acciones d-flex justify-content-end " >
+  <button class="btn-lila" (click)="descargarSolicitudServicios()" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.DownloadFile"></i>SOLICITUD DE DUPLICADOS Y SERVICIOS</button>
+</div>
 <div class="conetenedor-verificar d-flex justify-content-center align-items-center flex-column mt-4">
     
     <!-- aqui van a ir las cards de la informacion del egresado y la informacion del centro de trabajo -->
@@ -97,3 +100,4 @@
     </div>
 </div>
 
+<app-previsualizador-archivos [pdfUrl]="pdfSeleccionado" ></app-previsualizador-archivos>

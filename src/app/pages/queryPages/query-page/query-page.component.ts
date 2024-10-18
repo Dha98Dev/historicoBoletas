@@ -28,6 +28,8 @@ export class QueryPageComponent {
   public nivelSelecionado: string = ''
   public estadoCaptura:string = ''
   public verificador:string= ''
+  public Egresado:string= ''
+  public boletaSeleccionada:Boleta = {} as Boleta
   dtOptions: any = {}
   dtTrigger: Subject<any> = new Subject<any>();
   public tablaInicializada: boolean = false
@@ -148,6 +150,11 @@ export class QueryPageComponent {
         this.vacio = false
         this.inicializarDatatable()
         console.log(this.datosBoleta);
+
+        this.datosBoleta.forEach(boleta => {
+          boleta.id_boleta = this.userService.Encriptar(boleta.id_boleta.toString())
+        })
+
         // setTimeout(() => {
         //   $('#resultadosBusqueda').DataTable(this.dtOptions);
         // }, 500);
@@ -172,6 +179,7 @@ export class QueryPageComponent {
 
   filtrarCalificaciones(idBoleta: number | string, nivel: string) {
     let calificacionesFiltrdadas = this.datosBoleta.filter((d) => d.id_boleta == idBoleta)
+    this.boletaSeleccionada= calificacionesFiltrdadas[0]
     if (nivel == 'PRIMARIA') {
       this.calificacionesSeleccionadaPrimaria = calificacionesFiltrdadas[0].calificacionesPrimaria
       this.nivelSelecionado = nivel
@@ -180,6 +188,7 @@ export class QueryPageComponent {
       this.capturador = calificacionesFiltrdadas[0].capturado_por
       this.verificador=calificacionesFiltrdadas[0].verificado
       console.log(this.verificador)
+      this.Egresado=calificacionesFiltrdadas[0].nombre+ ' ' + calificacionesFiltrdadas[0].apellido_paterno+ ' ' + calificacionesFiltrdadas[0].apellido_materno
     }
     else {
       this.calificacionesSeleccionadaSecundaria = calificacionesFiltrdadas[0].calificacionesSecundaria
@@ -191,5 +200,8 @@ export class QueryPageComponent {
     }
   }
 
+  redireccionarAVerificarRegistro(boleta:string | number){
+    this.router.navigate(['verificarCaptura', boleta])
+  }
 
 }

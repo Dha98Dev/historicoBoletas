@@ -5,6 +5,6 @@ export enum Iconos {
     Save = 'fas fa-save',
     Update = 'fas fa-pencil-alt',
     School = 'fas fa-school',
-    Fijar = "fas fa-thumbtack"
+    Fijar = "fas fa-thumbtack",
+    DownloadFile = "fas fa-file-download fa-flip-horizontal"
   }
-  
