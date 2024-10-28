@@ -36,6 +36,10 @@ import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-c
 import { CardDescripcionIconComponent } from './componentes/componentesCards/card-descripcion-icon/card-descripcion-icon.component';
 import { ModalConfirmacionComponent } from './componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
 import { PrevisualizadorArchivosComponent } from './componentes/componentesModales/previsualizador-archivos/previsualizador-archivos.component';
+import { GraficaAvanceComponent } from './pages/grafica-avance/grafica-avance.component';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { EditarBoletaComponent } from './pages/editar-boleta/editar-boleta.component';
+import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +70,10 @@ import { PrevisualizadorArchivosComponent } from './componentes/componentesModal
     VerificarCapturaComponent,
     CardDescripcionIconComponent,
     ModalConfirmacionComponent,
-    PrevisualizadorArchivosComponent
+    PrevisualizadorArchivosComponent,
+    GraficaAvanceComponent,
+    EditarBoletaComponent,
+    PaginaPruebaComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +83,8 @@ import { PrevisualizadorArchivosComponent } from './componentes/componentesModal
     HttpClientModule,
     RouterModule,
     DataTablesModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    HighchartsChartModule
   ],
   providers: [
     provideAnimationsAsync()

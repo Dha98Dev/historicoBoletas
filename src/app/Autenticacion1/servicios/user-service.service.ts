@@ -11,6 +11,7 @@ import { RespuestaPeticionHistorial } from '../../interfaces/respuesta.interface
 export class userService {
     constructor(private http:HttpClient, private router:Router, ) { }
  private url:string='http://localhost/historicoCalificaciones/Auth/'
+ private urlGet:string = 'http://localhost/historicoCalificaciones/api/'
 
 
  
@@ -102,7 +103,9 @@ export class userService {
         }),
         catchError(this.handleError)
         )
-    }  
+    } 
+    
+   
   
     private handleError(error: HttpErrorResponse): Observable<any> {
       let errorMessage = 'Error desconocido';

@@ -4,6 +4,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { RespuestaPeticionHistorial } from '../interfaces/respuesta.interface';
 import { InfoCctDirectores } from '../interfaces/datosCct.interface';
 import { RespuestaGetCalificaciones, RespuestaOpciones } from '../interfaces/respuestaOpcionesSelect.interface';
+import { userService } from '../Autenticacion1/servicios/user-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,13 @@ import { RespuestaGetCalificaciones, RespuestaOpciones } from '../interfaces/res
 export class HistorialBoletasGetService {
 
   private UrlHistorialBoletas:string='http://localhost/historicoCalificaciones/api/';
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private userService:userService) { }
 
   getNivelesEducativos(data:any):Observable<RespuestaPeticionHistorial>{
     return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNivelesEducativos', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
@@ -28,7 +29,7 @@ export class HistorialBoletasGetService {
     return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getPlanesEstudios', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
@@ -39,7 +40,7 @@ export class HistorialBoletasGetService {
     return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getCiclosEscolares', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
@@ -50,7 +51,7 @@ export class HistorialBoletasGetService {
     return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getTurnos', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
@@ -61,7 +62,7 @@ export class HistorialBoletasGetService {
     return this.http.post<InfoCctDirectores>(`${this.UrlHistorialBoletas}`+'get/getDatosCct', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
@@ -72,7 +73,7 @@ export class HistorialBoletasGetService {
     return this.http.post<RespuestaOpciones>(`${this.UrlHistorialBoletas}`+'get/getMaterias', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
@@ -83,15 +84,36 @@ export class HistorialBoletasGetService {
     return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'get/getCalificaciones', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
-          // this.userService.tokenInvalido(response.mensaje)
+          this.userService.tokenInvalido(response.mensaje)
         }
       }),
       catchError(this.handleError)
       )
   }
+  getTiposUsuarios(data:any):Observable<RespuestaPeticionHistorial>{
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getTipoUsuarios', JSON.stringify(data)).pipe(
+      tap(response =>{
+        if(response.error && !response.isValidToken){
+          this.userService.tokenInvalido(response.mensaje)
+        }
+      }),
+      catchError(this.handleError)
+      )
+  } 
+
+  numeroBoletasXVerificar(data:any):Observable<RespuestaPeticionHistorial>{
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNumeroBoletasPorVerificar', JSON.stringify(data)).pipe(
+      tap(response =>{
+        if(response.error && !response.isValidToken){
+          this.userService.tokenInvalido(response.mensaje)
+        }
+      }),
+      catchError(this.handleError)
+      )
+  } 
 
 
-
+  
   private handleError(error: HttpErrorResponse): Observable<any> {
       let errorMessage = 'Error desconocido';
       if (error.error instanceof ErrorEvent) {

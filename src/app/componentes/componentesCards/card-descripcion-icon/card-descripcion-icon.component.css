@@ -1,3 +1,9 @@
 .card-contenedor{
     box-shadow: 1px 1px 15px #ddd;
 }
+.captura{
+    border-left: 5px solid #f59e0b;
+}
+.verificado{
+    border-left: 5px solid #14b8a6;
+}

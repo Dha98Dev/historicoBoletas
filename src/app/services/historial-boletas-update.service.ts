@@ -23,6 +23,27 @@ export class HistorialBoletasUpdateService {
       catchError(this.handleError)
       )
   }
+  updateInformacionComplementaria(data:any):Observable<RespuestaPeticionHistorial>{
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateDatosPersona', JSON.stringify(data)).pipe(
+      tap(response =>{
+        if(response.error && !response.isValidToken){
+          this.userService.tokenInvalido(response.mensaje)
+        }
+      }),
+      catchError(this.handleError)
+      )
+  }
+
+  updateInfoBoleta(data:any):Observable<RespuestaPeticionHistorial>{
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateInfoBoleta', JSON.stringify(data)).pipe(
+      tap(response =>{
+        if(response.error && !response.isValidToken){
+          this.userService.tokenInvalido(response.mensaje)
+        }
+      }),
+      catchError(this.handleError)
+      )
+  }
 
 
 

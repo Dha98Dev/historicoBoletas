@@ -19,4 +19,7 @@ public  titulo:string=''
 @Input()
 public  icono:Iconos = Iconos.Graduacion;
 
+@Input()
+public verificado:boolean = false
+
 }

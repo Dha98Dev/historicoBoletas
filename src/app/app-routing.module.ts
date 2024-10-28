@@ -11,16 +11,22 @@ import { AuthLoggedOutGuard } from './Autenticacion1/guards/auth-logout.guard';
 import { RegisterComponent } from './Autenticacion1/register/register.component';
 import { RevisarPageComponent } from './pages/loadPages/revisar-page/revisar-page.component';
 import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-captura.component';
+import { GraficaAvanceComponent } from './pages/grafica-avance/grafica-avance.component';
+import { EditarBoletaComponent } from './pages/editar-boleta/editar-boleta.component';
+import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'registro', component: RegisterComponent,canActivate:[AuthLoggedInGuard]},
-  {path: 'verificacion', component:RevisarPageComponent, canActivate:[AuthLoggedInGuard]},
+  { path: 'avance', component: GraficaAvanceComponent},
+  { path: 'verificacion', component:RevisarPageComponent, canActivate:[AuthLoggedInGuard]},
   { path: 'login', component: LoginComponent, canActivate:[AuthLoggedOutGuard] },
   { path: 'consulta', component: QueryPageComponent,canActivate:[AuthLoggedInGuard]},
   { path: 'cargarInformacion', component: LoadPageComponent, canActivate:[AuthLoggedInGuard]},
   { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthLoggedInGuard]},
+  { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent},
+  {path:  'prueba', component: PaginaPruebaComponent},
   {
     path: 'planesEstudio',
     component: PlanesEstudiosComponent,

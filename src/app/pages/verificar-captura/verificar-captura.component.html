@@ -1,17 +1,20 @@
 <app-loader *ngIf="loader"></app-loader>
-<div class="acciones d-flex justify-content-end " >
-  <button class="btn-lila" (click)="descargarSolicitudServicios()" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.DownloadFile"></i>SOLICITUD DE DUPLICADOS Y SERVICIOS</button>
+<div class="acciones d-flex justify-content-end gap-3" >
+
+  <button class="btn-gray-dark text-uppercase"  mat-raised-button (click)="llenarInfoAcional()"> <i [class]="iconos.DownloadFile"></i>Agregar informacion complementaria</button>
+
+  <button class="btn-lila"  (click)="descargarSolicitudServicios()" *ngIf="datosCaptura.localidad_dom != null" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.DownloadFile"></i>SOLICITUD DE DUPLICADOS Y SERVICIOS</button>
 </div>
 <div class="conetenedor-verificar d-flex justify-content-center align-items-center flex-column mt-4">
     
     <!-- aqui van a ir las cards de la informacion del egresado y la informacion del centro de trabajo -->
     <div class="card-escuela col-11 d-flex gap-3 flex-md-nowrap">
         <div class="w-100">
-            <app-card-descripcion-icon [icono]="iconos.School" [valores]="dataEscuela"
+            <app-card-descripcion-icon [verificado]="datosCaptura.verificado !='  ' ? true : false" [icono]="iconos.School" [valores]="dataEscuela"
                 [titulo]="'Información del centro de trabajo'"></app-card-descripcion-icon>
         </div>
         <div class="w-100 ">
-            <app-card-descripcion-icon [titulo]="'Información del Egresado'" [icono]="iconos.Graduacion" [valores]="dataPersona"></app-card-descripcion-icon>
+            <app-card-descripcion-icon [verificado]="datosCaptura.verificado !='  ' ? true : false" [titulo]="'Información del Egresado'" [icono]="iconos.Graduacion" [valores]="dataPersona"></app-card-descripcion-icon>
         </div>
     </div>
 
@@ -51,16 +54,16 @@
         <!-- informacion de las calificaciones en caso de que sea primaria -->
         <div class="primaria mt-4 mb-4" *ngIf="datosCaptura.nivel =='PRIMARIA'">
             <div class="calificaciones d-flex ">
-                <div class="materia-header lead text-center w-100 border  fw-bold">Materia</div>
-                <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+                <div class="materia-header lead text-center w-100 border py-2  fw-bold">Materia</div>
+                <div class="calificacion-header lead text-center w-100 border py-2 fw-bold">Calificación</div>
               </div>
               <div class="calificaciones d-flex " *ngFor="let calificacion of datosCaptura.calificacionesPrimaria">
-                <div class=" fs-6  materia-header lead text-center w-100 border "> {{calificacion.nombre_materia}} </div>
-                <div class=" fs-6calificacion-header lead text-center w-100 border"> {{calificacion.calificacion}} </div>
+                <div class=" fs-6  materia-header lead text-center w-100 border py-2 "> {{calificacion.nombre_materia}} </div>
+                <div class=" fs-6calificacion-header lead text-center w-100 border py-2"> {{calificacion.calificacion}} </div>
               </div>
               <div class="calificaciones d-flex ">
-                <div class="fs-6 lead text-center w-100 border  fw-semibold">Promedio Final</div>
-                <div class="fs-6 lead text-center w-100 border fw-bold"> {{ promedioPrimaria }} </div>
+                <div class="fs-6 lead text-center w-100 border py-2  fw-semibold">Promedio Final</div>
+                <div class="fs-6 lead text-center w-100 border py-2 fw-bold"> {{ promedioPrimaria }} </div>
               </div>
         </div>
 

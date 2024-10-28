@@ -20,3 +20,7 @@ estado:string;
 boleta:string
   }
 
+export interface tUsuarios{
+  id_tipo_usuario:string;
+  tipo_usuario:string;
+}

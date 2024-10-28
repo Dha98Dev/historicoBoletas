@@ -1,0 +1,72 @@
+/* *{
+    border: 1px solid red !important;
+} */
+.contenedor-editar{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.shadow{
+    border-left: 7px solid #f59e0b;
+}
+ label{
+font-size: 13px;
+
+}
+input, select {
+    border: none !important;
+    border-bottom: 1px solid #ddd !important;
+    font-size: 13px;
+}
+.invalid{
+    border: 2px solid red !important;
+    border-radius: 5px;
+}
+.valid{
+    border: 2px solid green !important;
+    border-radius: 5px;
+}
+.par-form{
+    display: flex;
+    width: 100%;
+}
+.bg-warning{
+    align-self: end;
+}
+.formulario{
+    height: 100%;
+    width: 100%;
+}
+.div2{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: ; */
+    align-items: center;
+    height: 100%;
+}
+.shadow-fecha{
+    box-shadow: 1px 1px 5px #aaa;
+}
+.shadow-fecha>p{
+    margin-bottom: 0px !important;
+    font-size: 13px;
+}
+.materia-header, .calificacion-header{
+    font-size: 13px !important;
+}
+::placeholder{
+text-transform: uppercase;
+
+}
+@media(max-width:990px){
+.par-form{
+    width: 100% !important;
+    flex-direction: column;
+}
+.card-datos-ct{
+    width: 100% !important;
+}
+.card-datos-persona{
+    width: 100% !important;
+}
+}

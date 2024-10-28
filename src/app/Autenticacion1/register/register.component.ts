@@ -5,6 +5,7 @@ import { HistorialBoletasAgregarService } from '../../services/historial-boletas
 import { HistorialBoletasGetService } from '../../services/historial-boletas-get.service';
 import { min } from 'rxjs';
 import { NotificacionesService } from '../../services/notificaciones.service';
+import { tUsuarios } from '../../interfaces/filtros.interface';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ import { NotificacionesService } from '../../services/notificaciones.service';
 export class RegisterComponent {
 
   constructor(private fb:FormBuilder, private userService:userService, private historialAdd: HistorialBoletasAgregarService, private historialGet:HistorialBoletasGetService, private notificacionesService:NotificacionesService){}
-
+public listadoTUsuarios:tUsuarios[] = []
   newUser:FormGroup={} as FormGroup;
 
   ngOnInit(){
@@ -25,8 +26,10 @@ export class RegisterComponent {
       curp: ['', [Validators.required,   Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
       usuario: ['', [Validators.required, Validators.minLength(8)]],
       password: ['', [Validators.required, Validators.minLength(8), passwordValidator()]],
+      t_usuario: ['', [Validators.required]]
 
     });
+    this.getTiposUsuarios()
   }
 
   getFieldStatus( field: string): number {
@@ -69,6 +72,7 @@ export class RegisterComponent {
     guardarNewUser(){
       if (this.newUser.valid) {
         let data ={...this.newUser.value, "token":this.userService.obtenerToken()}
+        console.log(data)
         this.userService.agregarUsuario(data).subscribe(response =>{
           if (!response.error) {
             this.notificacionesService.mostrarAlertaConIcono("Agregar Usuario",response.mensaje,'success' )
@@ -84,6 +88,18 @@ export class RegisterComponent {
         this.newUser.markAllAsTouched()
         this.notificacionesService.mostrarAlertaSimple('Debe de llenar todos los campos')
       }
+    }
+
+    getTiposUsuarios(){
+let data={token:this.userService.obtenerToken()}
+this.historialGet.getTiposUsuarios(data).subscribe(response => {
+  if (!response.error) {
+    this.listadoTUsuarios = response.data
+  }
+  else{
+    console.log(response)
+  }
+})
     }
 
 }

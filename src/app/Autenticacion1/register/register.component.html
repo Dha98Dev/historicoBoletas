@@ -17,32 +17,51 @@
                  <app-label-input-completo *ngIf="getFieldStatus('nombre') == 1 " [smallIndicador]="true" ></app-label-input-completo>
                   <app-label-input-incompleto *ngIf="getFieldStatus('nombre')== 2 " [smallIndicator]="true"></app-label-input-incompleto>
             </div>
-            <div class="par">
+           <div class="d-flex gap-1">
+            <div class="par w-100">
                 <input [value]="newUser.get('apellidoP')?.value | uppercase"  type="text" placeholder="Apellido Paterno" class="form form-control" formControlName="apellidoP" id="name" name="name" required>
                  <app-label-input-completo *ngIf="getFieldStatus('apellidoP') == 1 " [smallIndicador]="true" ></app-label-input-completo>
                   <app-label-input-incompleto *ngIf="getFieldStatus('apellidoP')== 2 " [smallIndicator]="true"></app-label-input-incompleto>
             </div>
-            <div class="par">
+            <div class="par w-100">
                 <input [value]="newUser.get('apellidoM')?.value | uppercase"  type="text" placeholder="Apellido Materno" class="form form-control" formControlName="apellidoM" id="name" name="name" required>
                  <app-label-input-completo *ngIf="getFieldStatus('apellidoM') == 1 " [smallIndicador]="true" ></app-label-input-completo>
                   <app-label-input-incompleto *ngIf="getFieldStatus('apellidoM')== 2 " [smallIndicator]="true"></app-label-input-incompleto>
             </div>
+           </div>
 
             <div class="par">
                 <input [value]="newUser.get('curp')?.value | uppercase"  type="text" placeholder="Curp" class="form form-control" formControlName="curp" id="name" name="name" required>
                  <app-label-input-completo *ngIf="getFieldStatus('curp') == 1 " [smallIndicador]="true" ></app-label-input-completo>
                   <app-label-input-incompleto *ngIf="getFieldStatus('curp')== 2 " [smallIndicator]="true"></app-label-input-incompleto>
             </div>
-            <div class="par">
+          <div class="d-flex gap-1">
+            <div class="par w-100">
                 <input [value]="newUser.get('usuario')?.value "  type="text" placeholder="Usuario" class="form form-control" formControlName="usuario" id="name" name="name" required>
                  <app-label-input-completo *ngIf="getFieldStatus('usuario') == 1 " [smallIndicador]="true" ></app-label-input-completo>
                   <app-label-input-incompleto *ngIf="getFieldStatus('usuario')== 2 " [smallIndicator]="true"></app-label-input-incompleto>
             </div>
-            <div class="par">
+            <div class="par w-100">
                 <input   type="password" placeholder="Contraseña" class="form form-control" formControlName="password" id="name" name="name" required>
                  <app-label-input-completo *ngIf="getFieldStatus('password') == 1 " [smallIndicador]="true" ></app-label-input-completo>
                   <app-label-input-incompleto *ngIf="getFieldStatus('password')== 2 " [smallIndicator]="true"></app-label-input-incompleto>
             </div>
+          </div>
+
+          <div class="par w-100">
+            <mat-form-field class="w-100">
+                <mat-label>Tipo de usuario</mat-label>
+                <mat-select formControlName="t_usuario">
+               
+                  @for (tUsuario of listadoTUsuarios; track tUsuario) {
+                <mat-option [value]="tUsuario.id_tipo_usuario">{{tUsuario.tipo_usuario}}</mat-option>
+              }
+                </mat-select>
+              </mat-form-field>
+             <app-label-input-completo *ngIf="getFieldStatus('t_usuario') == 1 " [smallIndicador]="false" ></app-label-input-completo>
+              <app-label-input-incompleto *ngIf="getFieldStatus('t_usuario')== 2 " [smallIndicator]="false"></app-label-input-incompleto>
+        </div>
+
             <button class="text-center btn btn-icon btn-stone-dark " (click)="guardarNewUser()"> <i class="fas fa-save"></i>Registrar Usuario </button>
         </div>
     </div>

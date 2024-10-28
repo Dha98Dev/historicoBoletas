@@ -1,0 +1,225 @@
+<h1 class="text-center text-capitalize fs-4 fw-semibold ">editar informacion de boleta capturada </h1>
+
+<div class="d-flex px-2 contenedor-editar mt-5">
+
+    <div class=" gap-3 par-form">
+
+        <!-- aqui van a ir los datos del centro de trabajo -->
+        <form [formGroup]="datosCct" class="shadow rounded card-datos-ct  w-50">
+            <div class="encabezado">
+                <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.Graduacion"></i> Información del centro de trabajo, grupo, turno</h2>
+                <div class="formulario px-3 py-2">
+<!--  -->
+
+
+                    <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">clave  del CT</label>
+                        <div class="col-sm-10">
+                          <input formControlName="claveCt"  type="text" [value]="datosCct.get('claveCt')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">nombre del Ct</label>
+                        <div class="col-sm-10">
+                          <input formControlName="nombreCt" type="text" [value]="datosCct.get('nombreCt')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">grupo</label>
+                        <div class="col-sm-10">
+                          <input formControlName="grupo" type="text" [value]="datosCct.get('grupo')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">turno</label>
+                        <div class="col-sm-10">
+                       <select name="" id="" formControlName="turno" class="form form-select">
+                        <option value="">seleccione  el turno correspondiente</option>
+                        <option *ngFor="let turno of turnos" [value]="datosCct.get('turno')?.value" [selected]="turno.nombre == datosCaptura.turno"> {{turno.nombre}} </option>
+                       </select>
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">ciclo</label>
+                        <div class="col-sm-10">
+                       <select name="" id="" formControlName="ciclo" class="form form-select" >
+                        <option value="">seleccione el ciclo escolar...</option>
+                        <option *ngFor="let ciclo of ciclosEscolares" [value]="datosCct.get('ciclo')?.value" [selected]="ciclo.nombre == datosCaptura.ciclo"> {{ciclo.nombre}} </option>
+
+                       </select>
+                        </div>
+                      </div>
+
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">nivel</label>
+                        <div class="col-sm-10">
+                          <div  [ngClass]="{ 'disabled': true }" type="text"  class="form-control materia-header "  id="inputPassword"> {{datosCaptura.nivel}} </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">zona</label>
+                        <div class="col-sm-10">
+                          <input formControlName="zona" type="text" [value]="datosCct.get('zona')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">localidad de origen</label>
+                        <div class="col-sm-10">
+                          <input formControlName="localidad" type="text" [value]="datosCct.get('localidad')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+
+
+                   
+
+
+                 
+
+                </div>
+
+            </div>
+          </form>
+
+        <!-- aqui van a ir los datos personales -->
+        <form [formGroup]="persona" class=" shadow rounded card-datos-persona w-50 px-3 py-2">
+            <div class="encabezado div2">
+                <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.User"></i> Información de datos personales</h2>
+                <div class="formulario ">
+
+                    <div class="mb-1 row">
+                        <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">nombre(s)</label>
+                        <div class="col-sm-9">
+                          <input formControlName="nombre" type="text" [value]="persona.get('nombre')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">apellido paterno </label>
+                        <div class="col-sm-9">
+                          <input formControlName="apellidoPaterno" type="text" [value]="persona.get('apellidoPaterno')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">apellido materno</label>
+                        <div class="col-sm-9">
+                          <input formControlName="apellidoMaterno" type="text" [value]="persona.get('apellidoMaterno')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+                      <div class="mb-1 row">
+                        <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">curp</label>
+                        <div class="col-sm-9">
+                          <input formControlName="curp" type="text" [value]="persona.get('curp')?.value" class="form-control" id="inputPassword">
+                        </div>
+                      </div>
+
+
+                    </div>
+                    <div class=" w-100 d-flex align-items-center gap-2 shadow-fecha px-2 rounded py-2 ">
+                    <p class="fw-semibold text-uppercase  " >Fecha de Registro de la boleta :</p> <p> {{datosCaptura.fecha_registro_boleta}} </p>
+                    </div>
+            </div>
+          </form>
+
+    </div>
+
+    <!-- aqui  van  a ir las calificaciones  -->
+    <div class="shadow rounded card-datos-calificaciones w-100 py-2 px-2 ">
+        <div class="encabezado">
+            <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.School"></i> Información del informacion de calificaciones </h2>
+            <div class="formulario">
+
+                <div class="d-flex gap-2">
+                    <div class="par d-flex align-items-center  mt-3 w-100">
+                        <div class="form form-control bg-light text-center" >Capturado por: {{datosCaptura.capturado_por}} </div>
+                    </div>
+    
+                    <form [formGroup]="datosCct" class="par d-flex align-items-center  mt-3 w-100 gap-3">
+                        <label for="" class="fs-6 w-30">folio original de la boleta</label>
+                        <input class="form form-control w-50 text-center"  formControlName="folio" [value]="datosCaptura.folio" type="text" placeholder="folio original de la boleta" >
+                    </form>
+    
+                </div>
+
+                <h2 class="text-center mt-2">Calificaciones</h2>
+
+                   <!-- informacion de las calificaciones en caso de que sea primaria -->
+                   <div class="primaria mt-4 mb-4" *ngIf="datosCaptura.nivel =='PRIMARIA'">
+                    <div class="calificaciones d-flex">
+                      <div class="materia-header-enc lead text-center w-100 border py-2 fw-bold">Materia</div>
+                      <div class="calificacion-header-enc lead text-center w-100 border py-2 fw-bold">Calificación</div>
+                    </div>
+                    
+                    <div class="calificaciones d-flex" *ngFor="let calificacion of datosCaptura.calificacionesPrimaria; let i = index">
+                      <div class="fs-6 materia-header lead text-center w-100 border py-2"> {{calificacion.nombre_materia}} </div>
+                      <input 
+                      [id]="'input-' + calificacion.id_calificacion_primaria" 
+                      (change)="ReemplazarCalificacion(calificacion.id_calificacion_primaria!, $event)" 
+                      min="0" 
+                      max="10" 
+                      type="number" 
+                      class="fs-6 calificacion-header lead text-center w-100 border py-2" 
+                      [value]="calificacion.calificacion">
+                  
+                    
+                    </div>
+                  
+                    <div class="calificaciones d-flex">
+                      <div class="fs-6 lead text-center w-100 border py-2 fw-semibold">Promedio Final</div>
+                      <div class="fs-6 lead text-center w-100 border py-2 fw-bold"> {{ promedioPrimaria }} </div>
+                    </div>
+                  </div>
+                  
+        
+        
+        
+        
+        
+        <!-- informacion de las calificaciones en caso de que sea secundaria -->
+        <form [formGroup]="calificacionesSecundaria" class="SECUNDARIA mt-4 mb-4" *ngIf=" datosCaptura.nivel== 'SECUNDARIA' && datosCaptura.calificacionesSecundaria.Primero != 0">
+            <div class="calificaciones d-flex ">
+                <div class="materia-header lead text-center w-100 border  fw-bold">Grado</div>
+                <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border ">1er año</div>
+                <input (change)="validarCalificacionesSecundaria($event)" id="primero" type="number" class="form form-control text-center w-100" formControlName="Primero" [value]="calificacionesSecundaria.get('Primero')?.value" >
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border ">2do año</div>
+                <input (change)="validarCalificacionesSecundaria($event)" id="segundo" type="number" class="form form-control text-center w-100" formControlName="Segundo"  >
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class="fs-6 lead text-center w-100 border ">3er año</div>
+                <input (change)="validarCalificacionesSecundaria($event)" id="tercero" type="number" class="form form-control text-center w-100" formControlName="Tercero"  >
+              </div>
+              <div class="calificaciones d-flex ">
+                <div class=" lead fs-6 text-center w-100 border fw-semibold">Promedio final</div>
+                <input class="form-control text-center " type="text" [value]="calificacionesSecundaria.get('calificacionFinal')?.value" aria-label="Disabled input example" disabled readonly>
+              </div>
+            </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="update d-flex justify-content-center w-100 ">
+        <button mat-raised-button matTooltip="guardar informacion " [matTooltipPosition]="'below'"
+            aria-label="Button that displays a tooltip when focused or hovered over" class="btn-sky-dark text-uppercase "   
+            [disabled]="(!datosCct.valid && !persona.valid && !calificacionesValidas) || (!datosCct.valid && !persona.valid && !calificacionesSecundaria.valid)"
+            (click)="actualizarInformacion()"
+            >
+             <i [class]="iconos.Update "></i> Actualizar y verificar
+            Información</button>
+    </div>
+</div>

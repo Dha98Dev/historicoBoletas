@@ -34,6 +34,7 @@ export interface calificacionesSecundaria {
 export interface Calificacion {
     nombre_materia: string;
     calificacion: string;
+    id_calificacion_primaria:number;
   }
   
   export interface Boleta {
@@ -41,6 +42,7 @@ export interface Calificacion {
     nombre: string;
     apellido_paterno: string;
     apellido_materno: string;
+    curp: string;
     capturado_por: string;
     nivel: string;
     plan_estudio: string;
@@ -48,11 +50,17 @@ export interface Calificacion {
     clave_centro_trabajo: string;
     nombre_cct: string;
     folio: string;
+    fecha_registro_boleta: string;
     grupo: string;
+    id_ct: number;
     turno: string;
     zona: string;
     estado_boleta: string;
     localidad: string;
+    localidad_dom: string;
+    domicilio_particular: string;
+    municipio_dom: string;
+    telefono:string;
     verificado:string ;
     boletaSolicitudServicio:string;
     calificacionesPrimaria: Calificacion[];
