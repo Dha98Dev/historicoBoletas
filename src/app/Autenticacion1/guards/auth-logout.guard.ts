@@ -16,7 +16,7 @@ export class AuthLoggedOutGuard implements CanActivate {
     } else {
       // Redirigir a la página de inicio de sesión si no cumple las condiciones
       
-      return this.router.createUrlTree(['/consulta']);
+      return this.router.createUrlTree(['/cargarInformacion']);
     }
   }
 }

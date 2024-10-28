@@ -14,23 +14,26 @@ import { VerificarCapturaComponent } from './pages/verificar-captura/verificar-c
 import { GraficaAvanceComponent } from './pages/grafica-avance/grafica-avance.component';
 import { EditarBoletaComponent } from './pages/editar-boleta/editar-boleta.component';
 import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.component';
+import { AuthCapturistaGuard } from './Autenticacion1/guards/capturista-guard.guard';
+import { AuthAdminGuard } from './Autenticacion1/guards/admin-guard.guard';
+import { AuthRevisadorGuard } from './Autenticacion1/guards/revisador-guard.guard';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'registro', component: RegisterComponent,canActivate:[AuthLoggedInGuard]},
-  { path: 'avance', component: GraficaAvanceComponent},
-  { path: 'verificacion', component:RevisarPageComponent, canActivate:[AuthLoggedInGuard]},
+  { path: 'registro', component: RegisterComponent,canActivate:[AuthAdminGuard]},
+  { path: 'avance', component: GraficaAvanceComponent, canActivate:[AuthAdminGuard] },
+  { path: 'verificacion', component:RevisarPageComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'login', component: LoginComponent, canActivate:[AuthLoggedOutGuard] },
-  { path: 'consulta', component: QueryPageComponent,canActivate:[AuthLoggedInGuard]},
-  { path: 'cargarInformacion', component: LoadPageComponent, canActivate:[AuthLoggedInGuard]},
-  { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthLoggedInGuard]},
+  { path: 'consulta', component: QueryPageComponent,canActivate:[AuthRevisadorGuard]},
+  { path: 'cargarInformacion', component: LoadPageComponent, canActivate:[AuthCapturistaGuard]},
+  { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent},
   {path:  'prueba', component: PaginaPruebaComponent},
   {
     path: 'planesEstudio',
     component: PlanesEstudiosComponent,
-    canActivate:[AuthLoggedInGuard],
+    canActivate:[AuthAdminGuard],
     children: [
       { path: 'agregarPlan', component: AgregarPlanComponent },
       { path: 'asignarMaterias', component: AsignarMateriasPlanComponent }

@@ -40,6 +40,7 @@ import { GraficaAvanceComponent } from './pages/grafica-avance/grafica-avance.co
 import { HighchartsChartModule } from 'highcharts-angular';
 import { EditarBoletaComponent } from './pages/editar-boleta/editar-boleta.component';
 import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.component';
+import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuarios.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.compo
     PrevisualizadorArchivosComponent,
     GraficaAvanceComponent,
     EditarBoletaComponent,
-    PaginaPruebaComponent
+    PaginaPruebaComponent,
+    ListadoUsuariosComponent
   ],
   imports: [
     BrowserModule,
