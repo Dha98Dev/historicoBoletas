@@ -41,6 +41,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { EditarBoletaComponent } from './pages/editar-boleta/editar-boleta.component';
 import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.component';
 import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuarios.component';
+import { ModalChangePasswordComponent } from './componentes/componentesModales/modal-change-password/modal-change-password.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuar
     GraficaAvanceComponent,
     EditarBoletaComponent,
     PaginaPruebaComponent,
-    ListadoUsuariosComponent
+    ListadoUsuariosComponent,
+    ModalChangePasswordComponent
   ],
   imports: [
     BrowserModule,

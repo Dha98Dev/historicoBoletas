@@ -32,13 +32,36 @@
     display: flex;
     gap:10px;
     align-items: center;
+    position: relative;
 }
-.usuario>span{
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
-    /* background: #07d6ad; */
-    box-shadow: inset 1px 1px 2px #0f766e;
+.usuario>button{
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    overflow: hidden;
+    transition: color 0.3s ease;
+}
+ .usuario>button::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px; /* Cambia este valor para ajustar el grosor del borde */
+        background-color: #333;
+        transition: width 0.3s ease, left 0.3s ease;
+      }
+    
+     .usuario>button:hover::after {
+        width: 100%;
+        left: 0;
+      }
+ 
+.usuario>button>i{
+    /* box-shadow: inset 1px 1px 2px #0f766e; */
     animation: color-change 0.2s infinite;
     animation-duration: 3s;
 }
@@ -47,26 +70,50 @@
     background: #fb7185 !important; 
 }
 
+
+.select-container {
+    position: absolute;
+    bottom: -110px;
+    width: 200px;
+    color: #444;
+    left: -50px;
+    background: #fefefe;
+    padding: 5px;
+  }
+
+  .submenu-item{
+    list-style-type: none;
+    padding: 5px 10px;
+  }
+  .submenu-item:hover{
+    background: #ededed;
+  }
+  .btn-rose:hover{
+    background: rgb(255, 74, 140) !important;
+  }
+
+
+
 @keyframes color-change {
     0%{
-        background: #63e4ca;
+        color: #63e4ca;
     }
     20%{
-        background: #07d6ad;
+        color: #07d6ad;
     }
     40%{
-        background: #09aa8a;
+        color: #09aa8a;
     }
     50%{
-        background: #0f766e;
+        color: #0f766e;
     }
     70%{
-        background: #09aa8a;
+        color: #09aa8a;
     }
     90%{
-        background: #07d6ad;
+        color: #07d6ad;
     }
     100%{
-        background: #63e4ca;
+        color: #63e4ca;
     }
 }

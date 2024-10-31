@@ -113,6 +113,18 @@ export class HistorialBoletasGetService {
   } 
 
 
+  getUsuarios(data:any):Observable<RespuestaPeticionHistorial>{
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getListadoUsuarios', JSON.stringify(data)).pipe(
+      tap(response =>{
+        if(response.error && !response.isValidToken){
+          this.userService.tokenInvalido(response.mensaje)
+        }
+      }),
+      catchError(this.handleError)
+      )
+  } 
+
+
   
   private handleError(error: HttpErrorResponse): Observable<any> {
       let errorMessage = 'Error desconocido';

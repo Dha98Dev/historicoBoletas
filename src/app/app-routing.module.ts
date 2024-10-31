@@ -17,6 +17,7 @@ import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.compo
 import { AuthCapturistaGuard } from './Autenticacion1/guards/capturista-guard.guard';
 import { AuthAdminGuard } from './Autenticacion1/guards/admin-guard.guard';
 import { AuthRevisadorGuard } from './Autenticacion1/guards/revisador-guard.guard';
+import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuarios.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'cargarInformacion', component: LoadPageComponent, canActivate:[AuthCapturistaGuard]},
   { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent},
+  { path: 'userList', component:ListadoUsuariosComponent, canActivate:[AuthAdminGuard]},
   {path:  'prueba', component: PaginaPruebaComponent},
   {
     path: 'planesEstudio',

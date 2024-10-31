@@ -6,5 +6,20 @@ export enum Iconos {
     Update = 'fas fa-pencil-alt',
     School = 'fas fa-school',
     Fijar = "fas fa-thumbtack",
-    DownloadFile = "fas fa-file-download fa-flip-horizontal"
+    DownloadFile = "fas fa-file-download fa-flip-horizontal",
+    Config= "fas fa-cog",
+    Lock='fas fa-unlock-alt',
+    CloseSesion='fas fa-sign-out-alt',
+    EyeClosed='fas fa-eye-slash',
+    EyeOpen='fas fa-eye',
+    XToClose='fas fa-window-close',
+    Info='fas fa-info-circle',
+    RowDown='far fa-arrow-alt-circle-down',
+    RowUp='far fa-arrow-alt-circle-up',
+    Chart='fas fa-chart-bar',
+    NewUser='fas fa-user-plus',
+    Book='fas fa-book',
+    DataBase='fas fa-database',
+    Consulta='fas fa-layer-group'
+
   }

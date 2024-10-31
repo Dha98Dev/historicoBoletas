@@ -1,7 +1,61 @@
-<div class="container">
-    <highcharts-chart 
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: 400px; display: block;">
-    </highcharts-chart>
+
+<div class="encabezado d-flex justify-content-between px-3 py-3 ">
+  <div>
+<div class="bg-white shadow px-3 py-2 text-uppercase d-flex gap-2"> <p>total de boletas registradas hasta el momento:</p> <p class="fw-bold"> {{totalboletas}} </p> </div>
   </div>
+
+  <select name="" id="" class="form form-select animate__animated animate__bounceIn">
+    <option value="">Seleccione un año para filtrar</option>
+    <option value="2024">2024</option>
+  </select>
+
+</div>
+
+<div class="row">
+  <div class="par-graficas  gap-4 col-12 px-4">
+<div class="w-50">
+  <highcharts-chart 
+  class="shadow"
+  [Highcharts]="Highcharts"
+  [options]="chartOptions"
+  [update]="updateFlag"
+  style="width: 100%; height: 400px; display: block;">
+</highcharts-chart>
+</div>
+  
+ <div class="w-50">
+  <highcharts-chart 
+  class="shadow" 
+  [Highcharts]="Highcharts"
+  [options]="chartOptionsMensual"
+  [update]="updateFlag"
+  style="width: 100%; height: 400px; display: block;">
+</highcharts-chart>
+ </div>
+  </div>
+
+  <div class="par-graficas  gap-4 col-12 px-4 mt-5 espacio">
+<div class="w-50">
+  <highcharts-chart 
+  class="shadow" 
+  [Highcharts]="Highcharts"
+  [options]="chartOptionsCapturistas"
+  [update]="updateFlag"
+  style="width: 100%; height: 400px; display: block;">
+</highcharts-chart>
+</div>
+
+<div class="w-50 donut">
+<label >Boletas agrupadas por estado</label>
+<highcharts-chart 
+class="shadow" 
+[Highcharts]="Highcharts"
+[options]="chartOptionsEstados"
+[update]="updateFlag"
+style="width: 100%; height: 400px; display: block;">
+</highcharts-chart>
+</div>
+
+  </div>
+</div>
+

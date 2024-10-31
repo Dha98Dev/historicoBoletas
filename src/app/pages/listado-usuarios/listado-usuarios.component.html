@@ -1,1 +1,54 @@
-<p>listado-usuarios works!</p>
+<div class="d-flex justify-content-center ">
+    <div class="col-11">
+        <div class="table-responsive">
+    
+            <table *ngIf="listadoUsuarios.length > 0" class="table" datatable [dtOptions]="dtOptions" id="listadoUsuarios">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-uppercase text-center">#</th>
+                        <th scope="col" class="text-uppercase text-center">Nombre Completo</th>
+                        <th scope="col" class="text-uppercase text-center">fecha de registro</th>
+                        <th scope="col" class="text-uppercase text-center">nombre de usuario</th>
+                        <th scope="col" class="text-uppercase text-center">estado</th>
+                        <th scope="col" class="text-uppercase text-center">tipo de Usuario</th>
+                        <th scope="col" class="text-uppercase text-center">habilitar</th>
+                        <th scope="col" class="text-uppercase text-center">inhabilitar</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr *ngFor="let user of listadoUsuarios; let i = index">
+                        <td class="text-center text-uppercase" > {{i+1 }} </td>
+                        <td class="text-center text-uppercase" > {{ user.nombre+ ' '+ user.apellido_paterno+ ' '+user.apellido_materno }} </td>
+                        <td class="text-center text-uppercase" > {{ user.fecha_registro_user }} </td>
+                        <td class="text-center text-uppercase">{{user.usuario}} </td>
+                        <td class="text-center text-uppercase" > <label [ngClass]="user.estado == 'activo' ? 'activo' : 'inactivo'">{{ user.estado }}</label> </td>
+                        <td class="text-center text-uppercase" > {{ user.tipo_usuario }} </td>
+                        <td class="text-center text-uppercase" > 
+                            <button class="btn-teal" mat-raised-button matTooltip="Habilitar"
+                                [matTooltipPosition]="'above'"
+                                aria-label="Button that displays a tooltip when focused or hovered over"
+                                *ngIf="user.estado == 'inactivo'"
+                                (click)="habilitarEInhabilitar(user.id_usuario,1)"
+                                >
+                                <i [class]="iconos.Check"></i>
+                            </button> 
+                        </td>
+        
+                        <td class="text-center text-uppercase" >
+                            <button class="btn-rose" mat-raised-button matTooltip="Inhabilitar"
+                            [matTooltipPosition]="'above'"
+                            aria-label="Button that displays a tooltip when focused or hovered over"
+                            *ngIf="user.estado == 'activo' "
+                            (click)="habilitarEInhabilitar(user.id_usuario,2)"
+                            >
+                            <i [class]="iconos.Check"></i>
+                        </button>
+        
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <p *ngFor="let item of datosBoleta"> {{item.ciclo}} </p> -->
+        </div>
+    </div>
+</div>

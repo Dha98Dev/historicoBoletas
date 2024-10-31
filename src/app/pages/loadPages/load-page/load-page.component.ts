@@ -28,6 +28,7 @@ export class LoadPageComponent {
   public boletaGuardada:boolean= false
   public iconos=Iconos
   public repetirInformacion:boolean = false
+  public fijarInformacion:boolean = false
   // variables de datos string o numeros
   
   // variables que son arreglos
@@ -41,6 +42,7 @@ export class LoadPageComponent {
   public datos:string[]=[]
   public Directores:opciones[]=[]
   public materias:opciones[]=[] 
+  public animationClass:string =''
 
   constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService){}
 
@@ -204,6 +206,29 @@ else if(tipo == "DPB" || tipo == "DPR"){
   this.nivelEducativoSeleccionado=this.nivelesEducativos.filter(nivel => nivel.nombre == 'PRIMARIA');
 }
 }
+}
+
+
+// estos siguentes dos metodos son para la animacion de cuando se fija la informacion de la cabecera
+toggleSelect() {
+  if (this.fijarInformacion) {
+    // Si el select está visible, activa la animación de salida
+    this.startFadeOut();
+  } else {
+    // Si el select está oculto, muestra con animación de entrada
+    this.fijarInformacion = true;
+    this.animationClass = 'animate__animated animate__bounceIn';
+  }
+}
+
+startFadeOut() {
+  // Agrega la clase de salida
+  this.animationClass = 'animate__animated animate__bounceOut';
+  // Después de la duración de la animación (0.5s), oculta el select
+  setTimeout(() => {
+    this.fijarInformacion = false;
+    this.animationClass = '';
+  }, 500); // Duración de la animación de salida
 }
 
 

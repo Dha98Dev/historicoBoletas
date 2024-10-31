@@ -67,7 +67,14 @@ export class userService {
     }
   
     obtenerToken() {
-      return this.Desencriptar(localStorage.getItem('tokenHistoricoCal')!);
+      let token =localStorage.getItem('tokenHistoricoCal')! != null ? localStorage.getItem('tokenHistoricoCal') : "";
+      if (token !="") {
+        return this.Desencriptar(localStorage.getItem('tokenHistoricoCal')!);
+        
+      }
+      else{
+        return ""
+      }
     }
   
     // SweetAlert
@@ -84,7 +91,6 @@ export class userService {
       const usuario = localStorage.getItem('usuarioHistoricoCal');
       const token = localStorage.getItem('tokenHistoricoCal');
       const tipoUsuario = localStorage.getItem('tipoUsuarioHistoricoCal');
-  
       return !!(usuario && token && tipoUsuario);
     }
   

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { userService } from '../servicios/user-service.service';
 import { HistorialBoletasAgregarService } from '../../services/historial-boletas-agregar.service';
 import { HistorialBoletasGetService } from '../../services/historial-boletas-get.service';

@@ -145,10 +145,10 @@
 <div class="mt-4 mb-2 d-flex gap-4 align-items-center">
   <p class="fst-italic p-info text-uppercase p-mantener small">si la informacion que ingreso se repetirá, ¿desea fijar la informacaion ingresada?</p>
   <label for="mantener-info" class="label-mantener shadow" [ngClass]=" repetirInformacion ? 'b-green' : 'b-red'">
-    <input type="checkbox" name="" id="mantener-info" class="check-mantener" (click)="mantenerInfo()">
+    <input type="checkbox" name="" id="mantener-info" class="check-mantener" (click)="mantenerInfo()" (click)="toggleSelect()">
     <i [class]="iconos.Fijar"></i>
   </label>
-  <p class="p-info fst-italic text-uppercase small " *ngIf="repetirInformacion">la informacion se encuentra fijada</p>
+  <p class="p-info fst-italic text-uppercase small " [ngClass]="animationClass" *ngIf="repetirInformacion">la informacion se encuentra fijada</p>
 </div>
 
 <!-- aqui termina  la parte de fijar la informacion del encabezado -->
