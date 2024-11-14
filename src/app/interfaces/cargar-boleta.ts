@@ -72,3 +72,50 @@ export interface Calificacion {
     numero_materias:number;
     periodo_aplicacion:string
   }
+
+  export interface boletaSecundaria extends boletaExcel{
+
+    calificacion_primero:number;
+    calificacion_segundo:number;
+    calificacion_tercero:number;
+    promedio_general:number;
+  }
+  export interface boletaPrimaria extends boletaExcel{
+materias:materias[]
+  }
+  
+  export interface boletaExcel{
+    nombre:string;
+    apellido_paterno:string;
+    apellido_materno:string;
+    curp:string;
+    folio:string;
+    clave_ct:string;
+    nombre_ct:string;
+    ciclo:string;
+    nivel:string;
+    plan_estudio:string;
+    zona:string;
+    localidad:string;
+    turno:string;
+    grupo:string;
+    valido:boolean;
+    [key:string]:any;
+  }
+
+  // export interface materias{
+  //   español?:number;
+  //   matematicas?:number;
+  //   ciencias_naturales?:number;
+  //   ciencias_sociales?:number;
+  //   educacion_fisica?:number;
+  //   educacion_artistica?:number;
+  //   educacion_tecnologica?:number;
+  //   promedio_general?:number;
+  //   [key :string] : any
+  // }
+
+  export interface materias{
+    materia: string;
+    calificacion: number;
+  }

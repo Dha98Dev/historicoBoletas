@@ -69,7 +69,7 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Seleccione el plan de estudio</label>
                 <div class="input-val">
-                <select  name="" formControlName="planEstudio" class="form form-control" id="">
+                <select (change)="getMaterias()" name="" formControlName="planEstudio" class="form form-control" id="">
                   <option value="" selected>seleccione el plan de estudios</option>
                   <option *ngFor="let plan of planesEstudio" [value]="plan.valor"> {{plan.nombre}} </option>
                 </select>
@@ -264,7 +264,7 @@
 
     <!-- esto es para agregar las calificaciones de primaria si el nivel educativo fue primaria -->
 
-    <div class="form-calificaciones d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value =='1'">
+    <div class="form-calificaciones d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value =='1' && completoPrimaria" >
 
       <div class="add-calificaciones mt-2 col-11">
         <div class="calificaciones d-flex ">

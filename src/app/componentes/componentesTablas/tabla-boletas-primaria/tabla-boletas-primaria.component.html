@@ -1,0 +1,51 @@
+<div class="table-responsive ">
+  <h2 class="fw-semibold text-center mt-4 fs-6"> {{titulo}} </h2>
+    <table class="table animate__animated animate__zoomIn" border="1" >
+      <thead>
+        <tr>
+          <th [ngClass]="clase" scope="col">#</th>
+          <th [ngClass]="clase" scope="col">Nombre</th>
+          <th [ngClass]="clase" scope="col">Apellido Paterno</th>
+          <th [ngClass]="clase" scope="col">Apellido Materno</th>
+          <th [ngClass]="clase" scope="col">CURP</th>
+          <th [ngClass]="clase" scope="col">Folio</th>
+          <th [ngClass]="clase" scope="col">CCT</th>
+          <th [ngClass]="clase" scope="col">Nombre CT</th>
+          <th [ngClass]="clase" scope="col">Ciclo</th>
+          <th [ngClass]="clase" scope="col">Nivel</th>
+          <th [ngClass]="clase" scope="col">Plan</th>
+          <th [ngClass]="clase" scope="col">Zona</th>
+          <th [ngClass]="clase" scope="col">Localidad</th>
+          <th [ngClass]="clase" scope="col">Turno</th>
+          <th [ngClass]="clase" scope="col">Grupo</th>
+          <!-- Encabezados dinámicos para las materias -->
+          <th [ngClass]="clase" *ngFor="let materia of BoletasPrimaria[0].materias">{{ materia.materia }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let boleta of BoletasPrimaria; let i = index">
+          <th [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''" scope="row">{{ i + 1 }}</th>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.nombre }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.apellido_paterno }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.apellido_materno }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.curp }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.folio }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.clave_ct }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.nombre_ct }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.ciclo }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.nivel }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.plan_estudio }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.zona }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.localidad }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.turno }}</td>
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.grupo }}</td>
+          <!-- Calificaciones dinámicas para las materias -->
+          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''" *ngFor="let calificacion of boleta.materias">
+            {{ calificacion.calificacion }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+  </div>
+  

@@ -42,6 +42,10 @@ import { EditarBoletaComponent } from './pages/editar-boleta/editar-boleta.compo
 import { PaginaPruebaComponent } from './pages/pagina-prueba/pagina-prueba.component';
 import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuarios.component';
 import { ModalChangePasswordComponent } from './componentes/componentesModales/modal-change-password/modal-change-password.component';
+import { CargaMasivaComponent } from './pages/loadPages/carga-masiva/carga-masiva.component';
+import { ModalMensajeNotificacionComponent } from './componentes/componentesModales/modal-mensaje-notificacion/modal-mensaje-notificacion.component';
+import { TablaBoletasPrimariaComponent } from './componentes/componentesTablas/tabla-boletas-primaria/tabla-boletas-primaria.component';
+import { TablaBoletasSecundariaComponent } from './componentes/componentesTablas/tabla-boletas-secundaria/tabla-boletas-secundaria.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +81,11 @@ import { ModalChangePasswordComponent } from './componentes/componentesModales/m
     EditarBoletaComponent,
     PaginaPruebaComponent,
     ListadoUsuariosComponent,
-    ModalChangePasswordComponent
+    ModalChangePasswordComponent,
+    CargaMasivaComponent,
+    ModalMensajeNotificacionComponent,
+    TablaBoletasPrimariaComponent,
+    TablaBoletasSecundariaComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +96,8 @@ import { ModalChangePasswordComponent } from './componentes/componentesModales/m
     RouterModule,
     DataTablesModule,
     AngularMaterialModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+  
   ],
   providers: [
     provideAnimationsAsync()

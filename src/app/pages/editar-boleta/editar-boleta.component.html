@@ -135,17 +135,17 @@
     <!-- aqui  van  a ir las calificaciones  -->
     <div class="shadow rounded card-datos-calificaciones w-100 py-2 px-2 ">
         <div class="encabezado">
-            <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.School"></i> Información del informacion de calificaciones </h2>
+            <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.School"></i> Información de calificaciones </h2>
             <div class="formulario">
 
-                <div class="d-flex gap-2">
+                <div class="datos-boleta gap-2 ">
                     <div class="par d-flex align-items-center  mt-3 w-100">
                         <div class="form form-control bg-light text-center" >Capturado por: {{datosCaptura.capturado_por}} </div>
                     </div>
     
-                    <form [formGroup]="datosCct" class="par d-flex align-items-center  mt-3 w-100 gap-3">
+                    <form [formGroup]="datosCct" class="par par-folio d-flex align-items-center  mt-3 w-100 gap-3">
                         <label for="" class="fs-6 w-30">folio original de la boleta</label>
-                        <input class="form form-control w-50 text-center"  formControlName="folio" [value]="datosCaptura.folio" type="text" placeholder="folio original de la boleta" >
+                        <input class=" folio form form-control w-50 text-center"  formControlName="folio" [value]="datosCaptura.folio" type="text" placeholder="folio original de la boleta" >
                     </form>
     
                 </div>
@@ -187,8 +187,8 @@
         <!-- informacion de las calificaciones en caso de que sea secundaria -->
         <form [formGroup]="calificacionesSecundaria" class="SECUNDARIA mt-4 mb-4" *ngIf=" datosCaptura.nivel== 'SECUNDARIA' && datosCaptura.calificacionesSecundaria.Primero != 0">
             <div class="calificaciones d-flex ">
-                <div class="materia-header lead text-center w-100 border  fw-bold">Grado</div>
-                <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+                <div class="materia-header lead text-center w-100 border py-2  fw-bold">Grado</div>
+                <div class="calificacion-header lead text-center w-100 border py-2 fw-bold">Calificación</div>
               </div>
               <div class="calificaciones d-flex ">
                 <div class="fs-6 lead text-center w-100 border ">1er año</div>

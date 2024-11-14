@@ -34,7 +34,10 @@
     "pako": "^2.1.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.1",
+    "toastify-js": "^1.12.0",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
+    "xslx": "^1.0.0",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
@@ -46,6 +49,7 @@
     "@types/jasmine": "~5.1.0",
     "@types/jquery": "^3.5.31",
     "@types/pako": "^2.0.3",
+    "@types/toastify-js": "^1.12.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

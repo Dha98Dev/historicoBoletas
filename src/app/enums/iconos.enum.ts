@@ -20,6 +20,11 @@ export enum Iconos {
     NewUser='fas fa-user-plus',
     Book='fas fa-book',
     DataBase='fas fa-database',
-    Consulta='fas fa-layer-group'
-
+    Consulta='fas fa-layer-group',
+    Pdf='fas fa-file-pdf',
+    ExcelFile='fas fa-file-excel',
+    UploadFile='fas fa-cloud-upload-alt',
+    Reload='fas fa-redo-alt',
+    Notification='fas fa-bell',
+    XToCloseRounded='fas fa-times-circle'
   }

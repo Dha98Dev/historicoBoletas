@@ -1,0 +1,106 @@
+<div class="plantillas-excel d-flex justify-content-between gap-3 px-3 align-items-center mt-2">
+  <div class="d-flex align-items-center  gap-3">
+    <button mat-raised-button  *ngIf="mostrarTabla || guardadoCompleto" class=" new-file2 btn "  (click)="limpiarData()"> <i [class]="iconos.Reload"></i> Cargar Otro
+      Archivo</button>
+      <button mat-raised-button *ngIf="mostrarTabla" class=" new-file2 btn btn-lila "  (click)="guardarCaptura()"> <i [class]="iconos.Save"></i>Guardar Captura</button>
+  </div >
+<div class="d-flex gap-3">
+  <button mat-raised-button class="btn btn-teal  text-uppercase d-flex gap-2  align-items-center "> <i [class]="iconos.ExcelFile"></i>
+    descargar Plantilla de Primarias</button>
+  <button mat-raised-button class="btn btn-teal-dark text-uppercase d-flex gap-2  align-items-center "> <i [class]="iconos.ExcelFile"></i>
+    Descargar Plantilla de Secundarias</button>
+</div>
+</div>
+
+<div *ngIf="!mostrarTabla && !guardadoCompleto" class="contenedor d-flex justify-content-around flex-wrap px-4 mt-3">
+
+  <!-- <a href="assets/plantilla.xlsx" download="plantilla.xlsx" class="btn btn-primary">
+    Descargar plantilla de Excel
+</a> -->
+
+
+  
+
+<!-- -------------------------------- este es el input en el que se deben de cargar los archivos -->
+
+  <div class="container-file-upload col-8 d-flex justify-content-center  flex-column align-items-center  animate__animated animate__zoomIn ">
+    <div class="file-upload" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+      *ngIf="!archivoCargado">
+  
+      <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
+      <div class="upload-area" (click)="fileInput.click()">
+        <i [class]="iconos.UploadFile"></i>
+        <p class="fw-semibold p">Arrastra y suelta tu Archivo aquí <br>O</p>
+        <button>Click aqui para Buscar</button>
+      </div>
+    </div>
+    
+  <div class="upload-file animate__animated animate__zoomIn" >
+    <div class="botones d-flex gap-3 px-3 mt-2" *ngIf="archivoCargado && !guardadoCompleto"  >
+      <button class="w-50 importar-data" mat-raised-button (click)="mostrarData()"> <i [class]="iconos.UploadFile"></i> Importar
+        Informacion</button>
+      <button class="w-50 new-file "  (click)="limpiarData()"> <i [class]="iconos.Reload"></i> Cargar Otro
+        Archivo</button>
+    </div>
+    <div *ngIf="!guardadoCompleto" class="nombre-archivo shadow " [ngClass]="nombreFile !='' ? 'cargado': 'vacio'">
+      <p  *ngIf="archivoCargado"> {{nombreFile}} </p>
+      <p  *ngIf="!archivoCargado"> Aun no se Ha cargado ningun archivo ...</p>
+    </div>
+  
+  </div>
+
+  </div>
+<!-- -------------- Aqui termina el input de la carga de archivos de excel -->
+
+
+
+<!-- -------------------- estos son los botones que mostraremos para importar la informacion o  cargar otro -->
+
+
+<!-- ------------ aqui finaliza el div que contiene los botones de importar informacion  o cargar otro archivo -->
+
+
+
+</div>
+
+
+<!-- en  esta tabla se agrega el listado de de registros obtenidos del excel -->
+<app-tabla-boletas-secundaria [BoletasSecundaria]="BoletasSecundaria" *ngIf="mostrarTabla && nivelSeleccionado == 'SECUNDARIA' && !guardadoCompleto" [textDanger]="true"></app-tabla-boletas-secundaria>
+<!-- aqui finaliza la tabla que contiene la  los registros de cuando un archivo se carga y el nivel es de secundaria -->
+
+
+
+
+<!-- esta es la tabla que se muestra cuando se carga un archivo y el nivel es de primaria -->
+<app-tabla-boletas-primaria [BoletasPrimaria]="BoletasPrimaria" *ngIf="mostrarTabla && nivelSeleccionado == 'PRIMARIA' && !guardadoCompleto" [textDanger]="true"></app-tabla-boletas-primaria>
+<!-- aqui finaliza la tabla que contiene lainformacion de cuando se carga un archivo y el nivel es de primaria -->
+
+
+<!-- este es el modal de notificacion de  error -->
+<app-modal-mensaje-notificacion [mostrar]="mostrarError" *ngIf="mostrarError"></app-modal-mensaje-notificacion> 
+
+<!-- <button (click)="mostrarTast()" >toasttify</button> -->
+
+
+<!-- esta tabla se mostrara cuando la informacion se haya guardado  -->
+ <!-- tabla que contiene los registros guardados -->
+  <div>
+    <app-tabla-boletas-primaria [BoletasPrimaria]="boletasGuardadas" [clase]="'guardado'" [titulo]="'BOLETAS DE PRIMARIA QUE SE  GUARDARON CORRECTAMENTE'" *ngIf="nivelSeleccionado== 'PRIMARIA' && guardadoCompleto && boletasGuardadas.length>0"></app-tabla-boletas-primaria>
+
+    <app-tabla-boletas-primaria [BoletasPrimaria]="boletasNoGuardadas" [clase]="'error'" [titulo]="'BOLETAS DE PRIMARIA QUE NO  SE GUARDARON '" *ngIf="nivelSeleccionado== 'PRIMARIA' && guardadoCompleto && boletasNoGuardadas.length>0"></app-tabla-boletas-primaria>
+  </div>
+
+  <app-tabla-boletas-secundaria [BoletasSecundaria]="boletasGuardadas" [clase]="'guardado'" [titulo]="'BOLETAS DE SECUNDARIA QUE SE GUARDARON CORRECTAMENTE'" *ngIf="nivelSeleccionado== 'SECUNDARIA' && guardadoCompleto && boletasGuardadas.length > 0"></app-tabla-boletas-secundaria>
+  <app-tabla-boletas-secundaria [BoletasSecundaria]="boletasNoGuardadas" [clase]="'error'" [titulo]="'BOLETAS DE SECUNDARIA QUE NO SE  GUARDARON'" *ngIf="nivelSeleccionado== 'SECUNDARIA' && guardadoCompleto && boletasNoGuardadas.length > 0 "></app-tabla-boletas-secundaria>
+
+ <!-- tabla que contiene los registros que por alguna razon no se pudieroin guardar -->
+
+ <!-- ------------------- este es el listado de los posibles errores que puede  haber  -->
+
+ <div *ngIf="mostrarListadoErrores" class="listadoErrores col-5 animate__animated animate__zoomIn shadow rounded px-2 py-2" >
+  <p class="text-dark fw-semibold text-center py-2 text-uppercase"> - - listado de errores por registros</p>
+  <div class="contenedor-lista d-flex flex-column gap-2">
+    <div *ngFor="let error of listadoErroresEncontrados" class="list-item px-2 py-1 rounded d-flex gap-2 align-items-center border" ><div class="icono-error"><i [class]="iconos.XToCloseRounded " ></i> </div>EL REGISTRO NUMERO {{error.numeroRegistro}} - {{error.descripcion}} </div>
+  </div>
+</div>
+<!-- Aqui termina el div del listado de posibles errores -->

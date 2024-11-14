@@ -13,6 +13,9 @@
           <li class="nav-item"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' ">
             <a class="nav-link d-flex gap-2 align-items-center" routerLink="cargarInformacion" routerLinkActive="activo"><i [class]="iconos.DataBase"></i> Cargar calificaciones</a>
           </li>
+          <li class="nav-item"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' ">
+            <a class="nav-link d-flex gap-2 align-items-center" routerLink="cargaMasiva" routerLinkActive="activo"><i [class]="iconos.ExcelFile"></i>Carga Masiva</a>
+          </li>
           <li class="nav-item"  *ngIf="getTipoUsuario() == '1'">
             <a class="nav-link d-flex gap-2 align-items-center" routerLink="planesEstudio" routerLinkActive="activo"><i [class]="iconos.Book"></i>Planes de Estudio</a>
           </li>

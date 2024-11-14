@@ -56,7 +56,6 @@ export class HistorialBoletasUpdateService {
   }
 
 
-
   private handleError(error: HttpErrorResponse): Observable<any> {
       let errorMessage = 'Error desconocido';
       if (error.error instanceof ErrorEvent) {

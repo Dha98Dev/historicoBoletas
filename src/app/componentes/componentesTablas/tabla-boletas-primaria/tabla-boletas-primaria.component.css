@@ -1,0 +1,17 @@
+table {
+  font-size: 10px;
+}
+.invalido {
+  color: red;
+}
+.guardado{
+background: rgb(18, 193, 18);
+color: white;
+}
+.error{
+  background: rgb(240, 31, 90);
+  color: white;
+}
+th{
+  text-transform: uppercase;
+}

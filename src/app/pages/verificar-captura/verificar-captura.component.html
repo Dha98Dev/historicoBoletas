@@ -1,9 +1,9 @@
 <app-loader *ngIf="loader"></app-loader>
-<div class="acciones d-flex justify-content-end gap-3" >
+<div class="acciones d-flex justify-content-end gap-3 px-3 py-2 " >
 
-  <button class="btn-gray-dark text-uppercase"  mat-raised-button (click)="llenarInfoAcional()"> <i [class]="iconos.DownloadFile"></i>Agregar informacion complementaria</button>
+  <button class="btn-gray-dark text-uppercase" *ngIf="!infoAdicional"  mat-raised-button (click)="llenarInfoAcional()"> <i [class]="iconos.DownloadFile"></i> SOLICITUD DE DUPLICADOS Y SERVICIOS </button>
 
-  <button class="btn-lila"  (click)="descargarSolicitudServicios()" *ngIf="datosCaptura.localidad_dom != null" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.DownloadFile"></i>SOLICITUD DE DUPLICADOS Y SERVICIOS</button>
+  <button class="btn-rose fs-6"  (click)="descargarSolicitudServicios()" *ngIf="infoAdicional"   matTooltip="Descargar Pdf" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.Pdf"></i>  </button>
 </div>
 <div class="conetenedor-verificar d-flex justify-content-center align-items-center flex-column mt-4">
     
@@ -75,24 +75,24 @@
         <!-- informacion de las calificaciones en caso de que sea secundaria -->
         <div class="SECUNDARIA mt-4 mb-4" *ngIf=" datosCaptura.nivel== 'SECUNDARIA'">
             <div class="calificaciones d-flex ">
-                <div class="materia-header lead text-center w-100 border  fw-bold">Grado</div>
-                <div class="calificacion-header lead text-center w-100 border fw-bold">Calificación</div>
+                <div class="materia-header lead text-center w-100 border py-2  fw-bold">Grado</div>
+                <div class="calificacion-header lead text-center w-100 border py-2 fw-bold">Calificación</div>
               </div>
               <div class="calificaciones d-flex ">
-                <div class="fs-6 lead text-center w-100 border ">1er año</div>
-                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.Primero}} </div>
+                <div class="fs-6 lead text-center w-100 border py-2 ">1er año</div>
+                <div class="fs-6 lead text-center w-100 border py-2">{{datosCaptura.calificacionesSecundaria.Primero}} </div>
               </div>
               <div class="calificaciones d-flex ">
-                <div class="fs-6 lead text-center w-100 border ">2do año</div>
-                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.Segundo}} </div>
+                <div class="fs-6 lead text-center w-100 border py-2 ">2do año</div>
+                <div class="fs-6 lead text-center w-100 border py-2">{{datosCaptura.calificacionesSecundaria.Segundo}} </div>
               </div>
               <div class="calificaciones d-flex ">
-                <div class="fs-6 lead text-center w-100 border ">3er año</div>
-                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.Tercero}} </div>
+                <div class="fs-6 lead text-center w-100 border py-2 ">3er año</div>
+                <div class="fs-6 lead text-center w-100 border py-2">{{datosCaptura.calificacionesSecundaria.Tercero}} </div>
               </div>
               <div class="calificaciones d-flex ">
-                <div class=" lead fs-6 text-center w-100 border fw-semibold">Promedio final</div>
-                <div class="fs-6 lead text-center w-100 border">{{datosCaptura.calificacionesSecundaria.calificacionFinal}} </div>
+                <div class=" lead fs-6 text-center w-100 border py-2 fw-semibold">Promedio final</div>
+                <div class="fs-6 lead text-center w-100 border py-2">{{datosCaptura.calificacionesSecundaria.calificacionFinal}} </div>
               </div>
         </div>
         <div class="botones d-flex justify-content-end w-100 gap-4" *ngIf="datosCaptura.estado_boleta != 'Revisado'">

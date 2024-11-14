@@ -28,6 +28,7 @@ export class VerificarCapturaComponent {
   public promedioPrimaria: number = 0
   public pdfUrlSolicitud: string = 'http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta='
   public pdfSeleccionado: string = ''
+  public infoAdicional = true
 
   public loader: boolean = true;
 
@@ -238,6 +239,7 @@ llenarInfoAcional() {
       this.serviceUpdate.updateInformacionComplementaria(data).subscribe(response =>{
         if (!response.error) {
           this.notificacionesService.mostrarAlertaConIcono('Registro exitoso', response.mensaje,'success')
+          this.infoAdicional=true
           this.datosCaptura.localidad_dom=localidad
           this.datosCaptura.domicilio_particular=domicilio
           this.datosCaptura.telefono=telefono

@@ -1,0 +1,53 @@
+
+<div class="table-responsive">
+  <h2 class="fw-semibold text-center mt-4 fs-6"> {{titulo}} </h2>
+    <table class="table animate__animated animate__zoomIn" border="1">
+      <thead>
+        <tr>
+          <th [ngClass]="clase" class="text-center " scope="col">#</th>
+          <th [ngClass]="clase" class="text-center " scope="col">nombre</th>
+          <th [ngClass]="clase" class="text-center " scope="col">apellido_paterno</th>
+          <th [ngClass]="clase" class="text-center " scope="col">apllido_materno</th>
+          <th [ngClass]="clase" class="text-center " scope="col">curp</th>
+          <th [ngClass]="clase" class="text-center " scope="col">folio</th>
+          <th [ngClass]="clase" class="text-center " scope="col">cct</th>
+          <th [ngClass]="clase" class="text-center " scope="col">nombre ct</th>
+          <th [ngClass]="clase" class="text-center " scope="col">ciclo</th>
+          <th [ngClass]="clase" class="text-center " scope="col">nivel</th>
+          <th [ngClass]="clase" class="text-center " scope="col">plan </th>
+          <th [ngClass]="clase" class="text-center " scope="col">zona</th>
+          <th [ngClass]="clase" class="text-center " scope="col">localidad</th>
+          <th [ngClass]="clase" class="text-center " scope="col">turno</th>
+          <th [ngClass]="clase" class="text-center " scope="col">grupo</th>
+          <th [ngClass]="clase" class="text-center " scope="col"><label class="rotate">1ro</label></th>
+          <th [ngClass]="clase" class="text-center " scope="col"><label class="rotate">2do</label></th>
+          <th [ngClass]="clase" class="text-center " scope="col"><label class="rotate">3ro</label></th>
+          <th [ngClass]="clase" class="text-center " scope="col"><label class="rotate">prom.</label></th>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <tr *ngFor="let boleta of BoletasSecundaria; let i=index" class=" animate__animated animate__fadeInUp">
+          <th class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''" scope="row"> {{i+1}} </th>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.nombre}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.apellido_paterno}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.apellido_materno}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.curp}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.folio}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.clave_ct}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.nombre_ct}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.ciclo}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.nivel}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.plan_estudio}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.zona}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.localidad}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.turno}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.grupo}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.calificacion_primero}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.calificacion_segundo}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.calificacion_tercero}} </td>
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''"> {{boleta.promedio_general}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

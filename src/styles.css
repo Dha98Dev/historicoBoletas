@@ -34,3 +34,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-size: 15px !important;
     padding-top:10px !important;
 }
+.toastify{
+/* width: 250px !important; */
+padding: 5px 10px ;
+border-radius: 3px;
+text-transform: uppercase;
+font-weight: bold;
+color: white;
+font-size: 12px;
+word-spacing: 4px;
+z-index: 20000;
+}

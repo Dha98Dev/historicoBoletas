@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as pako from 'pako';
+import { Iconos } from '../../enums/iconos.enum';
 
 @Component({
   selector: 'app-pagina-prueba',
@@ -7,6 +8,7 @@ import * as pako from 'pako';
   styleUrl: './pagina-prueba.component.css'
 })
 export class PaginaPruebaComponent {
+  public iconos=Iconos
 
   public data:any=[
     {

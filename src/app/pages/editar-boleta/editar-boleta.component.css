@@ -58,6 +58,12 @@ input, select {
 text-transform: uppercase;
 
 }
+
+.datos-boleta{
+display: flex;
+flex-direction: row;
+}
+
 @media(max-width:990px){
 .par-form{
     width: 100% !important;
@@ -68,5 +74,13 @@ text-transform: uppercase;
 }
 .card-datos-persona{
     width: 100% !important;
+}
+}
+@media(max-width:850px){
+.datos-boleta{
+    flex-direction: column;
+}
+.folio{
+    width: 75% !important;
 }
 }

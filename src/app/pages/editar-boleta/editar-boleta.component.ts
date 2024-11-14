@@ -209,8 +209,13 @@ export class EditarBoletaComponent {
   ReemplazarCalificacion(id_calificacion_primaria: number, event: Event) {
     // Convertir el EventTarget en un HTMLInputElement para acceder a su valor
     const inputElement = event.target as HTMLInputElement;
-    const valor = parseFloat(inputElement.value)
-    console.log(valor)
+  let  valor:number;
+    if(inputElement.value == ""){
+      valor= 5
+    }else{
+      valor = parseFloat(inputElement.value)
+    }
+    console.log(inputElement.value)
 
     if (valor < 1 || valor > 10) {
       this.calificacionesValidas = false
@@ -330,6 +335,7 @@ export class EditarBoletaComponent {
 
     if ((this.datosCct.valid && this.persona.valid && this.calificacionesValidas) || (this.datosCct.valid && this.persona.valid && this.calificacionesSecundaria.valid)) {
       let data = { token: this.userService.obtenerToken(), ...this.persona.value, ...this.datosCct.value, calificacionesSecundaria: this.calificacionesSecundaria.value, calificacionesPrimaria: this.calificacionesPrimaria }
+      data.folio=parseInt(data.folio)
       console.log(data)
   
       this.serviceUpdate.updateInfoBoleta(data).subscribe(response => {

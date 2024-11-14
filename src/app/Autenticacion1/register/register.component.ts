@@ -68,13 +68,14 @@ public listadoTUsuarios:tUsuarios[] = []
       }
       return 'campo completado correctamente'
     }
-
     guardarNewUser(){
       if (this.newUser.valid) {
+        let pass = btoa(this.newUser.get('password')?.value);
+        this.newUser.patchValue({password: pass})
         let data ={...this.newUser.value, "token":this.userService.obtenerToken()}
         console.log(data)
         this.userService.agregarUsuario(data).subscribe(response =>{
-          if (!response.error) {
+          if (!response.error) { 
             this.notificacionesService.mostrarAlertaConIcono("Agregar Usuario",response.mensaje,'success' )
             this.newUser.reset()
           }

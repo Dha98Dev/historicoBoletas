@@ -2,6 +2,7 @@ import { Component, ElementRef, viewChild, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Iconos } from '../../../enums/iconos.enum';
 import { NotificacionesService } from '../../../services/notificaciones.service';
+import { userService } from '../../../Autenticacion1/servicios/user-service.service';
 
 @Component({
   selector: 'app-modal-change-password',
@@ -17,7 +18,7 @@ export class ModalChangePasswordComponent {
 
 
 
-  constructor(private fb: FormBuilder, private notificationService:NotificacionesService) { }
+  constructor(private fb: FormBuilder, private notificationService:NotificacionesService, private userService:userService) { }
 
   @ViewChild('password') pass!: ElementRef;
   @ViewChild('confirmPassword') passConfirm!: ElementRef
@@ -69,9 +70,19 @@ export class ModalChangePasswordComponent {
 
   cambiarPassword() {
     if (this.newPassword.valid && this.passwordValidas) {
-      this.notificationService.mostrarAlertaSimple('datos llenados correctamente')
+      let newPasswordB64= btoa(this.newPassword.get('password')?.value)
+      let passwordActualB64= btoa(this.newPassword.get('currentPassword')?.value)
+      let data={token:this.userService.obtenerToken(), passwordActual:passwordActualB64, passwordNueva:newPasswordB64}
+      this.userService.cambiarPassword(data).subscribe(response =>{
+        if (!response.error) {
+          this.notificationService.mostrarAlertaConIcono('Cambio de Contraseña', response.mensaje, 'success');
+        }
+        else{
+          this.notificationService.mostrarAlertaConIcono('Cambio de Contraseña', response.mensaje, 'error');
+        }
+      })
     } else {
-      this.notificationService.mostrarAlertaSimple('Debe de llenar todos los campos')
+      this.notificationService.mostrarAlertaSimple('Debe de llenar todos los campos Correctamente')
     }
   }
 
@@ -136,7 +147,6 @@ export class ModalChangePasswordComponent {
       }
     }
 
-    console.log(pass1, pass2)
 
   }
 

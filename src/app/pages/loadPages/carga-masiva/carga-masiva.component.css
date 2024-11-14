@@ -1,0 +1,195 @@
+/* 
+*{
+  border: 1px solid red;
+} */
+.btn-teal-dark,
+.btn-teal {
+  font-size: 12px !important;
+}
+
+p {
+  margin-bottom: 0px !important;
+}
+
+.file {
+  min-height: 80vh;
+}
+
+.body-file {
+  border: 3px dashed #233dfd !important;
+  width: 450px;
+  height: 250px;
+}
+
+.icon>i {
+  font-size: 60px;
+
+}
+
+.file-upload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 400px;
+  border: 2px dashed #233dfd !important;
+  border-radius: 10px;
+  background-color: #f3f3f3;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.cloud-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.upload-area>button {
+  padding: 5px 15px;
+  background-color: #555;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 70%;
+}
+
+.upload-area>i {
+  font-size: 50px;
+}
+
+/* button:hover {
+    background-color: #444;
+  }
+   */
+.contenedor {
+  display: flex;
+  justify-content: center;
+  min-height: 75vh;
+  align-items: center;
+}
+
+p {
+  font-size: 15px;
+}
+
+.nombre-archivo {
+  width: 400px;
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px 5px;
+  background: #201e1e;
+  color: white;
+}
+
+.cargado {
+  background: #2dd4bf;
+  width: 100%;
+  text-align: center;
+}
+
+.vacio {
+  background: #444;
+  width: 100%;
+}
+
+.botones {
+  width: 500px;
+}
+
+.botones>button:hover {
+  color: white;
+}
+
+table {
+  font-size: 10px;
+}
+
+.rotate {
+  transform: rotate(-50deg);
+}
+
+.invalido {
+  color: red;
+}
+
+.new-file {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  outline: 1px solid #eee;
+  color: #000 !important;
+}
+
+.new-file:hover {
+  outline: 1px solid #999;
+}
+
+.importar-data {
+  background: #444 !important;
+  color: white;
+}
+
+.importar-data:hover {
+  background: #777 !important;
+}
+
+.new-file2{
+  width: 250px !important;
+  font-size: 12px !important;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.listadoErrores{
+position: fixed;
+top: 200px;
+right: 20px;
+background: white;
+z-index: 3000 !important;
+}
+.list-item{
+list-style-type: none;
+}
+.icono-error{
+  width: 25px;
+  height: 25px ;
+  background: #e3517e;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  box-shadow: 1px 1px 2px #e3517e;
+}
+
+@keyframes fadeInUpWithBorder {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInUpWithBorder {
+  animation: fadeInUpWithBorder 0.5s ease forwards;
+}
+

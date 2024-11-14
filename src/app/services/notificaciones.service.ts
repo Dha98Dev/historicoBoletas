@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
-
+import Toastify from 'toastify-js'
 @Injectable({
   providedIn: 'root'
 })
@@ -45,5 +45,29 @@ separarDescipcion(mensaje:string, sepador:string):string{
   let m=mensaje.split(sepador);
   return m[1];
 }
+
+
+Toastify(mensaje:string, clase:string){
+  let background= clase == 'error' ? 'linear-gradient(270deg, hsla(311, 94%, 50%, 1) 20%, hsla(0, 96%, 46%, 1) 100%)' : ' linear-gradient(270deg, hsla(107, 100%, 31%, 1) 20%, hsla(121, 100%, 29%, 1) 100%)'
+
+  
+  Toastify({
+    text: mensaje,
+    className: "info",
+    position:'left',
+    duration: 5000,
+    offset: {
+      x: 0, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+      y: 100 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+    },
+    style: {
+      background: background,
+      position: 'absolute',
+
+    }
+  }).showToast();
+
+}
+
 
 }

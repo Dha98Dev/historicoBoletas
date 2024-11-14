@@ -43,6 +43,7 @@ export class LoadPageComponent {
   public Directores:opciones[]=[]
   public materias:opciones[]=[] 
   public animationClass:string =''
+  public completoPrimaria:boolean=true
 
   constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService){}
 
@@ -364,7 +365,11 @@ enviarInfo(){
         this.Directores=[] 
         this.egresado.reset()
         this.promedioPrimaria='0'
-        this.PromedioSecundaria='0'  
+        this.PromedioSecundaria='0' 
+        this.completoPrimaria=false 
+        setTimeout(() => {
+          this.completoPrimaria=true
+        }, 1000);
       }
       else{
         this.calificacioneSecundaria.reset()
@@ -372,6 +377,10 @@ enviarInfo(){
         this.egresado.reset()
         this.promedioPrimaria='0'
         this.PromedioSecundaria='0'
+        this. completoPrimaria=false
+        setTimeout(() => {
+          this.completoPrimaria=true
+        }, 1000);
       }
     }
     else{
@@ -405,7 +414,8 @@ filtrarPlanEstudioByCiclo(){
   let continuar=true
 for (let i=this.planesEstudio.length -1; i>=0; i--) {
   let nombrePlan = this.planesEstudio[i].nombre.split(' ')
-    let inicioPlan:any = nombrePlan[nombrePlan.length - 1]
+  // aqui vamos a obtener el numero siguiente  a plan 
+    let inicioPlan:any = nombrePlan[1]
   
     planesEstudio.push(this.planesEstudio[i])
     inicioPlan=parseInt(inicioPlan)
