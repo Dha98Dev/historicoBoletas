@@ -157,7 +157,7 @@ table {
 
 .listadoErrores{
 position: fixed;
-top: 200px;
+top: 0px;
 right: 20px;
 background: white;
 z-index: 3000 !important;
@@ -191,5 +191,8 @@ list-style-type: none;
 
 .fadeInUpWithBorder {
   animation: fadeInUpWithBorder 0.5s ease forwards;
+}
+.modal-confirmacion{
+  border-left: 7px solid #e3517e;
 }
 

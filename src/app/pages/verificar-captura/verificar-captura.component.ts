@@ -28,7 +28,7 @@ export class VerificarCapturaComponent {
   public promedioPrimaria: number = 0
   public pdfUrlSolicitud: string = 'http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta='
   public pdfSeleccionado: string = ''
-  public infoAdicional = true
+  public infoAdicional = false
 
   public loader: boolean = true;
 
@@ -95,13 +95,17 @@ export class VerificarCapturaComponent {
       if (!response.error) {
         this.datosCaptura = response.data[0]
         let suma = 0
+        let contador=0;
         this.datosCaptura.calificacionesPrimaria.forEach(cal => {
-          suma += parseFloat(cal.calificacion)
+          if (cal.nombre_materia!='LENGUA QUE HABLA') {
+            suma += parseFloat(cal.calificacion)
+            contador++;
+          }
         })
-        this.promedioPrimaria = Number((suma / this.datosCaptura.calificacionesPrimaria.length).toFixed(2))
+        this.promedioPrimaria = Number((suma / contador).toFixed(2))
 
         this.loader = false;
-        let datosEscuela = ["clave_centro_trabajo", "nombre_cct", "grupo", "turno", "ciclo", "nivel", "plan_estudio", "zona"];
+        let datosEscuela = ["clave_centro_trabajo", "nombre_cct", "grupo", "turno", "ciclo", "nivel", "plan_estudio", "zona","localidad" ];
         let datosPersona = ["nombre", "apellido_paterno", "apellido_materno", "curp"];
 
         datosEscuela.forEach(datoEscuela => {

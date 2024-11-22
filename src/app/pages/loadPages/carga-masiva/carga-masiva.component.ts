@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Iconos } from '../../../enums/iconos.enum';
 import * as XLSX from 'xlsx'
-import { Boleta, boletaPrimaria, boletaSecundaria, listadoPlanesEstudios, materias } from '../../../interfaces/cargar-boleta';
+import { Boleta, boletaPrimaria, boletaSecundaria, listadoMaterias, listadoPlanesEstudios, materiaItem, materias } from '../../../interfaces/cargar-boleta';
 import { userService } from '../../../Autenticacion1/servicios/user-service.service';
 import Toastify from 'toastify-js'
 import { NotificacionesService } from '../../../services/notificaciones.service';
@@ -10,6 +10,9 @@ import { HistorialBoletasGetService } from '../../../services/historial-boletas-
 import { opciones } from '../../../componentes/componentesInputs/select-form/select-form.component';
 import { listadoErrores } from '../../../interfaces/errores.interface';
 import { Errores } from '../../../enums/erroresCargaExcel.enum';
+import Swal, { SweetAlertIcon } from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
+
 @Component({
   selector: 'app-carga-masiva',
   templateUrl: './carga-masiva.component.html',
@@ -26,10 +29,11 @@ export class CargaMasivaComponent {
   public mostrarTabla: boolean = false
   public mostrarMensaje: boolean = false
   public mostrarError: boolean = false
-  public mostrarListadoErrores: boolean = true
+  public mostrarListadoErrores: boolean = false
   public guardadoCompleto: boolean = false
   private numeroHojaSeleccionada:number = 0
   public seleccionoHojado: boolean = false
+  public listadoMateriasPlan:listadoMaterias[]=[]
 
   public nivelSeleccionado: string = ''
   public nombreFile: string = ''
@@ -47,6 +51,8 @@ export class CargaMasivaComponent {
   
   public contadorFila:number = 0
 
+  public File:File | null= null
+
 
 
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -57,6 +63,7 @@ export class CargaMasivaComponent {
   ngOnInit(){
     this.getPlanesEstudio()
     this.getCiclosEscolares()
+    // this.seleccionarRangoAnios()
   }
 
   handleFiles(files: FileList) {
@@ -64,7 +71,9 @@ export class CargaMasivaComponent {
       const file = files[0];
       // Validar que el archivo sea de tipo Excel
       if (this.isExcelFile(file)) {
-        this.leerExcel(file); // Llama a la función leerExcel solo si es un archivo de Excel
+        this.seleccionarRangoAnios()
+        this.File=file
+        // this.leerExcel(file); // Llama a la función leerExcel solo si es un archivo de Excel
       } else {
         this,this.notificacionesService.mostrarAlertaConIcono('Archivos validos', 'Por favor, sube solo archivos de Excel (.xls, .xlsx)', 'error')
       }
@@ -72,6 +81,7 @@ export class CargaMasivaComponent {
   }
 
   isExcelFile(file: File): boolean {
+    this.File=null
     const allowedExtensions = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     return allowedExtensions.includes(file.type) && (fileExtension === 'xls' || fileExtension === 'xlsx');
@@ -104,22 +114,41 @@ export class CargaMasivaComponent {
     let fileReader = new FileReader();
 
     fileReader.onload = (e) => {
-      // Leer el archivo en formato binario
-      const workBook = XLSX.read(fileReader.result, { type: 'binary' });
-      const sheetsNames = workBook.SheetNames;
+        // Leer el archivo en formato binario
+        const workBook = XLSX.read(fileReader.result, { type: 'binary' });
+        const sheetsNames = workBook.SheetNames; // Nombres de las hojas disponibles
+        // Verificar si se ha seleccionado un número de hoja válido
+        if (this.numeroHojaSeleccionada >= 0 && this.numeroHojaSeleccionada < sheetsNames.length) {
+            // Convertir la hoja seleccionada a JSON
+            this.excelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetsNames[this.numeroHojaSeleccionada]]);
+            this.nivelSeleccionado = this.excelData[0].nivel;
+            let planesEstudioExcel:string[]=[];
 
-      // Convertir la primera hoja a JSON
-      this.excelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetsNames[0]]);
-      this.nivelSeleccionado=this.excelData[0].nivel
-      alert("El nivel seleccionado fue : "+ this.nivelSeleccionado)
-      this.nombreFile = file.name
-      this.archivoCargado = true
+            for (let i = 0; i < this.excelData.length; i++) {
+           if(this.excelData[i].plan_estudio != undefined)
+            { planesEstudioExcel.push(this.excelData[i].plan_estudio)}
+            }
+            let result = planesEstudioExcel.filter((item,index)=>{
+              return planesEstudioExcel.indexOf(item) === index;
+            })
 
+            // mandamos a traer las materias de cada plan de estudio
+            for (let i = 0; i < result.length; i++) {
+              this.getMateriasPlanEstudio(result[i])
+              
+            }
+
+            this.nombreFile = file.name;
+            this.archivoCargado = true;
+        } else {
+            alert("Por favor selecciona una hoja válida.");
+        }
     };
 
     // Iniciar la lectura del archivo como binario
     fileReader.readAsBinaryString(file);
-  }
+}
+  
 
   onDrop(event: DragEvent) {
     event.preventDefault();
@@ -176,15 +205,19 @@ export class CargaMasivaComponent {
             if (registro.folio_boleta && registro.folio_boleta !== '') {
                 this.contadorFila = this.BoletasPrimaria.length + 1;
 
-                const materias: materias[] = [
-                    { materia: 'Español', calificacion: parseFloat((registro.Español || 0).toFixed(1)) },
-                    { materia: 'Matemáticas', calificacion: parseFloat((registro.Matematicas || 0).toFixed(1)) },
-                    { materia: 'Ciencias Naturales', calificacion: parseFloat((registro.Ciencias_naturales || 0).toFixed(1)) },
-                    { materia: 'Ciencias Sociales', calificacion: parseFloat((registro.Ciencias_sociales || 0).toFixed(1)) },
-                    { materia: 'Educación Física', calificacion: parseFloat((registro.Educacion_fisica || 0).toFixed(1)) },
-                    { materia: 'Educación Artística', calificacion: parseFloat((registro.Educacion_artistica || 0).toFixed(1)) },
-                    { materia: 'Educación Tecnológica', calificacion: parseFloat((registro.Educacion_tecnologica || 0).toFixed(1)) },
-                ];
+
+               
+                const materias: materias[] = this.extraerCalificacionesMateria(registro.plan_estudio,registro)
+
+                // const materias: materias[] = [
+                //     { materia: 'Español', calificacion: parseFloat((registro.Español || 0).toFixed(1)) },
+                //     { materia: 'Matemáticas', calificacion: parseFloat((registro.Matematicas || 0).toFixed(1)) },
+                //     { materia: 'Ciencias Naturales', calificacion: parseFloat((registro.Ciencias_naturales || 0).toFixed(1)) },
+                //     { materia: 'Ciencias Sociales', calificacion: parseFloat((registro.Ciencias_sociales || 0).toFixed(1)) },
+                //     { materia: 'Educación Física', calificacion: parseFloat((registro.Educacion_fisica || 0).toFixed(1)) },
+                //     { materia: 'Educación Artística', calificacion: parseFloat((registro.Educacion_artistica || 0).toFixed(1)) },
+                //     { materia: 'Educación Tecnológica', calificacion: parseFloat((registro.Educacion_tecnologica || 0).toFixed(1)) },
+                // ];
 
                 let data: boletaPrimaria = {
                     nombre: registro.nombre,
@@ -211,10 +244,19 @@ export class CargaMasivaComponent {
                 let cicloValido = this.validarCicloEscolar(data.ciclo.trim());
                 let boletaValida = true;
 
+                // validamos la longitud del  arreglo de materias 
+                if (materias.length== 0) {
+                  boletaValida = false;
+                  this.listadoErroresEncontrados.push({
+                    numeroRegistro: this.contadorFila,
+                    descripcion: 'EL CAMPO(S) DE CALIFICACIóN'+ this.listaErrores.ERROR_CAMPO_FALTANTE
+                });
+                }
+
                 // Validación de calificaciones dentro del rango
                 for (let j = 0; j < materias.length; j++) {
                     const mat = materias[j];
-                    if (mat.calificacion > 10 || mat.calificacion <= 0) {
+                    if (mat.calificacion > 10 || mat.calificacion <= 0 || isNaN(mat.calificacion)) {
                         boletaValida = false;
                         this.mostrarError = true;
                         this.listadoErroresEncontrados.push({
@@ -233,35 +275,35 @@ export class CargaMasivaComponent {
         // Código para el nivel Secundaria
     }
 
-    this.mostrarError = true;
-    console.log(this.listadoErroresEncontrados);
+    this.mostrarError = this.listadoErroresEncontrados.length > 0 ? true : false;
 }
 
 
 
 
-  obtenerNombresMaterias(excelData: materias) {
-    if (!excelData) this.listadoMaterias = []
+  // obtenerNombresMaterias(excelData: materias) {
+  //   if (!excelData) this.listadoMaterias = []
 
-    // Suponemos que las materias están definidas como claves en el primer registro
-    const primerRegistro = excelData;
-    let listado = []
+  //   // Suponemos que las materias están definidas como claves en el primer registro
+  //   const primerRegistro = excelData;
+  //   let listado = []
 
 
-    // Detectar materias buscando palabras clave o criterios específicos
-    for (const key in primerRegistro) {
-      if (key.toLowerCase().includes("español") ||
-        key.toLowerCase().includes("matematicas") ||
-        key.toLowerCase().includes("ciencias") ||
-        key.toLowerCase().includes("educacion") ||
-        key.toLowerCase().includes("tecnologica")) {
-        listado.push(key);
-      }
-    }
-    if (this.listadoMaterias.length == 0) {
-      this.listadoMaterias = listado
-    }
-  }
+  //   // Detectar materias buscando palabras clave o criterios específicos
+  //   for (const key in primerRegistro) {
+  //     if (key.toLowerCase().includes("español") ||
+  //       key.toLowerCase().includes("matematicas") ||
+  //       key.toLowerCase().includes("ciencias") ||
+  //       key.toLowerCase().includes("educacion") ||
+  //       key.toLowerCase().includes("tecnologica")||
+  //       key.toLowerCase().includes("lengua")) {
+  //       listado.push(key);
+  //     }
+  //   }
+  //   if (this.listadoMaterias.length == 0) {
+  //     this.listadoMaterias = listado
+  //   }
+  // }
 
   openModal() {
     const modalElement = this.modal.nativeElement;
@@ -302,7 +344,7 @@ export class CargaMasivaComponent {
     }, { once: true });
   }
 
-  guardarCaptura() {
+  async guardarCaptura() {
     let boletasValidasPrimaria: boletaPrimaria[] = []
     let boletasInvalidasPrimaria: boletaPrimaria[] = []
 
@@ -316,26 +358,23 @@ export class CargaMasivaComponent {
         }
         else {
           this.boletasNoGuardadas.push(bol)
+
         }
       })
+      
+
+
+
 
       for (let i = 0; i < boletasValidasPrimaria.length; i++) {
         let bol = boletasValidasPrimaria[i]
         let calSecundaria = { Primero: 0, Segundo: 0, Tercero: 0, calificacionFinal: 0 }
         let data = { "token": this.userService.obtenerToken(), "calPrimaria": bol.materias, calSecundaria, "claveCct": bol.clave_ct, "nombreCct": bol.nombre_ct, "cicloEscolar": bol.ciclo, "zonaEscolar": bol.zona, "planEstudio": bol.plan_estudio, "nivelEducativo": bol.nivel, "localidad": bol.localidad, "turno": bol.turno, "grupo": bol.grupo, "folioBoleta": bol.folio, "directorCorrespondiente": "", "nombre": bol.nombre, "apellidoPaterno": bol.apellido_paterno, "apellidoMaterno": bol.apellido_materno, "curp": bol.curp }
 
+        await this.enviarBoletaPrimaria(data, bol);
 
-        this.historialServiceAdd.cargarBoletaExcel(data).subscribe(response=>{
-          if (!response.error) {
-            this.notificacionesService.Toastify(response.mensaje,'success');
-            this.boletasGuardadas.push(boletasValidasPrimaria[i])
-          }
-          else {
-            this.notificacionesService.Toastify(response.mensaje, 'error');
-            this.boletasNoGuardadas.push(boletasValidasPrimaria[i])
-          }
-        })
-        
+        // Esperamos 1 segundo antes de pasar a la siguiente boleta
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
 
@@ -351,6 +390,9 @@ export class CargaMasivaComponent {
           this.boletasNoGuardadas.push(bol)
         }
       });
+
+      // mostramos el listado de errores 
+      
       
       
       for (let i = 0; i < boletasValidasSecundaria.length; i++) {
@@ -358,7 +400,7 @@ export class CargaMasivaComponent {
         let calSecundaria = { Primero: bol.calificacion_primero, Segundo: bol.calificacion_segundo, Tercero: bol.calificacion_tercero, calificacionFinal: bol.promedio_general }
         let data = { "token": this.userService.obtenerToken(), "calPrimaria": [], calSecundaria, "claveCct": bol.clave_ct, "nombreCct": bol.nombre_ct, "cicloEscolar": bol.ciclo, "zonaEscolar": bol.zona, "planEstudio": bol.plan_estudio, "nivelEducativo": bol.nivel, "localidad": bol.localidad, "turno": bol.turno, "grupo": bol.grupo, "folioBoleta": bol.folio, "directorCorrespondiente": "", "nombre": bol.nombre, "apellidoPaterno": bol.apellido_paterno, "apellidoMaterno": bol.apellido_materno, "curp": bol.curp }
 
-        if (data.curp === undefined) {
+        if (data.curp === undefined || !data.curp) {
           data.curp =''
         }
     
@@ -381,6 +423,57 @@ export class CargaMasivaComponent {
     this.guardadoCompleto=true
   }
 
+
+  async enviarBoletasConDelay(boletasValidasPrimaria: boletaPrimaria[]) {
+    for (let i = 0; i < boletasValidasPrimaria.length; i++) {
+      const bol = boletasValidasPrimaria[i];
+      const calSecundaria = { Primero: 0, Segundo: 0, Tercero: 0, calificacionFinal: 0 };
+      const data = {
+        token: this.userService.obtenerToken(),
+        calPrimaria: bol.materias,
+        calSecundaria,
+        claveCct: bol.clave_ct,
+        nombreCct: bol.nombre_ct,
+        cicloEscolar: bol.ciclo,
+        zonaEscolar: bol.zona,
+        planEstudio: bol.plan_estudio,
+        nivelEducativo: bol.nivel,
+        localidad: bol.localidad,
+        turno: bol.turno,
+        grupo: bol.grupo,
+        folioBoleta: bol.folio,
+        directorCorrespondiente: "",
+        nombre: bol.nombre,
+        apellidoPaterno: bol.apellido_paterno,
+        apellidoMaterno: bol.apellido_materno,
+        curp: bol.curp,
+      };
+  
+  
+      // Llamamos al método `enviarBoletaPrimaria` y esperamos que termine
+      await this.enviarBoletaPrimaria(data, bol);
+  
+      // Esperamos 1 segundo antes de pasar a la siguiente boleta
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  }
+  
+  async enviarBoletaPrimaria(data: any, boleta: boletaPrimaria) {
+    try {
+      const response = await firstValueFrom(this.historialServiceAdd.cargarBoletaExcel(data));
+      if (!response.error) {
+        this.notificacionesService.Toastify(response.mensaje, 'success');
+        this.boletasGuardadas.push(boleta);
+      } else {
+        this.notificacionesService.Toastify(response.mensaje, 'error');
+        this.boletasNoGuardadas.push(boleta);
+      }
+    } catch (error) {
+      this.notificacionesService.Toastify('Error inesperado', 'error');
+      this.boletasNoGuardadas.push(boleta);
+    }
+  }
+  
 
 
   // ---------------------- ESTAS SON LAS VALIDACIONES CORRESPONDIENTES ------------------------
@@ -502,6 +595,161 @@ validarCicloEscolar(cicloEscolar: string): boolean {
   return cicloValido;
 }
 
+seleccionarRangoAnios(){
+  Swal.fire({
+    title: '',
+    html: `
+
+        
+        <hr>
+        <strong>Seleccione el rango de años capturados</strong><br>
+        
+        <div class="d-flex justify-content-around mt-4">
+        <label>
+          <input type="radio" name="rangoAnos" value="0"> 1979-1991
+        </label><br>
+        
+        <label>
+          <input type="radio" name="rangoAnos" value="1"> 1992-2007
+        </label><br>
+        
+        <label>
+          <input type="radio" name="rangoAnos" value="2"> 2008-2017
+        </label>
+        </div>
+        
+      </div>
+    `, showClass: {
+      popup: `
+        animate__animated
+        animate__zoomIn
+        animate__faster
+      `
+    },
+    hideClass: {
+      popup: `
+        animate__animated
+        animate__zoomOut
+        animate__faster
+      `
+    },
+    // showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    preConfirm: () => {
+      // const educacionIndigena = (document.querySelector('input[name="educacionIndigena"]:checked') as HTMLInputElement)?.value;
+      const rangoAnos = (document.querySelector('input[name="rangoAnos"]:checked') as HTMLInputElement)?.value;
+
+      if (!rangoAnos) {
+        Swal.showValidationMessage('Seleccione una opción en ambas preguntas.');
+        return null;
+      }
+      // !educacionIndigena || 
+      return {  rangoAnos };
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+        let resultado = result.value // Puedes manejar los datos seleccionados aquí
+        // this.EsEducacionIndigena = resultado.educacionIndigena == 'no'? false: true
+        this.numeroHojaSeleccionada= resultado.rangoAnos
+        this.leerExcel(this.File!)
+    }
+  });
+}
+
+getMateriasPlanEstudio(planEstudio: string): void {
+  const data = {
+    token: this.userService.obtenerToken(),
+    idPlanEstudio: "",
+    nombrePlanEstudio: planEstudio
+  };
+
+  this.historialServiceGet.getMaterias(data).subscribe(response => {
+    if (!response.error && response.data) {
+      // Extraer nombres de materias y formatearlas
+      const materias:any = this.formatearNombreMaterias(
+        response.data.map((mat: any) => mat['nombre'])
+      );
+
+      // Crear el objeto con las materias formateadas
+      const objetoMaterias: listadoMaterias = {
+        nombre_plan_estudio: planEstudio,
+        materias
+      };
+
+      // Agregar al listado general
+      this.listadoMateriasPlan.push(objetoMaterias);
+    }
+  });
+}
 
 
+formatearNombreMaterias(materias: string[]): string[] {
+  if (!materias || materias.length === 0) {
+    return [];
+  }
+
+  return materias.map(materia =>
+    materia
+      .toLowerCase()
+      .split(' ')
+      .map((word, index) =>
+        index === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word
+      )
+      .join('_')
+  );
+}
+extraerCalificacionesMateria(planEstudio:string,registro:any): materias[]{
+// creamo la variable donde guardaremos el arreglo de materias con su calificacion respectiva
+  let materiasCalificaciones:materias[]=[]
+// en esta variable guardaremos el listado de las materias de las cuales extraeremos las calificaciones
+  let materias:string[]=[]
+  // creamo el ciclo para saber que plan de estudios debemos de seleccionar y asignamos las mater a la variable materi
+
+ for (let i = 0; i < this.listadoMateriasPlan.length; i++) {
+  if (planEstudio == this.listadoMateriasPlan[i].nombre_plan_estudio) {
+   materias = this.listadoMateriasPlan[i].materias
+  }
+  
+}
+
+//  generamos el siguiente ciclo para poder  generar un objeto de tipo materia con su calificacion y su nombre de materia
+materias.forEach(materia=>{
+  let data:materias
+
+ if(materia != 'Lengua_que_habla' ){
+  let cal:any = (`${registro[materia]}`).trim()
+  cal=parseFloat(cal).toFixed(1)
+    data={
+      materia: `${materia}`,
+      calificacion:parseFloat((cal || '0'))
+    }
+    materiasCalificaciones.push(data)
+    
+  }
+  else{
+    let cal:any = (`${registro[materia]}`).trim()
+    if(cal == "A"){
+      data={
+        materia: `${materia}`,
+        calificacion:1
+      }
+    materiasCalificaciones.push(data)
+  
+    }
+    else if(cal == "B"){
+      data={
+        materia: `${materia}`,
+        calificacion:2
+      }
+    materiasCalificaciones.push(data)
+  
+    }
+  }
+
+  
+
+
+})
+ return materiasCalificaciones
+}
 }

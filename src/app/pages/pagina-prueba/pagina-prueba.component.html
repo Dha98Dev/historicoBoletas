@@ -1,30 +1,51 @@
-<div>
-    <p><i [class]="iconos.Book"></i></p>
+<!-- <div>
+
+    <div>
+        <p><i [class]="iconos.Book"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.Chart"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.Check"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.CloseSesion"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.Config"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.Consulta"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.DataBase"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.DownloadFile"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.EyeClosed"></i></p>
+    </div>
+    <div>
+        <p><i [class]="iconos.EyeOpen"></i></p>
+    </div>
+    
+</div> -->
+
+<div class="row d-flex justify-content-center">
+    <div class="col-2">
+        <div class="border" *ngFor="let ciclo of ciclosEscolares">
+            {{ciclo.nombre}}
+            <button class="btn btn-light border" (click)="setCiclo(ciclo.nombre)"> Seleccionar </button>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="px-2 py-2 rounded border" *ngFor="let plan of planesEstudio"> {{plan.nombre}} </div>
+    </div>
+    <div class="col-2">
+        <p>Ciclo seleccionado: {{cicloEscolar}} </p>
+    </div>
+    <div class="col-2">Plan de estudios Seleccionado: {{planEstudioSeleccionado}} </div>
 </div>
-<div>
-    <p><i [class]="iconos.Chart"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.Check"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.CloseSesion"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.Config"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.Consulta"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.DataBase"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.DownloadFile"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.EyeClosed"></i></p>
-</div>
-<div>
-    <p><i [class]="iconos.EyeOpen"></i></p>
-</div>
+   

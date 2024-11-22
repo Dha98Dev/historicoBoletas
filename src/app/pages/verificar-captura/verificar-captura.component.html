@@ -59,7 +59,8 @@
               </div>
               <div class="calificaciones d-flex " *ngFor="let calificacion of datosCaptura.calificacionesPrimaria">
                 <div class=" fs-6  materia-header lead text-center w-100 border py-2 "> {{calificacion.nombre_materia}} </div>
-                <div class=" fs-6calificacion-header lead text-center w-100 border py-2"> {{calificacion.calificacion}} </div>
+                <div class=" fs-6calificacion-header lead text-center w-100 border py-2" *ngIf="calificacion.nombre_materia!= 'LENGUA QUE HABLA'"> {{calificacion.calificacion}} </div>
+                <div class=" fs-6calificacion-header lead text-center w-100 border py-2"*ngIf="calificacion.nombre_materia == 'LENGUA QUE HABLA'" > {{calificacion.calificacion == '1' ? 'A' : 'B'}} </div>
               </div>
               <div class="calificaciones d-flex ">
                 <div class="fs-6 lead text-center w-100 border py-2  fw-semibold">Promedio Final</div>

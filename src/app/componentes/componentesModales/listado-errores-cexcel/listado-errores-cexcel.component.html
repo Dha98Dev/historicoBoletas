@@ -1,0 +1,11 @@
+<div   #modalContainer class="listadoErrores col-5 animate__animated animate__zoomIn shadow rounded px-2 py-2" >
+    <div class="button-close  d-flex justify-content-end  ">
+        <button class="btn text-danger fs-4" mat-raised-button (click)="cerrarErrores()"> <i [class]="iconos.XToCloseRounded"></i> </button>
+    </div>
+    <p class="text-dark fw-semibold text-center py-2 text-uppercase"> - - listado de errores por registros</p>
+    <div class="contenedor-lista d-flex flex-column gap-2">
+      <div *ngFor="let error of listadoErroresEncontrados" class="list-item px-2 py-1 rounded d-flex gap-2 align-items-center border" ><div class="icono-error"><i [class]="iconos.XToCloseRounded " ></i> </div>EL REGISTRO NUMERO {{error.numeroRegistro}} - {{error.descripcion}} </div>
+    </div>
+  </div>
+
+  

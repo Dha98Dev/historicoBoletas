@@ -4,6 +4,8 @@ export interface opciones{
   nombre:string,
   valor:any,
   selected?:boolean,
+  // esta es para poder hacer los filtros y el ordenamiento de los planes de estudios
+  educacion_indigena?:string
   [key: string]: any;
 }
 

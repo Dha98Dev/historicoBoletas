@@ -46,6 +46,7 @@ import { CargaMasivaComponent } from './pages/loadPages/carga-masiva/carga-masiv
 import { ModalMensajeNotificacionComponent } from './componentes/componentesModales/modal-mensaje-notificacion/modal-mensaje-notificacion.component';
 import { TablaBoletasPrimariaComponent } from './componentes/componentesTablas/tabla-boletas-primaria/tabla-boletas-primaria.component';
 import { TablaBoletasSecundariaComponent } from './componentes/componentesTablas/tabla-boletas-secundaria/tabla-boletas-secundaria.component';
+import { ListadoErroresCExcelComponent } from './componentes/componentesModales/listado-errores-cexcel/listado-errores-cexcel.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { TablaBoletasSecundariaComponent } from './componentes/componentesTablas
     CargaMasivaComponent,
     ModalMensajeNotificacionComponent,
     TablaBoletasPrimariaComponent,
-    TablaBoletasSecundariaComponent
+    TablaBoletasSecundariaComponent,
+    ListadoErroresCExcelComponent
   ],
   imports: [
     BrowserModule,

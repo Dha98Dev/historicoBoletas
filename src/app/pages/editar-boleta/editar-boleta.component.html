@@ -168,7 +168,17 @@
                       max="10" 
                       type="number" 
                       class="fs-6 calificacion-header lead text-center w-100 border py-2" 
-                      [value]="calificacion.calificacion">
+                      [value]="calificacion.calificacion"
+                      *ngIf="calificacion.nombre_materia != 'LENGUA QUE HABLA'"
+                      >
+                      <input 
+                      [id]="'input-' + calificacion.id_calificacion_primaria" 
+                      (change)="ReemplazarCalificacion(calificacion.id_calificacion_primaria!, $event)" 
+                      type="text" 
+                      class="fs-6 calificacion-header lead text-center w-100 border py-2" 
+                      [value]="calificacion.calificacion == '1' ? 'A' : 'B'"
+                      *ngIf="calificacion.nombre_materia == 'LENGUA QUE HABLA'"
+                      >
                   
                     
                     </div>

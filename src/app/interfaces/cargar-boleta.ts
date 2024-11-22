@@ -116,6 +116,15 @@ materias:materias[]
   // }
 
   export interface materias{
-    materia: string;
-    calificacion: number;
+    materia: string | materiaItem;
+    calificacion: number ;
+    [key :string]:any;
+  }
+
+  export interface materiaItem{
+    nombre:string
+  }
+  export interface listadoMaterias {
+    nombre_plan_estudio:string,
+    materias: string[]
   }

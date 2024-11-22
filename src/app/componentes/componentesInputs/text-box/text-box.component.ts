@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-text-box',
@@ -6,9 +7,17 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
   styleUrl: './text-box.component.css'
 })
 export class TextBoxComponent {
-
+constructor(private fb:FormBuilder){}
 public campoTocado:boolean = false;
 public valorCajaTexto:string|number='';
+text:FormGroup={} as FormGroup;
+
+
+ngOnInit(){
+this.text= this.fb.group({
+  text:['',[]]
+})
+}
 
   @Output()
 public  onEmitValueInput:EventEmitter<string>  = new EventEmitter
@@ -102,10 +111,11 @@ if (changes['desmarcar'] && this.desmarcar) {
 }
 
 desmarcarCampo(){
-  alert()
+
   this.campoTocado=false;
   this.campoValido=true;
   this.Valor=''
+  this.text.reset()
 }
 
 

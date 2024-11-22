@@ -32,8 +32,8 @@ console.log(this.hoy)
 
 this.agregarPlan=this.fb.group({
   nombrePlan: ['',[Validators.required]],
-  periodoInicio:['',[Validators.required]],
-  periodoFin:['',[Validators.required]]
+  periodoInicio:['',],
+  periodoFin:['',]
 })
 this.getPlanesEstudios()
   }
@@ -107,6 +107,9 @@ this.getPlanesEstudios()
             console.log(response)
           }
         })
+      }
+      else{
+        this.notificacionesService.mostrarAlertaSimple("DEBE DE LLENAR LOS CAMPOS QUE SON REQUERIDOS COMO EL NOMBRE DEL PLAN DE ESTUDIOS")
       }
     } 
 }

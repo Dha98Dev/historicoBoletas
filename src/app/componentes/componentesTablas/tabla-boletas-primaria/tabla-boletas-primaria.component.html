@@ -40,8 +40,11 @@
           <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.turno }}</td>
           <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''">{{ boleta.grupo }}</td>
           <!-- Calificaciones dinámicas para las materias -->
-          <td [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''" *ngFor="let calificacion of boleta.materias">
-            {{ calificacion.calificacion }}
+          <td class="text-center" [ngClass]="!boleta.valido && textDanger ? 'invalido' : ''" *ngFor="let calificacion of boleta.materias">
+            <small  *ngIf="calificacion.materia != 'Lengua_que_habla'">{{ calificacion.calificacion }}</small>
+            <small  *ngIf="calificacion.materia == 'Lengua_que_habla' && calificacion.calificacion == 1">A</small>
+            <small  *ngIf="calificacion.materia == 'Lengua_que_habla' && calificacion.calificacion == 2">B</small>
+
           </td>
         </tr>
       </tbody>

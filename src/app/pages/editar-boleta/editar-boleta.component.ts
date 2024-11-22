@@ -102,10 +102,14 @@ export class EditarBoletaComponent {
   asignarValores() {
     if (this.datosCaptura.calificacionesPrimaria.length > 0) {
       let suma = 0;
+      let contador=0
       this.datosCaptura.calificacionesPrimaria.forEach(element => {
-        suma += parseFloat(element.calificacion)
+        if (element.nombre_materia!='LENGUA QUE HABLA') {
+          suma += parseFloat(element.calificacion)
+          contador++;
+        }
       });
-      this.promedioPrimaria = (suma / this.datosCaptura.calificacionesPrimaria.length).toString();
+      this.promedioPrimaria = (suma / contador).toFixed(1);
       this.calificacionesPrimaria
     }
 

@@ -81,10 +81,11 @@ export class AsignarMateriasPlanComponent {
   }
   getMaterias(){
     let data={"token":this.userService.obtenerToken(), "idPlanEstudio":"" }
-    console.log(data)
+
 this.historialServiceGet.getMaterias(data).subscribe(response =>{
 if (!response.error) {
 this.materias=response.data
+console.log(response.data)
 this.materias.forEach(materia =>{
   materia.valor=materia.valor +"-" + materia.nombre;
 })
@@ -132,7 +133,7 @@ console.log(this.materias)
   this.historialServiceAdd.agregarMateria(data).subscribe(response =>{
     if (!response.error) {
       this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
-      this.materias= response.data
+      this.materias.push(response.data)
     }
     else{
       this.NotificacionesService.mostrarAlertaSimple(response.mensaje)

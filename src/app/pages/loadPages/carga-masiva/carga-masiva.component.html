@@ -1,3 +1,4 @@
+<!-- esta es la parte del encabezado -->
 <div class="plantillas-excel d-flex justify-content-between gap-3 px-3 align-items-center mt-2">
   <div class="d-flex align-items-center  gap-3">
     <button mat-raised-button  *ngIf="mostrarTabla || guardadoCompleto" class=" new-file2 btn "  (click)="limpiarData()"> <i [class]="iconos.Reload"></i> Cargar Otro
@@ -34,6 +35,8 @@
         <button>Click aqui para Buscar</button>
       </div>
     </div>
+
+<!-- -------------------- estos son los botones que mostraremos para importar la informacion o  cargar otro -->
     
   <div class="upload-file animate__animated animate__zoomIn" >
     <div class="botones d-flex gap-3 px-3 mt-2" *ngIf="archivoCargado && !guardadoCompleto"  >
@@ -48,17 +51,12 @@
     </div>
   
   </div>
+<!-- ------------ aqui finaliza el div que contiene los botones de importar informacion  o cargar otro archivo -->
+
+<!-- esto sera para confirmar si es  educacion indigena o no y que seleccione el rango del año al que corresponde para saber que hoja leer  -->
 
   </div>
 <!-- -------------- Aqui termina el input de la carga de archivos de excel -->
-
-
-
-<!-- -------------------- estos son los botones que mostraremos para importar la informacion o  cargar otro -->
-
-
-<!-- ------------ aqui finaliza el div que contiene los botones de importar informacion  o cargar otro archivo -->
-
 
 
 </div>
@@ -96,11 +94,6 @@
  <!-- tabla que contiene los registros que por alguna razon no se pudieroin guardar -->
 
  <!-- ------------------- este es el listado de los posibles errores que puede  haber  -->
-
- <div *ngIf="mostrarListadoErrores" class="listadoErrores col-5 animate__animated animate__zoomIn shadow rounded px-2 py-2" >
-  <p class="text-dark fw-semibold text-center py-2 text-uppercase"> - - listado de errores por registros</p>
-  <div class="contenedor-lista d-flex flex-column gap-2">
-    <div *ngFor="let error of listadoErroresEncontrados" class="list-item px-2 py-1 rounded d-flex gap-2 align-items-center border" ><div class="icono-error"><i [class]="iconos.XToCloseRounded " ></i> </div>EL REGISTRO NUMERO {{error.numeroRegistro}} - {{error.descripcion}} </div>
-  </div>
-</div>
+ <!--  -->
+<app-listado-errores-cexcel [listadoErroresEncontrados]="listadoErroresEncontrados" *ngIf="mostrarError && listadoErroresEncontrados.length > 0" ></app-listado-errores-cexcel>
 <!-- Aqui termina el div del listado de posibles errores -->

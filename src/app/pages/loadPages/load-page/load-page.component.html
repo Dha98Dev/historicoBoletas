@@ -15,7 +15,7 @@
 
 
 
-      <form [formGroup]="datosGeneralesForm" class="accordion accordion-flush w-100 " id="accordionFlushExample">
+      <form autocomplete="off" [formGroup]="datosGeneralesForm" class="accordion accordion-flush w-100 " id="accordionFlushExample">
 
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -156,7 +156,7 @@
 
 
         <!-- Informacion de la persona  que egreso de la escuela de la cual se ingresaran las calificaciones -->
-        <form [formGroup]="egresado" class="accordion-item">
+        <form autocomplete="off" [formGroup]="egresado" class="accordion-item">
           <h2 class="accordion-header">
             <button
               class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
@@ -236,9 +236,9 @@
     <h2 class="fw-lighter text-center fs-4 mt-5 mb-3">Agregue las calificaciones correspondientes </h2>
 
     <!-- este es el encabezado para que agregue un nuevo director en caso de que sea necesario -->
-    <form  [formGroup]="datosGeneralesForm" class="d-flex justify-content-center mt-5">
+    <form autocomplete="off"  [formGroup]="datosGeneralesForm" class="d-flex justify-content-center mt-5">
       <div class="info-escuela d-flex col-8 gap-4">
-        <form [formGroup]="egresado" class="input-val w-100">
+        <form autocomplete="off" [formGroup]="egresado" class="input-val w-100">
           <input placeholder="ingrese el folio de la boleta" type="text" name="" class="form form-control" [value]="egresado.get('folioBoleta')?.value | uppercase" formControlName="folioBoleta" id="">
           <app-label-input-completo *ngIf="getFieldStatus(3,'folioBoleta')==1" [smallIndicador]="true" ></app-label-input-completo>
           <app-label-input-incompleto *ngIf="getFieldStatus(3,'folioBoleta') == 2" [smallIndicator]="true" ></app-label-input-incompleto>
@@ -264,7 +264,7 @@
 
     <!-- esto es para agregar las calificaciones de primaria si el nivel educativo fue primaria -->
 
-    <div class="form-calificaciones d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value =='1' && completoPrimaria" >
+    <div class="form-calificaciones d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value =='1' && completoPrimaria " >
 
       <div class="add-calificaciones mt-2 col-11">
         <div class="calificaciones d-flex ">
@@ -273,7 +273,7 @@
         </div>
         <div class="calificaciones-item d-flex" *ngFor="let materia of materias, trackBy: trackById">
           <div class="materia border w-100 lead text-center f-6"> {{materia.nombre}} </div>
-          <app-text-box  class="w-100" [type]="'number'"
+          <app-text-box [desmarcar]="desmarcar" class="w-100" [type]="'number'"
             (onEmitValueInput)="recibirCalificacionesPrimaria(materia.valor, $event)" [valorMinimo]="0"
             [valorMaximo]="10" [smallIndicator]="true"></app-text-box>
         </div>
@@ -288,7 +288,7 @@
 
     <!-- esto es para agregar las calificaciones para agregar en caso de que el nivel seleccionado sea secundaria -->
     <div class="d-flex justify-content-center" *ngIf="datosGeneralesForm.get('nivelEducativo')?.value == '2'">
-      <form [formGroup]="calificacioneSecundaria" class="d-flex flex-column col-11 " >
+      <form autocomplete="off" [formGroup]="calificacioneSecundaria" class="d-flex flex-column col-11 " >
         <div class="calificaciones-item d-flex">
           <div class="materia border w-100 lead text-center fw-semibold">Año</div>
           <div class="materia border w-100 lead text-center fw-semibold">Calificación</div>
@@ -331,7 +331,7 @@
   <div class="contenedor d-flex justify-content-center">
     <div class="col-11 d-flex justify-content-center mb-5">
       <!--  -->
-      <button class="btn-sky btn w-50 mt-5 btn-icon d-flex justify-content-center fs-6"  (click)="enviarInfo()" [disabled]="!datosGeneralesForm.valid" ><i
+      <button class="btn-sky btn w-50 mt-5 btn-icon d-flex justify-content-center fs-6"  (click)="enviarInfo()" [disabled]="!datosGeneralesForm.valid && calificacionesPrimaria.length == materias.length" ><i
           class="fas fa-save"></i> Guardar</button>
     </div>
   </div>

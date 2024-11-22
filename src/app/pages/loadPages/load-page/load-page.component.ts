@@ -44,6 +44,8 @@ export class LoadPageComponent {
   public materias:opciones[]=[] 
   public animationClass:string =''
   public completoPrimaria:boolean=true
+  public desmarcar:boolean=false
+
 
   constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService){}
 
@@ -131,6 +133,7 @@ export class LoadPageComponent {
     this.historialServiceGet.getPlanesEstudio(data).subscribe(response =>{
       if(!response.error){
       this.planesEstudio=response.data;
+      this.ordernarPlanes(this.planesEstudio)
       }
     })
   }
@@ -196,18 +199,30 @@ if (this.nivelEducativoSeleccionado.length == 0) {
 }
 
 // creamos el metodo  para filtrar el nivel que sera seleccionado dependiendo de la clave de centro de trabajo
-filtrarNivel(){
-if (this.datosGeneralesForm.controls['claveCct'].valid) {
-  const clave = this.datosGeneralesForm.get('claveCct')?.value;
-  const tipo = clave.substring(2, 5); 
-  if (tipo == "DES" || tipo == "DST" || tipo == "EST") {
-    this.nivelEducativoSeleccionado=this.nivelesEducativos.filter(nivel => nivel.nombre == 'SECUNDARIA');
+filtrarNivel() {
+  if (this.datosGeneralesForm.controls['claveCct'].valid) {
+    const clave = this.datosGeneralesForm.get('claveCct')?.value;
+
+    if (clave && clave.length >= 5) {
+      const tipo = clave.substring(2, 5); // Extrae el tipo de la clave
+      console.log("Tipo extraído:", tipo); // Verifica qué valor tiene tipo
+
+      if (["DES", "DST", "EST"].includes(tipo)) {
+        this.nivelEducativoSeleccionado = this.nivelesEducativos.filter(
+          nivel => nivel.nombre === "SECUNDARIA"
+        );
+      } else if (["DPB", "DPR"].includes(tipo)) {
+        this.nivelEducativoSeleccionado = this.nivelesEducativos.filter(
+          nivel => nivel.nombre === "PRIMARIA"
+        );
+      } 
+
+      console.log("Niveles seleccionados:", this.nivelEducativoSeleccionado);
+    } 
+  } 
 }
-else if(tipo == "DPB" || tipo == "DPR"){
-  this.nivelEducativoSeleccionado=this.nivelesEducativos.filter(nivel => nivel.nombre == 'PRIMARIA');
-}
-}
-}
+
+
 
 
 // estos siguentes dos metodos son para la animacion de cuando se fija la informacion de la cabecera
@@ -304,20 +319,22 @@ this.historialServiceAdd.agregarDirector(data).subscribe(response =>{
 })
 }
 getMaterias(){
-  
+  this.promedioPrimaria='0'
   if (this.datosGeneralesForm.get('nivelEducativo')?.value == '1') {
+    this.calificacionesPrimaria=[]
     
-  let data={"token":this.userService.obtenerToken(), "idPlanEstudio":this.datosGeneralesForm.get("planEstudio")?.value}
-  console.log(data)
-  this.historialServiceGet.getMaterias(data).subscribe(response =>{
-  if (!response.error) {
-    this.materias= response.data;
-    console.log(this.materias)
+    let data={"token":this.userService.obtenerToken(), "idPlanEstudio":this.datosGeneralesForm.get("planEstudio")?.value}
+    console.log(data)
+    this.historialServiceGet.getMaterias(data).subscribe(response =>{
+      if (!response.error) {
+        this.materias= response.data;
+        console.log(this.materias)
+        this.desmarcar=true
   }
   
   })
   }
-
+this.desmarcar=false
 }
 
 calcularPromedioSecundaria(){
@@ -337,11 +354,7 @@ enviarInfo(){
 
   if ((this.datosGeneralesForm.valid && this.calificacioneSecundaria.valid && this.egresado.valid) || (this.datosGeneralesForm.valid && this.calificacionesPrimaria.length == this.materias.length && this.egresado.valid)) {
     
-  }else{
-    this.NotificacionesService.mostrarAlertaSimple("Por favor, complete el formulario correctamente")
-    this.datosGeneralesForm.markAllAsTouched()
-  }
-
+    
   this.datosFormulario.cicloEscolar=this.NotificacionesService.separarValor(this.datosGeneralesForm.get('cicloEscolar')?.value,' ')
   let data={}
   if (this.datosGeneralesForm.get('nivelEducativo')?.value == 1) {
@@ -390,6 +403,11 @@ enviarInfo(){
     }
   })
   
+  }else{
+    this.NotificacionesService.mostrarAlertaSimple("Por favor, complete el formulario correctamente")
+    this.datosGeneralesForm.markAllAsTouched()
+  }
+
 }
 
 filtrarPlanEstudioByCiclo(){
@@ -413,6 +431,7 @@ filtrarPlanEstudioByCiclo(){
 
   let continuar=true
 for (let i=this.planesEstudio.length -1; i>=0; i--) {
+  console.log(this.planesEstudio[i].nombre)
   let nombrePlan = this.planesEstudio[i].nombre.split(' ')
   // aqui vamos a obtener el numero siguiente  a plan 
     let inicioPlan:any = nombrePlan[1]
@@ -427,10 +446,31 @@ for (let i=this.planesEstudio.length -1; i>=0; i--) {
     }
 }
 
-this.planesEstudio=planesEstudio;
+this.ordernarPlanes(planesEstudio)
 
 
 }
+ordernarPlanes(planesEstudios:opciones[]){
+  let planesEducIndigena:opciones[]=[]
+  let planesGenerales:opciones[]=[]
+  
+  planesEstudios.forEach(plan =>{
+    if (plan.educacion_indigena =='1') {
+      planesEducIndigena.push(plan)
+    }
+    else{
+      planesGenerales.push(plan)
+    }
+  })
+  
+  let planesOrdenados=planesEducIndigena.reverse().concat(planesGenerales.reverse())
+  
+  // console.log(planesEducIndigena)
+  console.log(planesOrdenados)
+  // console.log(planesGenerales.reverse())
+  this.planesEstudio= planesOrdenados
+  }
+
 
 recibirFolioYDirector(nombreCampo:string, event:any){
 this.datosFormulario[nombreCampo] = event
@@ -457,6 +497,7 @@ this.calificacionesPrimaria.push(cal) ;
 
 
 }
+
 trackById(index: number, item: any): number {
   return item.id; // o alguna propiedad única
 }

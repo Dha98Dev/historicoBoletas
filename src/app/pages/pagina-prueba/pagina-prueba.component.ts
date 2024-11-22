@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import * as pako from 'pako';
 import { Iconos } from '../../enums/iconos.enum';
+import { HistorialBoletasGetService } from '../../services/historial-boletas-get.service';
+import { HistorialBoletasAgregarService } from '../../services/historial-boletas-agregar.service';
+import { NotificacionesService } from '../../services/notificaciones.service';
+import { userService } from '../../Autenticacion1/servicios/user-service.service';
+import { opciones } from '../../componentes/componentesInputs/select-form/select-form.component';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-pagina-prueba',
@@ -9,7 +15,11 @@ import { Iconos } from '../../enums/iconos.enum';
 })
 export class PaginaPruebaComponent {
   public iconos=Iconos
-
+  public planesEstudio: opciones[]=[];
+  public ciclosEscolares: opciones[]=[];
+  public contadorCambiosPlanes:number=0
+  public cicloEscolar:string=''
+  public planEstudioSeleccionado:string=''
   public data:any=[
     {
       "cifras": [
@@ -570,7 +580,7 @@ export class PaginaPruebaComponent {
       }
     }
   ]
-
+  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private userService:userService){}
 
 // Convierte un Uint8Array a Base64
 uint8ArrayToBase64(uint8Array:any) {
@@ -599,9 +609,92 @@ ngOnInit() {
 // Comprimiendo y convirtiendo a Base64
 const dataToCompress = "ejemplo_de_cadena_base64";
 const compressedData = this.compressData(JSON.stringify(this.data));
-console.log(compressedData); 
+this.getCiclosEscolares()
+this.getPlanesEstudio()
+// console.log(compressedData); 
 }
 
+getPlanesEstudio(){
+  let data={"token":this.userService.obtenerToken() }
+  this.historialServiceGet.getPlanesEstudio(data).subscribe(response =>{
+    if(!response.error){
+    this.planesEstudio=response.data;
+    // console.log(this.planesEstudio)
+    this.ordernarPlanes(this.planesEstudio)
+    }
+  })
+}
+
+getCiclosEscolares(){
+  let data={"token":this.userService.obtenerToken(), };
+  this.historialServiceGet.getCiclosEscolares(data).subscribe(response=>{
+    if(!response.error){
+      this.ciclosEscolares=response.data;
+     localStorage.setItem('ciclosEscolares', JSON.stringify(this.ciclosEscolares))
+    }
+  })
+}
+
+filtrarPlanEstudioByCiclo(){
+  this.contadorCambiosPlanes++
+  let cicloEscolar:any=this.cicloEscolar
+  this.planesEstudio.forEach(plan => {
+    plan.selected=false;
+  })
+
+
+  let cicloSeparado= cicloEscolar.split('-')
+  let cicloInicio = parseInt(cicloSeparado[0])
+  let cicloFin=cicloSeparado[1]
+  let planesEstudio=[]
+
+  let continuar=true
+for (let i=this.planesEstudio.length -1; i>=0; i--) {
+  console.log(this.planesEstudio[i].nombre)
+  let nombrePlan = this.planesEstudio[i].nombre.split(' ')
+  // aqui vamos a obtener el numero siguiente  a plan 
+    let inicioPlan:any = nombrePlan[1]
   
+    planesEstudio.push(this.planesEstudio[i])
+    inicioPlan=parseInt(inicioPlan)
+    if (continuar && inicioPlan <= cicloInicio) {
+      this.planesEstudio[i].selected = true
+      this.planEstudioSeleccionado=this.planesEstudio[i].nombre
+      // this.datosGeneralesForm.patchValue({planEstudio: this.planesEstudio[i].valor})
+      // this.datosGeneralesForm.controls['planEstudio'].markAsTouched()
+      continuar = false;
+    }
+}
+this.ordernarPlanes(planesEstudio)
+
+
+}
+
+ordernarPlanes(planesEstudios:opciones[]){
+let planesEducIndigena:opciones[]=[]
+let planesGenerales:opciones[]=[]
+
+planesEstudios.forEach(plan =>{
+  if (plan.educacion_indigena =='1') {
+    planesEducIndigena.push(plan)
+  }
+  else{
+    planesGenerales.push(plan)
+  }
+})
+
+let planesOrdenados=planesEducIndigena.reverse().concat(planesGenerales.reverse())
+
+// console.log(planesEducIndigena)
+console.log(planesOrdenados)
+// console.log(planesGenerales.reverse())
+this.planesEstudio= planesOrdenados
+}
+
+setCiclo(ciclo:string){
+  this.cicloEscolar=ciclo;
+  this.filtrarPlanEstudioByCiclo()
+}
+
 
 }
