@@ -5,6 +5,7 @@ import { HistorialBoletasGetService } from '../../services/historial-boletas-get
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { listadoPlanesEstudios } from '../../interfaces/cargar-boleta';
 import { userService } from '../../Autenticacion1/servicios/user-service.service';
+import { GetNombreService } from '../../services/get-nombre.service';
 
 @Component({
   selector: 'app-agregar-plan',
@@ -12,7 +13,7 @@ import { userService } from '../../Autenticacion1/servicios/user-service.service
   styleUrl: './agregar-plan.component.css'
 })
 export class AgregarPlanComponent {
-  constructor(private fb: FormBuilder, private HistorialServiceAdd:HistorialBoletasAgregarService, private historialServiceGet:HistorialBoletasGetService, private notificacionesService:NotificacionesService, private userService:userService){}
+  constructor(private fb: FormBuilder, private HistorialServiceAdd:HistorialBoletasAgregarService, private historialServiceGet:HistorialBoletasGetService, private notificacionesService:NotificacionesService, private userService:userService, private tituloPagina:GetNombreService){}
 
   agregarPlan:FormGroup={} as  FormGroup;
 
@@ -21,8 +22,10 @@ export class AgregarPlanComponent {
   public listadoPlanesEstudio: listadoPlanesEstudios[] = [];
 
   ngOnInit(){
-    let fechaActual = new Date();
 
+    this.tituloPagina.setNombre='Planes de Estudios'
+  
+    let fechaActual = new Date();
 let año = fechaActual.getFullYear();
 let mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2); // Los meses van de 0 a 11, por eso sumamos 1
 let dia = ('0' + fechaActual.getDate()).slice(-2);

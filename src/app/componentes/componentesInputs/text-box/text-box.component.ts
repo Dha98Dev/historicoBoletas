@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -19,7 +19,9 @@ this.text= this.fb.group({
 })
 }
 
-  @Output()
+@ViewChild('input') inputElement!: ElementRef<HTMLInputElement>;
+
+@Output()
 public  onEmitValueInput:EventEmitter<string>  = new EventEmitter
 
 @Input()
@@ -66,7 +68,7 @@ else{
 }
 
 validaciones(valor:string | number){
-if ((this.type == "number") && (this.valorMaximo != 0)  && (parseFloat(valor.toString()) < this.valorMinimo || parseFloat(valor.toString()) > this.valorMaximo)) {
+if ((this.type == "number") && (this.valorMaximo != 0)  && (parseFloat(valor.toString()) <= this.valorMinimo || parseFloat(valor.toString()) > this.valorMaximo)) {
   this.campoValido= false;
   return false;
 }

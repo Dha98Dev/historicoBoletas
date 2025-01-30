@@ -3,6 +3,7 @@ import * as Highcharts from 'highcharts';
 import { GetInfoGraficasService } from '../../services/get-info-graficas.service';
 import { userService } from '../../Autenticacion1/servicios/user-service.service';
 import { avanceCapturistas, avanceEstado, avancePorTiempo } from '../../interfaces/graficas.interface';
+import { GetNombreService } from '../../services/get-nombre.service';
 
 @Component({
   selector: 'app-grafica-avance',
@@ -22,7 +23,7 @@ public totalboletas:number=0
   chartOptionsEstados: Highcharts.Options={};
 
 public updateFlag:boolean = false;
-  constructor(private graficasService:GetInfoGraficasService, private userService:userService) {
+  constructor(private graficasService:GetInfoGraficasService, private userService:userService,  private tituloPagina:GetNombreService) {
 
     // Inicializamos chartOptions
     // this.chartOptions = {
@@ -69,6 +70,9 @@ public updateFlag:boolean = false;
   }
 
   ngOnInit(){
+
+    this.tituloPagina.setNombre='Avance De Captura'
+
     this.getInfoGraficas()
 
     this.chartOptions = {

@@ -10,6 +10,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { opciones } from '../../componentes/componentesInputs/select-form/select-form.component';
 import { Iconos } from '../../enums/iconos.enum';
 import { min } from 'rxjs';
+import { GetNombreService } from '../../services/get-nombre.service';
+import { ValidacionesService } from '../../services/validaciones.service';
 
 @Component({
   selector: 'app-editar-boleta',
@@ -18,7 +20,7 @@ import { min } from 'rxjs';
 })
 export class EditarBoletaComponent {
 
-  constructor(private route: ActivatedRoute, private userService: userService, private _route: Router, private historialGet: HistorialBoletasGetService, private notificacionesService: NotificacionesService, private serviceUpdate: HistorialBoletasUpdateService, private fb: FormBuilder) { }
+  constructor(private route: ActivatedRoute, private userService: userService, private _route: Router, private historialGet: HistorialBoletasGetService, private notificacionesService: NotificacionesService, private serviceUpdate: HistorialBoletasUpdateService, private fb: FormBuilder,  private tituloPagina:GetNombreService,  private Validaciones:ValidacionesService) { }
 
   public idBoleta: number = 0;
   public datosCaptura: Boleta = {} as Boleta
@@ -27,6 +29,11 @@ export class EditarBoletaComponent {
   public ciclosEscolares: opciones[] = []
   public turnos: opciones[] = []
   private calificacionesPrimaria: Calificacion[] = []
+
+  // estas variables son para controlar si mostrar o no el mensaje de notificacion despues de confirmar o no la informacion 
+  public mostrarConfirmacion: boolean = false
+  public mensajeNotificacion:string=''
+
 
 
   public promedioPrimaria: string = '0';
@@ -41,7 +48,7 @@ export class EditarBoletaComponent {
   calificacionesSecundaria: FormGroup = {} as FormGroup
 
   ngOnInit() {
-
+    this.tituloPagina.setNombre='Editar Certificado'
     this.route.paramMap.subscribe(params => {
       let idBoleta = params.get('idBoleta');
       let datosCaptura;
@@ -49,7 +56,6 @@ export class EditarBoletaComponent {
       // Verificar si 'datosCaptura' existe en localStorage
       if (localStorage.getItem('datosCaptura') && localStorage.getItem('datosCaptura') != undefined) {
         datosCaptura = JSON.parse(localStorage.getItem('datosCaptura')!);
-        console.log(datosCaptura);
         this.datosCaptura = datosCaptura;
         this.calificacionesPrimaria = datosCaptura.calificacionesPrimaria
 
@@ -66,24 +72,26 @@ export class EditarBoletaComponent {
 
 
     this.datosCct = this.fb.group({
-      claveCt: ['', [Validators.required]],
-      nombreCt: ['', [Validators.required]],
-      grupo: ['', [Validators.required]],
+      claveCt: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(3)], ],
+      nombreCt: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/)]],
+      grupo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/)]],
       turno: ['', [Validators.required]],
       ciclo: ['', [Validators.required]],
       nivel: ['', [Validators.required]],
-      zona: ['', [Validators.required]],
-      localidad: ['', [Validators.required]],
-      folio: ['', [Validators.required]],
+      zona: ['', [Validators.required,  Validators.pattern(/^\d{1,4}$/)]],
+      localidad: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
+      folio: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/)]],
       idBoleta: ['', [Validators.required]],
       idCt: ['', [Validators.required]],
     });
 
     this.persona = this.fb.group({
-      nombre: ['', [Validators.required]],
-      apellidoPaterno: ['', [Validators.required]],
-      apellidoMaterno: ['', [Validators.required]],
-      curp: ['', []]
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
+      apellidoPaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
+      apellidoMaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
+      curp: ['', [Validators.pattern(
+        /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/i
+      )]]
     });
 
     this.calificacionesSecundaria = this.fb.group({
@@ -110,6 +118,7 @@ export class EditarBoletaComponent {
         }
       });
       this.promedioPrimaria = (suma / contador).toFixed(1);
+      console.log(this.promedioPrimaria)
       this.calificacionesPrimaria
     }
 
@@ -183,6 +192,11 @@ export class EditarBoletaComponent {
     this.historialGet.getTurnos(data).subscribe(response => {
       if (!response.error) {
         this.turnos = response.data
+        this.turnos.forEach(turno =>{
+          if (turno.nombre == this.datosCaptura.turno) {
+            this.datosCct.patchValue({turno:turno.nombre})
+          }
+        })
       }
     })
   }
@@ -219,7 +233,6 @@ export class EditarBoletaComponent {
     }else{
       valor = parseFloat(inputElement.value)
     }
-    console.log(inputElement.value)
 
     if (valor < 1 || valor > 10) {
       this.calificacionesValidas = false
@@ -230,7 +243,6 @@ export class EditarBoletaComponent {
       this.datosCaptura.calificacionesPrimaria.forEach(cal => {
         if (cal.id_calificacion_primaria == id_calificacion_primaria) {
           cal.calificacion = valor.toString()
-          console.log(cal.calificacion)
         } this.calificacionesValidas = true
       })
     }
@@ -238,7 +250,7 @@ export class EditarBoletaComponent {
     this.datosCaptura.calificacionesPrimaria.forEach(cal => {
       suma += parseFloat(cal.calificacion)
     })
-    this.promedioPrimaria = (suma / this.datosCaptura.calificacionesPrimaria.length).toString()
+    this.promedioPrimaria = (suma / this.datosCaptura.calificacionesPrimaria.length).toFixed(1).toString()
 
     // aqui verificamos que to
 
@@ -335,32 +347,17 @@ export class EditarBoletaComponent {
 
 
   actualizarInformacion() {
-
-
     if ((this.datosCct.valid && this.persona.valid && this.calificacionesValidas) || (this.datosCct.valid && this.persona.valid && this.calificacionesSecundaria.valid)) {
       let data = { token: this.userService.obtenerToken(), ...this.persona.value, ...this.datosCct.value, calificacionesSecundaria: this.calificacionesSecundaria.value, calificacionesPrimaria: this.calificacionesPrimaria }
-      data.folio=parseInt(data.folio)
-      console.log(data)
-  
+      
+      console.log(data);
       this.serviceUpdate.updateInfoBoleta(data).subscribe(response => {
         
         if (!response.error) {
-          
-let marcarRevisado=  this.notificacionesService.mostrarConfirmacion('¿Desea cambiar el estado de la Boleta a Revisado?', 'Confirmar', 'No Confirmar').then(response =>{
-  if (response) {
-    let data = {token: this.userService.obtenerToken(), idBoleta: this.datosCaptura.id_boleta}
-    console.log(data)
-    this.serviceUpdate.updateEstadoBoleta(data).subscribe(res =>{
-      if (!res.error) {
-        this.notificacionesService.mostrarAlertaSimple("Boleta marcada como Revisada")
-        this._route.navigate(['verificarCaptura',this.userService.Encriptar(this.datosCaptura.id_boleta.toString())])
-      }
-    });
-  }
-  })
+          console.log('informacion actualizada correctamente')
         }
         else{
-          this.notificacionesService.mostrarAlertaConIcono("Correccion de la infromación", "ocurrio un error al corregir la información", 'error');
+          this.notificacionesService.mostrarAlertaConIcono("Correccion de la información", "ocurrio un error al corregir la información", 'error');
         }
       })
 
@@ -371,6 +368,47 @@ let marcarRevisado=  this.notificacionesService.mostrarConfirmacion('¿Desea cam
 
   }
 
+  recibirConfirmacion(event:any){
+if (event) {
+  let data = {token: this.userService.obtenerToken(), idBoleta: this.datosCaptura.id_boleta}
+  this.serviceUpdate.updateEstadoBoleta(data).subscribe(res =>{
+    if (!res.error) {
+      // this.notificacionesService.mostrarAlertaSimple("Boleta marcada como Revisada")
+      this.mensajeNotificacion=res.mensaje
+      this.mostrarConfirmacion=true
 
+      this._route.navigate(['verificarCaptura',this.userService.Encriptar(this.datosCaptura.id_boleta.toString())])
+    }
+  });
+}
+else{
+  this.mensajeNotificacion='La informacion fue Actualizada correctamente pero sigue en estado "En Captura"'
+  this.mostrarConfirmacion=true
+  setTimeout(() => {
+    this.mostrarConfirmacion=false
+  }, 3000);
+}
+  }
+
+  eliminarEspaciosBlancos(numeroFormulario:number, nombreCampo:string, tipoLimpieza:number){
+    let formulario;
+      if(numeroFormulario==1){
+        formulario = this.datosCct;
+      }
+      else if(numeroFormulario == 2){
+        formulario=this.persona
+      }
+      else if(numeroFormulario == 3){
+        formulario=this.calificacionesSecundaria
+      }
+    
+     if (tipoLimpieza== 1) {
+      formulario!.patchValue({[nombreCampo]: this.Validaciones.normalizeSpacesToUpperCase(formulario!.get(nombreCampo)?.value)})
+     }
+     else{
+      formulario!.patchValue({[nombreCampo]: this.Validaciones.normalizeSpaces(formulario!.get(nombreCampo)?.value)})
+     }
+    
+    }
 
 }

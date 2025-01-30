@@ -5,6 +5,7 @@ import { userService } from '../../../Autenticacion1/servicios/user-service.serv
 import { Boleta } from '../../../interfaces/cargar-boleta';
 import { datosFiltro } from '../../../interfaces/filtros.interface';
 import { Router } from '@angular/router';
+import { GetNombreService } from '../../../services/get-nombre.service';
 
 @Component({
   selector: 'app-revisar-page',
@@ -15,9 +16,10 @@ export class RevisarPageComponent {
 
   public registros:Boleta[]=[]
 
-  constructor(private historialGet: HistorialBoletasGetService, private notificaciones:NotificacionesService, private userService:userService, private router:Router){}
+  constructor(private historialGet: HistorialBoletasGetService, private notificaciones:NotificacionesService, private userService:userService, private router:Router,  private tituloPagina:GetNombreService){}
 
   ngOnInit(){
+    this.tituloPagina.setNombre='Certificados por Revisar'
     this.getRegistros()
   }
 

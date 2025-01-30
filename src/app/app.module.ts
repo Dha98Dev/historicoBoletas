@@ -47,6 +47,11 @@ import { ModalMensajeNotificacionComponent } from './componentes/componentesModa
 import { TablaBoletasPrimariaComponent } from './componentes/componentesTablas/tabla-boletas-primaria/tabla-boletas-primaria.component';
 import { TablaBoletasSecundariaComponent } from './componentes/componentesTablas/tabla-boletas-secundaria/tabla-boletas-secundaria.component';
 import { ListadoErroresCExcelComponent } from './componentes/componentesModales/listado-errores-cexcel/listado-errores-cexcel.component';
+import { BannerMensajeComponent } from './componentes/banners/banner-mensaje/banner-mensaje.component';
+import { SideBarComponent } from './componentes/componentesNavegacion/side-bar/side-bar.component';
+import { AppUpperCaseDirective } from './directivas/app-upper-case.directive';
+import { PageNotFoundComponent } from './componentes/banners/page-not-found/page-not-found.component';
+import { FormSolicitudDuplicadosComponent } from './componentes/componentesModales/form-solicitud-duplicados/form-solicitud-duplicados.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +92,12 @@ import { ListadoErroresCExcelComponent } from './componentes/componentesModales/
     ModalMensajeNotificacionComponent,
     TablaBoletasPrimariaComponent,
     TablaBoletasSecundariaComponent,
-    ListadoErroresCExcelComponent
+    ListadoErroresCExcelComponent,
+    BannerMensajeComponent,
+    SideBarComponent,
+    AppUpperCaseDirective,
+    PageNotFoundComponent,
+    FormSolicitudDuplicadosComponent
   ],
   imports: [
     BrowserModule,
@@ -96,10 +106,13 @@ import { ListadoErroresCExcelComponent } from './componentes/componentesModales/
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    DataTablesModule,
     AngularMaterialModule,
+    DataTablesModule,
     HighchartsChartModule,
   
+  ],
+  exports:[
+    AppUpperCaseDirective
   ],
   providers: [
     provideAnimationsAsync()

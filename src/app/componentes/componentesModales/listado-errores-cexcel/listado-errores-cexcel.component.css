@@ -40,4 +40,8 @@
     font-size: 20px;
     box-shadow: 1px 1px 2px #e3517e;
   }
+  .contenedor-lista{
+    overflow-y: scroll;
+    max-height: 80vh
+  }
   

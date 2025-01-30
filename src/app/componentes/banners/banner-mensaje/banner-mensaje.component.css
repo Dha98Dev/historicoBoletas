@@ -1,0 +1,18 @@
+.contenedor-banner{
+    min-height: 80vh;
+}
+p{
+    margin-bottom: 0px !important;
+}
+.body-banner{
+    /* box-shadow: 1px 1px 5px rgb(255, 104, 104); */
+    /* border: 1px solid rgb(251, 49, 49) !important; */
+    background: #f1f1f1;
+}
+.titulo{
+   color: #000;
+   text-transform: capitalize;
+}
+.mensaje{
+    color: #555;
+}

@@ -3,6 +3,6 @@
         <option value="" > {{mensajePredeterminado}} </option>   
         <option  *ngFor="let opcion   of opciones" [value]="opcion.valor" [selected]="opcion.selected"> {{opcion.nombre}} </option>
     </select>
-    <app-label-input-completo [smallIndicador]="smallIndicator" *ngIf="esCampoValido && campoTocado"></app-label-input-completo>
-    <app-label-input-incompleto [smallIndicator]="smallIndicator" *ngIf="!esCampoValido && campoTocado"></app-label-input-incompleto>
+    <app-label-input-completo [smallIndicador]="smallIndicator" *ngIf="esCampoValido && campoTocado && mostrarNotificacion"></app-label-input-completo>
+    <app-label-input-incompleto [smallIndicator]="smallIndicator" *ngIf="!esCampoValido && campoTocado && mostrarNotificacion"></app-label-input-incompleto>
 </div>

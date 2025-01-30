@@ -4,10 +4,9 @@
         </button></div>
       <div class="icono"> <i class="fs-2 animate__animated  text-warning " #iconoMensaje
           [class]="iconos.Notification"></i> </div>
-      <div class="descripcion  text-uppercase  ">Las filas que tengan errores, o la informacion no este completa no se
-        cargara, la informacion incorrecta se mostrara con un color rojo</div>
+      <div class="descripcion  text-uppercase  "> {{mensajeNotificacion}} </div>
       <div class="accion">
-        <button mat-raised-button class="text-capitalize btn aceptar" (click)="closeModal()"> aceptar </button>
+        <button mat-raised-button class="text-capitalize btn aceptar" (click)="closeModal()"> Aceptar </button>
       </div>
     </div>
   </div>

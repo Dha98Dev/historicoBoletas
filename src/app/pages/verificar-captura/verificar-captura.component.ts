@@ -1,17 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { userService } from '../../Autenticacion1/servicios/user-service.service';
 import { HistorialBoletasGetService } from '../../services/historial-boletas-get.service';
 import { Boleta } from '../../interfaces/cargar-boleta';
-import { data } from 'jquery';
 import { opciones } from '../../componentes/componentesInputs/select-form/select-form.component';
 import { datosFiltro } from '../../interfaces/filtros.interface';
 import { Iconos } from '../../enums/iconos.enum';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalConfirmacionComponent } from '../../componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { HistorialBoletasUpdateService } from '../../services/historial-boletas-update.service';
-import Swal from 'sweetalert2';
+import { GetNombreService } from '../../services/get-nombre.service';
+import { ValidacionesService } from '../../services/validaciones.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalConfirmacionComponent } from '../../componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
 
 @Component({
   selector: 'app-verificar-captura',
@@ -20,7 +21,7 @@ import Swal from 'sweetalert2';
 })
 export class VerificarCapturaComponent {
 
-  private idBoleta: number = 0;
+  private idBoleta: string = '';
   public datosCaptura: Boleta = {} as Boleta
   public dataPersona: opciones[] = []
   public dataEscuela: opciones[] = []
@@ -29,9 +30,9 @@ export class VerificarCapturaComponent {
   public pdfUrlSolicitud: string = 'http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta='
   public pdfSeleccionado: string = ''
   public infoAdicional = false
-
+  public mostrarSeleccionTipoPromedio = true
   public loader: boolean = true;
-
+  private tipoPresentacionPromedio:number=0
   municipios: string[] = [
     'Acaponeta',
     'Ahuacatlán',
@@ -55,9 +56,11 @@ export class VerificarCapturaComponent {
     'Xalisco'
   ];
 
-  constructor(private route: ActivatedRoute, private userService: userService, private _route: Router, private historialGet: HistorialBoletasGetService, private dialogo: MatDialog, private notificacionesService: NotificacionesService, private serviceUpdate: HistorialBoletasUpdateService) { }
-
+  constructor(private route: ActivatedRoute, private userService: userService, private _route: Router, private historialGet: HistorialBoletasGetService, private dialogo: MatDialog, private notificacionesService: NotificacionesService, private serviceUpdate: HistorialBoletasUpdateService, private tituloPagina: GetNombreService, private Validaciones: ValidacionesService, private fb: FormBuilder) { }
+  @ViewChild('modalSeleccionarTipoPromedio') modalSeleccionarTipoPromedio!: ModalConfirmacionComponent;
   ngOnInit() {
+
+    this.tituloPagina.setNombre = 'Detalles Certificado'
     this.route.paramMap.subscribe(params => {
       let idBoleta = params.get('idBoleta');
 
@@ -65,17 +68,9 @@ export class VerificarCapturaComponent {
         try {
           // Intentar desencriptar y convertir a número entero
           const desencriptado = this.userService.Desencriptar(idBoleta);
+          this.idBoleta = desencriptado
+          this.getInfoCaptura()
 
-          // Validar que el valor desencriptado sea numérico antes de asignarlo
-          this.idBoleta = parseInt(desencriptado, 10);
-
-          // Verificar si parseInt devolvió un valor no numérico (NaN)
-          if (isNaN(this.idBoleta)) {
-            throw new Error('ID de boleta no es un número válido');
-          }
-          else {
-            this.getInfoCaptura()
-          }
 
         } catch (error) {
           console.error('Error al desencriptar o procesar idBoleta:', error);
@@ -88,24 +83,28 @@ export class VerificarCapturaComponent {
 
     })
   }
+  ngAfterViewInit() {
+    this.modalSeleccionarTipoPromedio.mostrar()
+  }
 
   getInfoCaptura() {
     let data: datosFiltro = { folio: "", curp: "", localidad: "", cct: "", boleta: this.idBoleta.toString(), numeroFiltro: "7", estado: "", token: this.userService.obtenerToken(), idCiclo: "", nombre: "" }
+    console.log(data);
     this.historialGet.getDatosBoleta(data).subscribe(response => {
       if (!response.error) {
         this.datosCaptura = response.data[0]
         let suma = 0
-        let contador=0;
+        let contador = 0;
         this.datosCaptura.calificacionesPrimaria.forEach(cal => {
-          if (cal.nombre_materia!='LENGUA QUE HABLA') {
+          if (cal.nombre_materia != 'LENGUA QUE HABLA') {
             suma += parseFloat(cal.calificacion)
             contador++;
           }
         })
-        this.promedioPrimaria = Number((suma / contador).toFixed(2))
+        this.promedioPrimaria = Number((suma / contador).toFixed(1))
 
         this.loader = false;
-        let datosEscuela = ["clave_centro_trabajo", "nombre_cct", "grupo", "turno", "ciclo", "nivel", "plan_estudio", "zona","localidad" ];
+        let datosEscuela = ["clave_centro_trabajo", "nombre_cct", "grupo", "turno", "ciclo", "nivel", "plan_estudio", "zona", "localidad", "director_ct"];
         let datosPersona = ["nombre", "apellido_paterno", "apellido_materno", "curp"];
 
         datosEscuela.forEach(datoEscuela => {
@@ -117,9 +116,6 @@ export class VerificarCapturaComponent {
           let opcion = this.separarDatos(datoPersona)
           this.dataPersona.push(opcion)
         })
-
-
-
       }
       else {
         this.loader = false;
@@ -132,23 +128,8 @@ export class VerificarCapturaComponent {
     opcion.valor = this.datosCaptura[campo]
     opcion.nombre = campo.replace(/_/g, ' ')
     return opcion
-    // kimberly 
   }
-  // openConfirmDialog(): void {
-  //   const dialogRef = this.dialogo.open(ModalConfirmacionComponent, {
-  //     width: '300px',
-  //     data: { message: '¿Estás seguro de que deseas continuar?' },
-  //     panelClass:'redondeado'
-  //   });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       // Acción confirmada
-  //     } else {
-  //       // Acción cancelada
-  //     }
-  //   });
-  // }
 
   ConfirmarVerificacion() {
     let respuesta = this.notificacionesService.mostrarConfirmacion('Desea Confirmar que la informacion es correcta', 'Confirmar', 'No').then(result => {
@@ -177,7 +158,8 @@ export class VerificarCapturaComponent {
   }
 
   descargarSolicitudServicios() {
-    this.pdfSeleccionado = this.pdfUrlSolicitud + this.datosCaptura.boletaSolicitudServicio
+    this.pdfSeleccionado = this.pdfUrlSolicitud + this.datosCaptura.boletaSolicitudServicio + '&tpp=' + this.tipoPresentacionPromedio
+    console.log(this.pdfSeleccionado)
   }
 
   RedireccionarAEditar() {
@@ -185,79 +167,53 @@ export class VerificarCapturaComponent {
     localStorage.setItem('datosCaptura', JSON.stringify(this.datosCaptura))
   }
 
-//este es el metodo para cargar la informacion adicional de la persona para poder generar el pdf de solicitud de servicio
+  //este es el metodo para cargar la informacion adicional de la persona para poder generar el pdf de solicitud de servicio
 
 
 
 
-llenarInfoAcional() {
-  Swal.fire({
-    title: 'Formulario de Registro',
-    html:
-      `<select id="municipio" class="swal2-input">
-        <option value="" disabled selected>Selecciona un municipio</option>` +
-      this.municipios.map(municipio => `<option value="${municipio}">${municipio}</option>`).join('') +
-      `</select>
-      <input type="text" id="localidad" class="swal2-input" placeholder="Localidad">
-      <input type="text" id="domicilio" class="swal2-input" placeholder="Domicilio Particular">
-      <input type="text" id="telefono" class="swal2-input" placeholder="Teléfono">`,
-    focusConfirm: false,
-    showCancelButton: true,
-    confirmButtonText: 'Guardar',
-    cancelButtonText: 'Cancelar',
-    preConfirm: () => {
-      const municipio = (document.getElementById('municipio') as HTMLSelectElement).value;
-      const localidad = (document.getElementById('localidad') as HTMLInputElement).value;
-      const domicilio = (document.getElementById('domicilio') as HTMLInputElement).value;
-      const telefono = (document.getElementById('telefono') as HTMLInputElement).value;
+  llenarInfoAcional(data: any) {
+    {
 
-      // Validaciones
-      if (!municipio) {
-        Swal.showValidationMessage('Debes seleccionar un municipio');
-        return false;
-      }
-
-      if (!localidad.trim()) {
-        Swal.showValidationMessage('El campo localidad no puede estar vacío');
-        return false;
-      }
-
-      if (!domicilio.trim()) {
-        Swal.showValidationMessage('El campo domicilio no puede estar vacío');
-        return false;
-      }
-
-      const telefonoRegex = /^[0-9]{10}$/;
-      if (!telefonoRegex.test(telefono)) {
-        Swal.showValidationMessage('Debe de ingresar un numero de telefono valido');
-        return false;
-      }
-
-      return { municipio, localidad, domicilio, telefono };
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const { municipio, localidad, domicilio, telefono } = result.value;
-      const data = {token:this.userService.obtenerToken(),municipio, localidad, domicilio, telefono, idBoleta: this.datosCaptura.id_boleta}
-
-      this.serviceUpdate.updateInformacionComplementaria(data).subscribe(response =>{
+      this.serviceUpdate.updateInformacionComplementaria(data).subscribe(response => {
         if (!response.error) {
-          this.notificacionesService.mostrarAlertaConIcono('Registro exitoso', response.mensaje,'success')
-          this.infoAdicional=true
-          this.datosCaptura.localidad_dom=localidad
-          this.datosCaptura.domicilio_particular=domicilio
-          this.datosCaptura.telefono=telefono
-          this.datosCaptura.municipio_dom=municipio
+          this.notificacionesService.mostrarAlertaConIcono('Registro exitoso', response.mensaje, 'success')
+          this.infoAdicional = true
+          this.datosCaptura.localidad_dom = data.localidad
+          this.datosCaptura.domicilio_particular = data.domicilio
+          this.datosCaptura.telefono = data.telefono
+          this.datosCaptura.municipio_dom = data.municipio
         }
-        else{
+        else {
           this.notificacionesService.mostrarAlertaConIcono('Error al registrar', response.mensaje, 'error')
         }
       })
 
       // Aquí puedes procesar los datos ingresados
     }
-  });
-}
+  }
 
+
+  recibirInfoSolicitudDuplicado(Event: any) {
+    let data = { ...Event, token: this.userService.obtenerToken(), idBoleta: this.datosCaptura.id_boleta }
+    console.log(data);
+    this.llenarInfoAcional(data)
+  }
+
+  SeleccionarTipoPromedio(Event: any) {
+    switch (Event) {
+      case true:
+        this.promedioPrimaria = Math.round(this.promedioPrimaria);
+        this.tipoPresentacionPromedio =1
+        break;
+
+      case false:
+        this.tipoPresentacionPromedio =0
+        break;
+
+      default:
+        break;
+    }
+  }
 
 }

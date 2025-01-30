@@ -12,6 +12,7 @@ import { listadoErrores } from '../../../interfaces/errores.interface';
 import { Errores } from '../../../enums/erroresCargaExcel.enum';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { GetNombreService } from '../../../services/get-nombre.service';
 
 @Component({
   selector: 'app-carga-masiva',
@@ -20,10 +21,10 @@ import { firstValueFrom } from 'rxjs';
 })
 export class CargaMasivaComponent {
 
-  constructor(private userService: userService, private notificacionesService: NotificacionesService, private historialServiceAdd: HistorialBoletasAgregarService, private historialServiceGet:HistorialBoletasGetService) { }
-  public iconos = Iconos
+  constructor(private userService: userService, private notificacionesService: NotificacionesService, private historialServiceAdd: HistorialBoletasAgregarService, private historialServiceGet:HistorialBoletasGetService,  private tituloPagina:GetNombreService) { }
   private listaErrores=Errores
   public excelData: any
+  public iconos = Iconos
 
   public archivoCargado: boolean = false
   public mostrarTabla: boolean = false
@@ -33,6 +34,8 @@ export class CargaMasivaComponent {
   public guardadoCompleto: boolean = false
   private numeroHojaSeleccionada:number = 0
   public seleccionoHojado: boolean = false
+  public subiendoRegistros:boolean=false
+
   public listadoMateriasPlan:listadoMaterias[]=[]
 
   public nivelSeleccionado: string = ''
@@ -61,6 +64,7 @@ export class CargaMasivaComponent {
   @ViewChild('iconoMensaje') icono!: ElementRef
 
   ngOnInit(){
+    this.tituloPagina.setNombre='Carga Masiva'
     this.getPlanesEstudio()
     this.getCiclosEscolares()
     // this.seleccionarRangoAnios()
@@ -188,6 +192,7 @@ export class CargaMasivaComponent {
     this.boletasGuardadas=[];
     this.boletasNoGuardadas=[];
     this.guardadoCompleto = false;
+    this.subiendoRegistros=false;
   }
   // verificar los campos que todos esten llenos 
   mostrarData() {
@@ -243,6 +248,8 @@ export class CargaMasivaComponent {
                 let planValido = this.validarPlanEstudio(data.plan_estudio);
                 let cicloValido = this.validarCicloEscolar(data.ciclo.trim());
                 let boletaValida = true;
+                let cctValido =this.validarLongitudCentroTrabajo(data.clave_ct)
+                console.log(cctValido)
 
                 // validamos la longitud del  arreglo de materias 
                 if (materias.length== 0) {
@@ -256,7 +263,7 @@ export class CargaMasivaComponent {
                 // Validación de calificaciones dentro del rango
                 for (let j = 0; j < materias.length; j++) {
                     const mat = materias[j];
-                    if (mat.calificacion > 10 || mat.calificacion <= 0 || isNaN(mat.calificacion)) {
+                    if (mat.calificacion > 10 || mat.calificacion < 0 || isNaN(mat.calificacion)) {
                         boletaValida = false;
                         this.mostrarError = true;
                         this.listadoErroresEncontrados.push({
@@ -267,8 +274,8 @@ export class CargaMasivaComponent {
                     }
                 }
 
-                data.valido = this.validarBoletaPrimaria(data) && curpValida && planValido && cicloValido && boletaValida;
-                this.BoletasPrimaria.push(data);
+                data.valido = this.validarBoletaPrimaria(data) && curpValida && planValido && cicloValido && boletaValida && cctValido;
+                this.BoletasPrimaria.push(data)  ;
             }
         }
     } else if (this.nivelSeleccionado.toUpperCase() === 'SECUNDARIA') {
@@ -345,6 +352,7 @@ export class CargaMasivaComponent {
   }
 
   async guardarCaptura() {
+    this.subiendoRegistros=true
     let boletasValidasPrimaria: boletaPrimaria[] = []
     let boletasInvalidasPrimaria: boletaPrimaria[] = []
 
@@ -371,10 +379,13 @@ export class CargaMasivaComponent {
         let calSecundaria = { Primero: 0, Segundo: 0, Tercero: 0, calificacionFinal: 0 }
         let data = { "token": this.userService.obtenerToken(), "calPrimaria": bol.materias, calSecundaria, "claveCct": bol.clave_ct, "nombreCct": bol.nombre_ct, "cicloEscolar": bol.ciclo, "zonaEscolar": bol.zona, "planEstudio": bol.plan_estudio, "nivelEducativo": bol.nivel, "localidad": bol.localidad, "turno": bol.turno, "grupo": bol.grupo, "folioBoleta": bol.folio, "directorCorrespondiente": "", "nombre": bol.nombre, "apellidoPaterno": bol.apellido_paterno, "apellidoMaterno": bol.apellido_materno, "curp": bol.curp }
 
+    console.log(data)
+
+
         await this.enviarBoletaPrimaria(data, bol);
 
         // Esperamos 1 segundo antes de pasar a la siguiente boleta
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
 
 
@@ -403,7 +414,6 @@ export class CargaMasivaComponent {
         if (data.curp === undefined || !data.curp) {
           data.curp =''
         }
-    
     
         this.historialServiceAdd.cargarBoletaExcel(data).subscribe(response => {
           if (!response.error) {
@@ -454,11 +464,12 @@ export class CargaMasivaComponent {
       await this.enviarBoletaPrimaria(data, bol);
   
       // Esperamos 1 segundo antes de pasar a la siguiente boleta
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // await new Promise(resolve => setTimeout(resolve, 100));
     }
   }
   
   async enviarBoletaPrimaria(data: any, boleta: boletaPrimaria) {
+    // console.log(data)
     try {
       const response = await firstValueFrom(this.historialServiceAdd.cargarBoletaExcel(data));
       if (!response.error) {
@@ -541,21 +552,35 @@ validarBoletaSecundaria(data: boletaSecundaria): boolean {
   data.valido = esValido;
   return esValido;
 }
-
+// validacion para la curp, en esta funcion retornara si la curp es valida o no 
 validarCURP(curp: string): boolean {
-  curp = curp.toUpperCase();
+  // Eliminar espacios al inicio y al final
+  curp = curp.trim().toUpperCase();
+
+  // Verificar si contiene caracteres no válidos (solo permitir A-Z y 0-9)
+  if (!/^[A-Z0-9]+$/.test(curp)) {
+    this.listadoErroresEncontrados.push({
+      numeroRegistro: this.contadorFila,
+      descripcion: 'La CURP contiene caracteres no válidos.'
+    });
+    return false;
+  }
+
+  // Expresión regular de validación
   const curpRegex = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[0-9A-Z]\d$/;
   const validacionCurp = curpRegex.test(curp);
 
   if (!validacionCurp) {
-      this.listadoErroresEncontrados.push({
-          numeroRegistro: this.contadorFila,
-          descripcion: this.listaErrores.ERROR_CURP
-      });
+    this.listadoErroresEncontrados.push({
+      numeroRegistro: this.contadorFila,
+      descripcion: 'La CURP no cumple con el formato válido.'
+    });
   }
 
   return validacionCurp;
 }
+
+
 
 validarPlanEstudio(planEstudio: string): boolean {
   let planEstudioValido = false;
@@ -752,4 +777,16 @@ materias.forEach(materia=>{
 })
  return materiasCalificaciones
 }
+
+validarLongitudCentroTrabajo(centroTrabajo:string): boolean{
+  let validacionCt= centroTrabajo.length > 10 ? false : true
+  if(!validacionCt){
+      this.listadoErroresEncontrados.push({
+        numeroRegistro: this.contadorFila,
+        descripcion: this.listaErrores.ERROR_LONGITUD_CENTRO_TRABAJO
+      });
+    }
+    return validacionCt
+}
+
 }

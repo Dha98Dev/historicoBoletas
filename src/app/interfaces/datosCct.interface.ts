@@ -16,6 +16,7 @@ export interface Persona {
       nombreCt:string,
       zonaEscolar:string,
       nivel:string,
+      localidad:string,
       id_nivel:string
     }
 

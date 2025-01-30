@@ -1,60 +1,30 @@
 
 <nav class="navbar navbar-expand-lg bg-light fixed-top">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse " id="navbarNav">
-        <ul class="navbar-nav navbar-center d-flex justify-content-center w-100">
-
-          <li class="nav-item"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' ">
-            <a class="nav-link d-flex gap-2 align-items-center" routerLink="consulta" routerLinkActive="activo"  > <i [class]="iconos.Consulta"></i> Consultar</a>
-          </li> 
-          <li class="nav-item"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' ">
-            <a class="nav-link d-flex gap-2 align-items-center" routerLink="cargarInformacion" routerLinkActive="activo"><i [class]="iconos.DataBase"></i> Cargar calificaciones</a>
-          </li>
-          <li class="nav-item"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' ">
-            <a class="nav-link d-flex gap-2 align-items-center" routerLink="cargaMasiva" routerLinkActive="activo"><i [class]="iconos.ExcelFile"></i>Carga Masiva</a>
-          </li>
-          <li class="nav-item"  *ngIf="getTipoUsuario() == '1'">
-            <a class="nav-link d-flex gap-2 align-items-center" routerLink="planesEstudio" routerLinkActive="activo"><i [class]="iconos.Book"></i>Planes de Estudio</a>
-          </li>
-          <li class="nav-item"  *ngIf="getTipoUsuario() == '1' ">
-            <a class="nav-link d-flex gap-2 align-items-center" routerLink="registro" routerLinkActive="activo"><i [class]="iconos.NewUser"></i>Nuevo Usuario</a>
-          </li>
-          <li class="nav-item"  *ngIf="getTipoUsuario() =='1'">
-            <a class="nav-link  d-flex gap-2 align-items-center" routerLink="avance" routerLinkActive="activo"><i [class]="iconos.Chart"></i>Avance</a> 
-          </li>
-          <li class="nav-item"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' ">
-            <a class="nav-link  d-flex gap-2 align-items-center" routerLink="verificacion" routerLinkActive="activo"><i [class]="iconos.Check"></i>Verificación <small class="text-danger fw-bold"> {{boletas}} </small> </a> 
-          </li>
-          
-          
-        </ul>
+      </button> -->
+      <div class="collapse navbar-collapse d-flex justify-content-between " id="navbarNav">
+      
+        <button mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" matTooltip="Abrir Menu"> <i [class]="iconos.Menu"></i>  Menú</button>
+        
         
         <li class="nav-item justify-self-end usuario">
           
-           <button class="nav-link d-flex  justify-content-center align-items-center gap-2   "  (click)="toggleSelect()"> <i [class]="iconos.Config"></i> {{getUsuario}} </button>
+           <button class="nav-link d-flex  justify-content-center align-items-center gap-2" matTooltip="Opciones  de Ajustes"  (click)="toggleSelect()"> <i [class]="iconos.Config"></i> {{getUsuario}} </button>
 
 
            <div [ngClass]="animationClass"  *ngIf="showSelect" class="select-container d-flex justify-content-center flex-column rounded shadow gap-2">
 
               <li class="submenu-item   d-flex gap-2 align-items-center text-capitalize " data-bs-toggle="modal" data-bs-target="#changePassword"> <i [classList]="iconos.Lock"></i> cambiar contraseña</li>
-              <li class="submenu-item   d-flex gap-2 align-items-center text-capitalize "> <i [class]="iconos.User"></i>  ver mi informacion</li>
+              <li class="submenu-item   d-flex gap-2 align-items-center text-capitalize "> <i [class]="iconos.User"></i>  ver mi información</li>
               <li class=" d-flex gap-2 align-items-center">
-                <button class="btn btn-rose text-white w-100" (click)="cerrarSesion()"> <i [class]="iconos.CloseSesion"></i> cerrar sesion</button>  </li>
+                <button class="btn btn-rose text-white w-100" (click)="cerrarSesion()"> <i [class]="iconos.CloseSesion"></i> cerrar sesión</button>  </li>
           </div>
         </li>
-
-        <!-- <li class="nav-item justify-self-end  cerrar-sesion" >
-          <button  class="nav-link "
-          mat-raised-button
-          matTooltip="Cerrar Sesion"
-          [matTooltipPosition]="'above'"
-          aria-label="Button that displays a tooltip when focused or hovered over"  (click)="cerrarSesion()"><i class=" fas fa-sign-out-alt"></i></button>
-        </li> -->
       </div>
     </div>
   </nav>
 
   <app-modal-change-password></app-modal-change-password>
+  <app-side-bar></app-side-bar>

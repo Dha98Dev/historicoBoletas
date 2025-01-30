@@ -45,3 +45,16 @@ font-size: 12px;
 word-spacing: 4px;
 z-index: 20000;
 }
+
+.offcanvas-backdrop{
+    background-color: transparent !important;
+    }
+    
+
+    .sobreSideBar{
+        z-index: 10000 !important;
+    }
+
+::placeholder{
+    text-transform: capitalize;
+}

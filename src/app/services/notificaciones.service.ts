@@ -38,12 +38,18 @@ mostrarConfirmacion(mensaje: string, textConfirm: string, textDeny: string): Pro
 }
 
 separarValor(mensaje:string, sepador:string):string{
+if(mensaje != '' || mensaje !=  undefined || mensaje != null){
   let m=mensaje.split(sepador);
   return m[0];
 }
+return '';
+}
 separarDescipcion(mensaje:string, sepador:string):string{
-  let m=mensaje.split(sepador);
-  return m[1];
+if(mensaje != '' || mensaje !=  undefined || mensaje != null){
+    let m=mensaje.split(sepador);
+    return m[1];
+  }
+  return '' 
 }
 
 

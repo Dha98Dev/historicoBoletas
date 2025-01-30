@@ -29,6 +29,9 @@ export class SelectFormComponent {
   @Input()
   public mensajePredeterminado:string='Seleccione una Opcion'
 
+ @Input()
+ public mostrarNotificacion:boolean= true
+
   @Output()
   OnEmitValorSelect:EventEmitter<any> = new EventEmitter();
 

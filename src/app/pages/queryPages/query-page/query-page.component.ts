@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Boleta, Calificacion, calificacionesPrimaria, calificacionesSecundaria } from '../../../interfaces/cargar-boleta';
 import { userService } from '../../../Autenticacion1/servicios/user-service.service';
 import { Subject } from 'rxjs';
+import { GetNombreService } from '../../../services/get-nombre.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { Subject } from 'rxjs';
   styleUrl: './query-page.component.css'
 })
 export class QueryPageComponent {
-  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd: HistorialBoletasAgregarService, private NotificacionesService: NotificacionesService, private router: Router, private userService: userService) { }
+  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd: HistorialBoletasAgregarService, private NotificacionesService: NotificacionesService, private router: Router, private userService: userService, private getNombreService:GetNombreService) { }
 
   public loader: boolean = false
   public ciclosEscolares: opciones[] = []
@@ -34,6 +35,9 @@ export class QueryPageComponent {
   dtTrigger: Subject<any> = new Subject<any>();
   public tablaInicializada: boolean = false
   ngOnInit() {
+
+    this.getNombreService.setNombre='Consultar'
+
     let ciclosEscolares = localStorage.getItem('ciclosEscolares')
     if (ciclosEscolares != null) {
       this.ciclosEscolares = JSON.parse(ciclosEscolares);
@@ -103,37 +107,51 @@ export class QueryPageComponent {
   recivirValoresFiltro(event: any) {
     let data: datosFiltro = { cct: "", boleta:"", idCiclo: "",estado:'', nombre: "", localidad: "", folio: "", curp: "", numeroFiltro: "", "token": this.userService.obtenerToken() }
     this.vacio = true;
+    this.loader=true
+
+    // verificamos que al menos un campo venga con informacion
+    let tieneInformacion=false;
+
     // validamos que tipo de filtro se realizo
 
     switch (event.numeroFiltro) {
       case '1':
         data.curp = (event.data).toUpperCase()
+        tieneInformacion = this.validarBusquedaVacia(data.curp)
         data.numeroFiltro = event.numeroFiltro
         break;
       case '2':
-        data.idCiclo = this.NotificacionesService.separarValor(event.data.idCiclo, ' ')
+        let ciclo= event.data.idCiclo ? event.data.idCiclo : ""
+        data.idCiclo = this.NotificacionesService.separarValor(ciclo, ' ')
         data.cct = (event.data.cct.toUpperCase())
+        tieneInformacion = this.validarBusquedaVacia(data.idCiclo) &&  this.validarBusquedaVacia(data.cct) 
         data.numeroFiltro = event.numeroFiltro
+        console.log(tieneInformacion)
         break;
       case '3':
         data.folio = event.data
+        tieneInformacion = this.validarBusquedaVacia(data.folio)
         data.numeroFiltro = event.numeroFiltro
         break;
       case '4':
-        data.nombre = (event.data.nombre).toUpperCase()
-        data.cct = (event.data.cct).toUpperCase()
-        data.numeroFiltro = event.numeroFiltro
+        data.nombre = event.data.nombre ? (event.data.nombre).toUpperCase() : ''
+        console.log(data.nombre)
 
+        data.cct = event.data.cct ?  (event.data.cct).toUpperCase() : ''
+        tieneInformacion = this.validarBusquedaVacia(data.nombre) &&  this.validarBusquedaVacia(data.cct) 
+        data.numeroFiltro = event.numeroFiltro
         break;
 
       case '5':
         data.nombre = (event.data).toUpperCase()
+        tieneInformacion = this.validarBusquedaVacia(data.nombre)
         data.numeroFiltro = '5'
         // console.log(event.data)
         break;
 
       case '6':
         data.localidad = event.data.toUpperCase()
+        tieneInformacion = this.validarBusquedaVacia(data.localidad)
         data.numeroFiltro = '6'
         // console.log(event.data)
         break;
@@ -141,19 +159,20 @@ export class QueryPageComponent {
       default:
         break;
     }
-    console.log(data)
 
+if(tieneInformacion){
     this.historialServiceGet.getDatosBoleta(data).subscribe(response => {
       if (!response.error) {
         this.datosBoleta = response.data;
-        this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
+        // this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
         this.vacio = false
         this.inicializarDatatable()
-        console.log(this.datosBoleta);
 
         this.datosBoleta.forEach(boleta => {
           boleta.id_boleta = this.userService.Encriptar(boleta.id_boleta.toString())
         })
+
+        this.loader=false;
 
         // setTimeout(() => {
         //   $('#resultadosBusqueda').DataTable(this.dtOptions);
@@ -163,8 +182,19 @@ export class QueryPageComponent {
         this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
         console.log(response.data)
         this.vacio = true;
+        this.loader=false;
       }
     })
+  }
+  else{
+    this.NotificacionesService.mostrarAlertaConIcono("Busqueda  para Filtar", "Debe de seleccionar y /o ingresar informacion para realizar la busqueda", 'warning')
+    this.vacio = true;
+    this.loader=false;
+  }
+  }
+
+  validarBusquedaVacia(ValorCampo:string):boolean{
+return ValorCampo != ''  ? true : false;
   }
 
   getCiclosEscolares() {

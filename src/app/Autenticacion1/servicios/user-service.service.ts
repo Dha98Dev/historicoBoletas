@@ -43,7 +43,7 @@ export class userService {
     cerrarSesion() {
       localStorage.clear();
       this.loggedIn.next(false); // Actualizamos el estado a no logueado
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
     }
   
     // Obtener estado reactivo de loggedIn

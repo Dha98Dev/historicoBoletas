@@ -19,7 +19,7 @@ export class NavbarComponent {
   public  iconos=Iconos
   public numeroPeticiones:number =0
   private logueado:boolean = false
-  showSelect: boolean = false;
+  showSelect: boolean = false; 
   animationClass: string = '';
 
  
@@ -54,14 +54,14 @@ export class NavbarComponent {
   cerrarSesion(){
     this.userService.cerrarSesion()
   }
+  
+  get getUsuario(){
+    return this.usuario
+  }
   ngOnInit(){
     // this.boletasPorVerificar()
     this.contarBoletas()
   }
-
-get getUsuario(){
-  return this.usuario
-}
 
  getTipoUsuario(){
   return this.tipoUsuario

@@ -6,6 +6,8 @@ import { HistorialBoletasGetService } from '../../services/historial-boletas-get
 import { min } from 'rxjs';
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { tUsuarios } from '../../interfaces/filtros.interface';
+import { GetNombreService } from '../../services/get-nombre.service';
+import { ValidacionesService } from '../../services/validaciones.service';
 
 @Component({
   selector: 'app-register',
@@ -14,17 +16,18 @@ import { tUsuarios } from '../../interfaces/filtros.interface';
 })
 export class RegisterComponent {
 
-  constructor(private fb:FormBuilder, private userService:userService, private historialAdd: HistorialBoletasAgregarService, private historialGet:HistorialBoletasGetService, private notificacionesService:NotificacionesService){}
+  constructor(private fb:FormBuilder, private userService:userService, private historialAdd: HistorialBoletasAgregarService, private historialGet:HistorialBoletasGetService, private notificacionesService:NotificacionesService,  private tituloPagina:GetNombreService,  private Validaciones:ValidacionesService){}
 public listadoTUsuarios:tUsuarios[] = []
   newUser:FormGroup={} as FormGroup;
 
   ngOnInit(){
+    this.tituloPagina.setNombre='Nuevo Usuario'
     this.newUser = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      apellidoP: ['', [Validators.required, Validators.minLength(3)]],
-      apellidoM: ['', [Validators.required, Validators.minLength(3)]],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$/), Validators.maxLength(60)]],
+      apellidoP: ['', [Validators.required, Validators.minLength(3),  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$/), Validators.maxLength(60)]],
+      apellidoM: ['', [Validators.required, Validators.minLength(3),  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']+$/), Validators.maxLength(60)]],
       curp: ['', [Validators.required,   Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
-      usuario: ['', [Validators.required, Validators.minLength(8)]],
+      usuario: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-\s']+$/)]],
       password: ['', [Validators.required, Validators.minLength(8), passwordValidator()]],
       t_usuario: ['', [Validators.required]]
 
@@ -70,14 +73,17 @@ public listadoTUsuarios:tUsuarios[] = []
     }
     guardarNewUser(){
       if (this.newUser.valid) {
-        let pass = btoa(this.newUser.get('password')?.value);
-        this.newUser.patchValue({password: pass})
-        let data ={...this.newUser.value, "token":this.userService.obtenerToken()}
+
+        let dataForm = {nombre:this.Validaciones.limpiarParaSQL(this.newUser.get('nombre')?.value) , apellidoP:this.Validaciones.limpiarParaSQL(this.newUser.get('apellidoP')?.value) , apellidoM: this.Validaciones.limpiarParaSQL(this.newUser.get('apellidoM')?.value) , curp:this.Validaciones.limpiarParaSQL(this.newUser.get('curp')?.value), usuario: this.newUser.get('usuario')?.value, password : btoa(this.newUser.get('password')?.value), t_usuario: this.newUser.get('t_usuario')?.value }
+
+        // this.newUser.patchValue({password: pass})
+        let data ={...dataForm, "token":this.userService.obtenerToken()}
         console.log(data)
         this.userService.agregarUsuario(data).subscribe(response =>{
           if (!response.error) { 
             this.notificacionesService.mostrarAlertaConIcono("Agregar Usuario",response.mensaje,'success' )
             this.newUser.reset()
+            this.newUser.markAsUntouched()
           }
           else{
             this.notificacionesService.mostrarAlertaConIcono("Agregar Usuario",response.mensaje,'error' )
@@ -102,6 +108,21 @@ this.historialGet.getTiposUsuarios(data).subscribe(response => {
   }
 })
     }
+
+    eliminarEspaciosVacios(nombreCampo: string, event: any, opcionLimpieza:number) {
+       let nuevaCadena;
+       
+       if (opcionLimpieza === 1) {
+        nuevaCadena = this.Validaciones.normalizeSpacesToUpperCase(event.target.value);
+        console.log(nombreCampo + ' ------------ ' + nuevaCadena); 
+       }
+       else{
+        nuevaCadena = this.Validaciones.normalizeSpaces(event.target.value);
+        console.log(nombreCampo + ' ------------ ' + nuevaCadena); 
+       }
+       
+        this.newUser.patchValue({ [nombreCampo]: nuevaCadena });
+   } 
 
 }
 

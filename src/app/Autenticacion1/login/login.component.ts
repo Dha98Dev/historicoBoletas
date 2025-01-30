@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 import { userService } from '../servicios/user-service.service';
+import { GetNombreService } from '../../services/get-nombre.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private fb:FormBuilder, private userService:userService, private router:Router){}
+  constructor(private fb:FormBuilder, private userService:userService, private router:Router,  private tituloPagina:GetNombreService){}
   
   
   public error:boolean=false;
@@ -19,6 +20,7 @@ export class LoginComponent {
 
   login:FormGroup={} as FormGroup;
   ngOnInit(){
+    this.tituloPagina.setNombre='Iniciar Sesion'
     this.login= this.fb.group({
       usuario:['', [Validators.required ]],
       password:['',[Validators.required]]

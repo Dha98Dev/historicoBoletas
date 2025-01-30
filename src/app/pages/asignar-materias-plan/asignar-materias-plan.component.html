@@ -3,7 +3,7 @@
     <form [formGroup]="datosPlan" class="nivel-plan d-flex gap-4 mt-4">
         
         <div class="d-flex flex-column">
-            <label for="">seleccione el plan de estudios</label>
+            <label for="">Seleccione el plan de estudios</label>
            <select formControlName="idPlanEstudio" name="" class="form form-select" id="">
             <option value="" selected>Seleccione el Plan de Estudios</option>
             <option *ngFor="let plan of planesEstudio" [value]="plan.valor"> {{plan.nombre}} </option>

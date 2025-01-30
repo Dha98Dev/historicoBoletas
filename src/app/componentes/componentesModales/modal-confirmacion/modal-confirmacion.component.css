@@ -1,0 +1,42 @@
+.contenedor-confirmacion {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(48, 54, 70, 0.9);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden; /* Oculta el contenedor cuando no está visible */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Suaviza la opacidad */
+}
+
+.contenedor-confirmacion.mostrar {
+    opacity: 1;
+    visibility: visible; /* Hace visible el contenedor */
+}
+
+
+.mensaje {
+    width: 40%;
+    background: #fafafa;
+}
+
+p {
+    margin-bottom: 0px !important;
+}
+
+.titulo {
+    font-size: 18px !important;
+}
+.small{
+    font-size: 13.5px;
+}
+
+@media(max-width:900px){
+    .mensaje{
+width: 90%;
+}}

@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Merienda:wght@300&family=Oleo+Script:wght@400;700&display=swap');
+h1{
+
+    font-size: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:20px;
+    font-family: "Merienda", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+h2{
+    font-family: "Merienda", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 50px;
+}
+button{
+    background: #000 !important;
+    color: white !important;
+}
+button:hover{
+    background: #44403c!important;
+
+}
+img{
+    height: 150px;
+    filter: drop-shadow(1px 1px 10px #000);
+}
+.row{
+    margin-right: 0px !important;
+}
+.col-8{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rotate-left{
+    transform: rotate(-10deg);
+}
+.rotate-right{
+    transform: rotate(10deg);
+}
+
+@media screen and (max-width: 700px) {
+h1{
+    font-size: 60px;
+}
+img{
+    height: 60px;
+}
+h2{
+
+    font-size: 25px;
+}
+}

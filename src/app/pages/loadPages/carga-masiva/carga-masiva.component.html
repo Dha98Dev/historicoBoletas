@@ -1,9 +1,9 @@
 <!-- esta es la parte del encabezado -->
 <div class="plantillas-excel d-flex justify-content-between gap-3 px-3 align-items-center mt-2">
   <div class="d-flex align-items-center  gap-3">
-    <button mat-raised-button  *ngIf="mostrarTabla || guardadoCompleto" class=" new-file2 btn "  (click)="limpiarData()"> <i [class]="iconos.Reload"></i> Cargar Otro
-      Archivo</button>
-      <button mat-raised-button *ngIf="mostrarTabla" class=" new-file2 btn btn-lila "  (click)="guardarCaptura()"> <i [class]="iconos.Save"></i>Guardar Captura</button>
+    <button mat-raised-button  *ngIf="mostrarTabla || guardadoCompleto" class=" new-file2 btn "  (click)="limpiarData()"> <i [class]="iconos.Reload"></i> Cargar Otro Archivo</button>
+
+      <button mat-raised-button [disabled]="subiendoRegistros" *ngIf="mostrarTabla" class=" new-file2 btn btn-lila "  (click)="guardarCaptura()"> <i [class]="iconos.Save"></i>Guardar Captura</button>
   </div >
 <div class="d-flex gap-3">
   <button mat-raised-button class="btn btn-teal  text-uppercase d-flex gap-2  align-items-center "> <i [class]="iconos.ExcelFile"></i>
@@ -32,7 +32,7 @@
       <div class="upload-area" (click)="fileInput.click()">
         <i [class]="iconos.UploadFile"></i>
         <p class="fw-semibold p">Arrastra y suelta tu Archivo aquí <br>O</p>
-        <button>Click aqui para Buscar</button>
+        <button class="search-file">Click aquí para Buscar</button>
       </div>
     </div>
 
@@ -40,14 +40,13 @@
     
   <div class="upload-file animate__animated animate__zoomIn" >
     <div class="botones d-flex gap-3 px-3 mt-2" *ngIf="archivoCargado && !guardadoCompleto"  >
-      <button class="w-50 importar-data" mat-raised-button (click)="mostrarData()"> <i [class]="iconos.UploadFile"></i> Importar
-        Informacion</button>
+      <button class="w-50 importar-data" mat-raised-button (click)="mostrarData()"> <i [class]="iconos.UploadFile"></i> Importar Información</button>
       <button class="w-50 new-file "  (click)="limpiarData()"> <i [class]="iconos.Reload"></i> Cargar Otro
         Archivo</button>
     </div>
     <div *ngIf="!guardadoCompleto" class="nombre-archivo shadow " [ngClass]="nombreFile !='' ? 'cargado': 'vacio'">
       <p  *ngIf="archivoCargado"> {{nombreFile}} </p>
-      <p  *ngIf="!archivoCargado"> Aun no se Ha cargado ningun archivo ...</p>
+      <p  *ngIf="!archivoCargado"> Aun no se Ha cargado ningún archivo ...</p>
     </div>
   
   </div>
@@ -75,7 +74,7 @@
 
 
 <!-- este es el modal de notificacion de  error -->
-<app-modal-mensaje-notificacion [mostrar]="mostrarError" *ngIf="mostrarError"></app-modal-mensaje-notificacion> 
+<app-modal-mensaje-notificacion [mostrar]="mostrarError" [mensajeNotificacion]="'Las filas que tengan errores, o la información no este completa no se cargara, la información incorrecta se mostrará con un color rojo' " *ngIf="mostrarError"></app-modal-mensaje-notificacion> 
 
 <!-- <button (click)="mostrarTast()" >toasttify</button> -->
 
@@ -97,3 +96,12 @@
  <!--  -->
 <app-listado-errores-cexcel [listadoErroresEncontrados]="listadoErroresEncontrados" *ngIf="mostrarError && listadoErroresEncontrados.length > 0" ></app-listado-errores-cexcel>
 <!-- Aqui termina el div del listado de posibles errores -->
+
+<!-- estes es el banner que se va a mostrar cuando el archivo este cargado y no haya nada de informacion en la hoja que seleccione -->
+ <app-banner-mensaje class="animate__animated animate__zoomIn" [mostrarBanner]="archivoCargado &&mostrarTabla && (BoletasPrimaria.length == 0  && BoletasSecundaria.length == 0) ? true : false" [mensaje]="'La hoja que selecciono, Al parecer esta vacía o no hay información referente a la captura de certificados'" [IconoSeleccionado]="iconos.Exclamation" [tituloBanner]="'No hay información disponible'" [tituloBoton]="'Reintentar'" (onEmitClick)="limpiarData()" ></app-banner-mensaje>
+<!-- 
+
+ <div class="mensaje-upload">
+  <p>SUELTE EL ARCHIVO  AQUI </p>
+  <i [class]="iconos.RowDown"></i>
+ </div> -->

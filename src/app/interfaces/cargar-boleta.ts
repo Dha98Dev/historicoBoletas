@@ -19,7 +19,7 @@ export interface DatosGenerales {
 }
 
 export interface calificacionesPrimaria{
-    id_materia:number,
+    id_materia:string,
     calificacion:number
 }
 export interface calificacionesSecundaria {
@@ -65,6 +65,7 @@ export interface Calificacion {
     boletaSolicitudServicio:string;
     calificacionesPrimaria: Calificacion[];
     calificacionesSecundaria: calificacionesSecundaria;
+    director_ct: string;
     [key: string]: any;
   }
  

@@ -7,7 +7,7 @@
         <!-- aqui van a ir los datos del centro de trabajo -->
         <form [formGroup]="datosCct" class="shadow rounded card-datos-ct  w-50">
             <div class="encabezado">
-                <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.Graduacion"></i> Información del centro de trabajo, grupo, turno</h2>
+                <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.Graduacion" [ngClass]="datosCaptura.estado_boleta == 'En Captura' ? 'captura' : 'revisado'"></i> Información del centro de trabajo, grupo, turno</h2>
                 <div class="formulario px-3 py-2">
 <!--  -->
 
@@ -15,66 +15,79 @@
                     <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">clave  del CT</label>
                         <div class="col-sm-10">
-                          <input formControlName="claveCt"  type="text" [value]="datosCct.get('claveCt')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('claveCt',2) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="claveCt" (blur)="eliminarEspaciosBlancos(1,'claveCt',1)"  type="text" class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">nombre del Ct</label>
                         <div class="col-sm-10">
-                          <input formControlName="nombreCt" type="text" [value]="datosCct.get('nombreCt')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('nombreCt',2) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="nombreCt" (blur)="eliminarEspaciosBlancos(1,'nombreCt',1)"  [ngClass]="getFieldStatus('nombreCt',2) == 2 ? 'invalido' : 'valido'" type="text"  class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">grupo</label>
                         <div class="col-sm-10">
-                          <input formControlName="grupo" type="text" [value]="datosCct.get('grupo')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('grupo',2) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="grupo" (blur)="eliminarEspaciosBlancos(1,'grupo',1)" [ngClass]="getFieldStatus('grupo',2) == 2 ? 'invalido' : 'valido'" type="text" class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">turno</label>
                         <div class="col-sm-10">
-                       <select name="" id="" formControlName="turno" class="form form-select">
-                        <option value="">seleccione  el turno correspondiente</option>
-                        <option *ngFor="let turno of turnos" [value]="datosCct.get('turno')?.value" [selected]="turno.nombre == datosCaptura.turno"> {{turno.nombre}} </option>
-                       </select>
+                          <div [ngClass]="getFieldStatus('turno',2) == 2 ? 'invalido' : 'valido'">
+                            <select name="" id="" formControlName="turno" class="form form-select">
+                             <option value="" >seleccione  el turno correspondiente</option>
+                             <option  *ngFor="let turno of turnos" [value]=" datosCct.get('turno')?.value == turno.nombre ? datosCct.get('turno')?.value : turno.nombre"> {{turno.nombre}} </option>
+                            </select>
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">ciclo</label>
                         <div class="col-sm-10">
-                       <select name="" id="" formControlName="ciclo" class="form form-select" >
+                       <!-- <select name="" id="" formControlName="ciclo" class="form form-select" >
                         <option value="">seleccione el ciclo escolar...</option>
                         <option *ngFor="let ciclo of ciclosEscolares" [value]="datosCct.get('ciclo')?.value" [selected]="ciclo.nombre == datosCaptura.ciclo"> {{ciclo.nombre}} </option>
-
-                       </select>
+                       </select> -->
+                       <div [ngClass]="{'disabled':true}" class="border rounded py-2 px-2"> {{datosCaptura.ciclo}} </div>
                         </div>
                       </div>
 
 
                       <div class="mb-1 row">
-                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">nivel</label>
+                        <label class="col-sm-2 col-form-label fw-semibold text-uppercase">nivel</label>
                         <div class="col-sm-10">
-                          <div  [ngClass]="{ 'disabled': true }" type="text"  class="form-control materia-header "  id="inputPassword"> {{datosCaptura.nivel}} </div>
+                          <div  [ngClass]="{ 'disabled': true }"   class="form-control materia-header "> {{datosCaptura.nivel}} </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">zona</label>
                         <div class="col-sm-10">
-                          <input formControlName="zona" type="text" [value]="datosCct.get('zona')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('zona',2) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="zona" (blur)="eliminarEspaciosBlancos(1,'zona',1)" type="number"  class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
-
+                 
                       <div class="mb-1 row">
                         <label class="col-sm-2 col-form-label fw-semibold text-uppercase ">localidad de origen</label>
                         <div class="col-sm-10">
-                          <input formControlName="localidad" type="text" [value]="datosCct.get('localidad')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('localidad',2) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="localidad" (blur)="eliminarEspaciosBlancos(1,'localidad',1)" type="text"  class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
+
 
 
 
@@ -91,34 +104,42 @@
         <!-- aqui van a ir los datos personales -->
         <form [formGroup]="persona" class=" shadow rounded card-datos-persona w-50 px-3 py-2">
             <div class="encabezado div2">
-                <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.User"></i> Información de datos personales</h2>
+                <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.User" [ngClass]="datosCaptura.estado_boleta == 'En Captura' ? 'captura' : 'revisado'"></i> Información de datos personales</h2>
                 <div class="formulario ">
 
                     <div class="mb-1 row">
                         <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">nombre(s)</label>
                         <div class="col-sm-9">
-                          <input formControlName="nombre" type="text" [value]="persona.get('nombre')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('nombre',1) == 2 ? 'invalido' : 'valido'">
+                            <input  formControlName="nombre" (blur)="eliminarEspaciosBlancos(2,'nombre',1)" type="text"  class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">apellido paterno </label>
                         <div class="col-sm-9">
-                          <input formControlName="apellidoPaterno" type="text" [value]="persona.get('apellidoPaterno')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('apellidoPaterno',1) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="apellidoPaterno" (blur)="eliminarEspaciosBlancos(2,'apellidoPaterno',1)" type="text" class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">apellido materno</label>
                         <div class="col-sm-9">
-                          <input formControlName="apellidoMaterno" type="text" [value]="persona.get('apellidoMaterno')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('apellidoMaterno',1) == 2 ? 'invalido' : 'valido'">
+                            <input formControlName="apellidoMaterno" (blur)="eliminarEspaciosBlancos(2,'apellidoMaterno',1)" type="text"  class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-1 row">
                         <label class="col-sm-3 col-form-label text-uppercase fw-semibold ">curp</label>
                         <div class="col-sm-9">
-                          <input formControlName="curp" type="text" [value]="persona.get('curp')?.value" class="form-control" id="inputPassword">
+                          <div [ngClass]="getFieldStatus('curp',1) == 2 ? 'invalido' : 'valido'">
+                            <input  formControlName="curp" (blur)="eliminarEspaciosBlancos(2,'curp',1)" type="text"  class="form-control" id="inputPassword">
+                          </div>
                         </div>
                       </div>
 
@@ -135,7 +156,7 @@
     <!-- aqui  van  a ir las calificaciones  -->
     <div class="shadow rounded card-datos-calificaciones w-100 py-2 px-2 ">
         <div class="encabezado">
-            <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.School"></i> Información de calificaciones </h2>
+            <h2 class=" fs-5 fw-semibold  text-center d-flex gap-4 justify-content-center align-items-center "> <i [class]="iconos.School" [ngClass]="datosCaptura.estado_boleta == 'En Captura' ? 'captura' : 'revisado'"></i> Información de calificaciones </h2>
             <div class="formulario">
 
                 <div class="datos-boleta gap-2 ">
@@ -147,9 +168,8 @@
                         <label for="" class="fs-6 w-30">folio original de la boleta</label>
                         <input class=" folio form form-control w-50 text-center"  formControlName="folio" [value]="datosCaptura.folio" type="text" placeholder="folio original de la boleta" >
                     </form>
-    
                 </div>
-
+                
                 <h2 class="text-center mt-2">Calificaciones</h2>
 
                    <!-- informacion de las calificaciones en caso de que sea primaria -->
@@ -224,12 +244,17 @@
     </div>
 
     <div class="update d-flex justify-content-center w-100 ">
-        <button mat-raised-button matTooltip="guardar informacion " [matTooltipPosition]="'below'"
-            aria-label="Button that displays a tooltip when focused or hovered over" class="btn-sky-dark text-uppercase "   
-            [disabled]="(!datosCct.valid && !persona.valid && !calificacionesValidas) || (!datosCct.valid && !persona.valid && !calificacionesSecundaria.valid)"
+
+
+            <app-modal-confirmacion #modalConfirmacion [titulo]="'¿Confirmar vericidad de la información?'" [mensaje]="'Si acepta se cambiara el estado de la información  a revisado, de lo contrario solo se actualizará la información y continuara en estado En Captura '" (accionConfirmada)="recibirConfirmacion($event)" ></app-modal-confirmacion>
+            
+            <button 
+            (click)="modalConfirmacion.mostrar()"
             (click)="actualizarInformacion()"
-            >
-             <i [class]="iconos.Update "></i> Actualizar y verificar
-            Información</button>
+            mat-raised-button matTooltip="guardar informacion " [matTooltipPosition]="'below'"
+            aria-label="Button that displays a tooltip when focused or hovered over" class="btn-sky-dark text-uppercase "   
+            [disabled]="(!datosCct.valid && !persona.valid && !calificacionesValidas) || (!datosCct.valid && !persona.valid && !calificacionesSecundaria.valid)">
+             <i [class]="iconos.Update "></i>Guardar Cambios</button>
+            
     </div>
 </div>

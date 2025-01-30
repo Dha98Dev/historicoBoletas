@@ -64,43 +64,39 @@ export class ModalFiltroConsultaComponent {
   recibirFiltroCicloYCct(nombreCampo: string, event: any) {
 this.filtroCicloYCct[nombreCampo]=event;
 this.filtroSeleccionado='2'
-if (this.filtroCicloYCct.cct != undefined && this.filtroCicloYCct.idCiclo != undefined) {
-  this.disabled=false
-
-}
   }
   
     recibirFolio(event: any) {
       this.filtroBoleta = event;
     this.filtroSeleccionado='3'
-    if (this.filtroBoleta != '') {
-      this.disabled=false
+    // if (this.filtroBoleta != '') {
+    //   this.disabled=false
 
-    }
+    // }
     }
   recibirfiltroNombreCct(nombreCampo: string, event: any) {
     this.filtroNombreCct[nombreCampo] = event;
     this.filtroSeleccionado='4'
-    if ((this.filtroNombreCct.cct != undefined && this.filtroNombreCct.nombre != undefined) || (this.filtroNombreCct.cct != '' && this.filtroNombreCct.nombre != '')) {
+    // if ((this.filtroNombreCct.cct != undefined && this.filtroNombreCct.nombre != undefined) || (this.filtroNombreCct.cct != '' && this.filtroNombreCct.nombre != '')) {
      
-      this.disabled=false
-    }
+    //   this.disabled=false
+    // }
   }
   recibirNombreSolicitante(nombreSolicitante: string, event: any){
 this.filtroNombre=event;
 this.filtroSeleccionado='5'
-    if (this.filtroNombre!= '') {
-      this.disabled=false
+    // if (this.filtroNombre!= '') {
+    //   this.disabled=false
 
-    }
+    // }
   }
   recibirLocalidad(nombreCampo: string, event: any){
     this.filtroLocalidad=event;
     console.log(this.filtroLocalidad)
     this.filtroSeleccionado='6'
-    if (this.filtroLocalidad!= '') {
-      this.disabled=false
-    }
+    // if (this.filtroLocalidad!= '') {
+    //   this.disabled=false
+    // }
   }
 
   realizarBusqueda() {
@@ -128,6 +124,7 @@ this.filtroSeleccionado='5'
       default:
         break;
     }
+    console.log(filtro)
     this.emitirValor(filtro);
   }
 }

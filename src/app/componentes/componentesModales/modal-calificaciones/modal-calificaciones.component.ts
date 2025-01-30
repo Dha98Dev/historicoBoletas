@@ -21,7 +21,7 @@ public promedioPrimaria:number = 0;
       this.boletaSeleccionada.calificacionesPrimaria.forEach(cal =>{
       suma +=parseFloat(cal.calificacion)
       })
-      this.promedioPrimaria = suma/this.boletaSeleccionada.calificacionesPrimaria.length;
+      this.promedioPrimaria = parseFloat( (suma/this.boletaSeleccionada.calificacionesPrimaria.length).toFixed(1));
     }
   }
 

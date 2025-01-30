@@ -1,3 +1,172 @@
-.row{
+.row {
     margin-right: 0px !important;
+}
+
+textarea {
+    min-height: 50vh;
+    max-height: 80vh;
+    resize: none !important;
+    font-size: 10px !important;   
+}
+textarea:focus{
+    box-shadow: none;
+    border: 1px solid #345;
+}
+
+.acciones {
+    margin-bottom: -18px;
+}
+
+.format-btn {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.5s ease;
+}
+
+.label-button {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    margin-left: 10px;
+}
+
+.format-btn i {
+    transform: translateX(-70px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.btn-clean i {
+    transform: translateX(-33px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.btn-apellido i {
+    transform: translateX(-63px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.btn-nombre i {
+    transform: translateX(-65px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.btn-copiarCal i {
+    transform: translateX(-78px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.btn-lila i{
+    transform: translateX(-78px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.format-btn:hover {
+    width: 190px !important;
+}
+.btn-clean:hover{
+    width: 120px !important;
+}
+
+.format-btn:hover i {
+    opacity: 0;
+    transform: translateX(-120px);
+}
+
+.format-btn:hover .label-button {
+    opacity: 1;
+    transform: translateX(0);
+}
+.btn-clean{
+    background: #e11d48;
+    color: white;
+}
+.btn-copiar{
+    color: #4b5563;
+    background: white;
+}
+
+.nombre,.nombre-compuesto {
+    font-size: 10px !important;
+}
+
+
+
+.indice {
+    width: 25px !important;
+}
+
+.celda>.w-100,
+.botones>div {
+    width: 30% !important;
+}
+
+.entrada>.acciones-nombres {
+    position: relative;
+    top: 0px;
+}
+
+p {
+    margin-bottom: 0px !important;
+}
+.excel, .btn-copiar, .btn-copiarCal{
+    background: #059669 !important;
+    color: white;
+}
+
+.entrada, .organizados, .compuestos , .contenedor-calificaciones .col-2 , .contenedor-calificaciones .col-10{
+background: #f4f4f5;
+border-radius: 20px;
+}
+
+.textarea-nombres{
+    background:transparent;
+}
+.compuestos{
+    margin-bottom: 30px;
+}
+.nombre-compuesto{
+    width: 100% !important;
+    border-radius: 4px;
+    }
+
+    .titulo-compuestos{
+        margin-bottom: 20px;
+    }
+
+/* estilos del organizador de las calificaciones */
+.contenedor-calificaciones{
+    display: flex;
+}
+.contenedor-calificaciones .col-2 {
+    width: 25%;
+}
+
+.contenedor-calificaciones .col-10 {
+    width: 70%;
+}
+.fila-cal{
+    display: flex;
+    font-size: 10px;
+}
+.materia, table{
+    font-size: 10px
+}
+th, td{
+    border-bottom: 1px solid #ccc;
+}
+
+
+/* medias query */
+@media(max-width:850px) {
+    .entrada {
+        width: 100% !important;
+        /* border: 1px solid red !important; */
+        margin-bottom: 20px;
+    }
+
+    .organizados, .compuestos {
+        width: 100% !important;
+        /* border: 1px solid red !important; */
+    }
 }

@@ -1,6 +1,5 @@
 
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, ElementRef, EventEmitter, Inject, Input, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-modal-confirmacion',
@@ -9,16 +8,40 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   encapsulation:ViewEncapsulation.None
 })
 export class ModalConfirmacionComponent {
-  constructor(
-    public dialogRef: MatDialogRef<ModalConfirmacionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { message: string }
-  ) {}
 
-  onConfirm(): void {
-    this.dialogRef.close(true);
-  }
+constructor(){}
 
-  onCancel(): void {
-    this.dialogRef.close(false);
-  }
+// estos son los inputs 
+@Input()
+public titulo:string = '¿Desea confirmar la Veracidad de la informacion ?'
+
+@Input()
+public mensaje:string = 'La informacion se marcará como revisada, dando por echo que la informacion capturada es correcta '
+
+@Input()
+public textoBotonConfirmar:string = 'Confirmar'
+
+@Input()
+public textoBotonCancelar:string = 'Cancelar'
+
+@Output() accionConfirmada = new EventEmitter<boolean>();
+mostrarModal: boolean = false;
+
+mostrar(): void {
+    this.mostrarModal = true; // Activa la visibilidad y las animaciones
+}
+
+ocultar(): void {
+    this.mostrarModal = false; // Desactiva las animaciones y oculta el modal
+}
+
+confirmar(): void {
+    this.accionConfirmada.emit(true);
+    this.ocultar();
+}
+
+cancelar(): void {
+    this.accionConfirmada.emit(false);
+    this.ocultar();
+}
 }

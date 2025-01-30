@@ -16,6 +16,9 @@ public iconos=Iconos
 @Input()
 public mostrar:boolean = false;
 
+@Input()
+public mensajeNotificacion:string = "";
+
 ngAfterViewInit() {
   if (this.mostrar) {
     this.openModal();

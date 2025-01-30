@@ -7,3 +7,12 @@
 .verificado{
     border-left: 5px solid #14b8a6;
 }
+.Encaptura{
+    color: #f59e0b;
+    filter: drop-shadow(1px 1px  #e34bc7);
+    }
+    
+    .revisado{
+    color: #0a7266;
+    filter: drop-shadow(1px 1px  #04a16ad6);
+    }

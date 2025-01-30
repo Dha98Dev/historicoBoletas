@@ -26,5 +26,11 @@ export enum Iconos {
     UploadFile='fas fa-cloud-upload-alt',
     Reload='fas fa-redo-alt',
     Notification='fas fa-bell',
-    XToCloseRounded='fas fa-times-circle'
+    XToCloseRounded='fas fa-times-circle',
+    Exclamation='fas fa-exclamation-triangle',
+    Clipboard='fas fa-clipboard',
+    Delete='fas fa-trash-alt',
+    Menu='fas fa-bars',
+    Tools='fas fa-tools',
+    SortLetter= 'fas fa-sort-alpha-up'
   }

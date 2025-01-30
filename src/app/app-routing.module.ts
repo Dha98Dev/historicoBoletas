@@ -19,6 +19,7 @@ import { AuthAdminGuard } from './Autenticacion1/guards/admin-guard.guard';
 import { AuthRevisadorGuard } from './Autenticacion1/guards/revisador-guard.guard';
 import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuarios.component';
 import { CargaMasivaComponent } from './pages/loadPages/carga-masiva/carga-masiva.component';
+import { PageNotFoundComponent } from './componentes/banners/page-not-found/page-not-found.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent},
   { path: 'userList', component:ListadoUsuariosComponent, canActivate:[AuthAdminGuard]},
   {path:  'prueba', component: PaginaPruebaComponent},
+  {path: 'notFound', component:PageNotFoundComponent},
   {
     path: 'planesEstudio',
     component: PlanesEstudiosComponent,
@@ -43,7 +45,7 @@ const routes: Routes = [
       { path: 'asignarMaterias', component: AsignarMateriasPlanComponent }
     ]
   },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'notFound' }
 ];
 
 

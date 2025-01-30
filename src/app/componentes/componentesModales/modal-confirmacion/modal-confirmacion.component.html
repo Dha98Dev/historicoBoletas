@@ -1,9 +1,10 @@
-
-    <h2 mat-dialog-title class="transparente">Confirmación</h2>
-<mat-dialog-content>
-  <p>{{ data.message }}</p>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-button color="primary" (click)="onConfirm()">Confirmar</button>
-</mat-dialog-actions>
+<div class="contenedor-confirmacion" [ngClass]="{'mostrar': mostrarModal}">
+  <div class="mensaje rounded d-flex flex-column py-2 px-2 animate__animated" [ngClass]="{'animate__zoomIn': mostrarModal}">
+      <p class="lead titulo fw-semibold fs-5">{{ titulo }}</p>
+      <p class="small mt-3">{{ mensaje }}</p>
+      <div class="footer-modal d-flex justify-content-center gap-4 mt-3">
+          <button class="btn btn-lila" (click)="confirmar()"> {{textoBotonConfirmar}} </button>
+          <button class="btn btn-red" (click)="cancelar()"> {{textoBotonCancelar}} </button>
+      </div>
+  </div>
+</div>

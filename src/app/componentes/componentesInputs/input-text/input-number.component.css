@@ -4,3 +4,6 @@
 div{
     position: relative;
 }
+input{
+text-transform: uppercase;
+}

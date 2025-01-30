@@ -1,51 +1,176 @@
-<!-- <div>
+<div class="encabezado d-flex  justify-content-end gap-2 px-2">
+    <button mat-raised-button (click)="mostrarOrganizarNombres(false)">
+        <label *ngIf="!organizarNombres" for="">Organizar Nombres</label>
+        <label *ngIf="organizarNombres" for="">Eliminar Espacios de Curp</label>
+    </button>
+    <button mat-stroked-button (click)="mostrarOrganizarNombres(true)">Organizar calificaciones</button>
+</div>
 
-    <div>
-        <p><i [class]="iconos.Book"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.Chart"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.Check"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.CloseSesion"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.Config"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.Consulta"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.DataBase"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.DownloadFile"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.EyeClosed"></i></p>
-    </div>
-    <div>
-        <p><i [class]="iconos.EyeOpen"></i></p>
-    </div>
-    
-</div> -->
+<div *ngIf="!organizarNombres && !organizarCalificaciones" #eliminarEspaciosCurp class="animate__animated animate__zoomIn">
+    <p class="lead text-center mt-2  ">Pegue el listado escaneado con google lens para eliminar espacios innecesarios
+    </p>
 
-<div class="row d-flex justify-content-center">
-    <div class="col-2">
-        <div class="border" *ngFor="let ciclo of ciclosEscolares">
-            {{ciclo.nombre}}
-            <button class="btn btn-light border" (click)="setCiclo(ciclo.nombre)"> Seleccionar </button>
+
+    <div class="d-flex flex-column align-items-center mt-2">
+        <div class=" acciones w-50 d-flex justify-content-center gap-2  ">
+
+            <button class="btn btn border format-btn excel" mat-raised-button (click)="copiarParaExcel(textArea.value)">
+                <label for="" class="label-button ">formato para Excel</label>
+                <i [class]="iconos.Clipboard"></i>
+            </button>
+
+            <button class=" btn border format-btn btn-clean" mat-raised-button (click)="limpiarTextArea()">
+                <label for="" class="label-button">Limpiar</label>
+                <i [class]="iconos.Delete"></i>
+            </button>
+        </div>
+
+
+        <div class=" textArea w-50 ">
+            <textarea class="form-control px-3" name="" #textArea id=""></textarea>
         </div>
     </div>
-    <div class="col-4">
-        <div class="px-2 py-2 rounded border" *ngFor="let plan of planesEstudio"> {{plan.nombre}} </div>
-    </div>
-    <div class="col-2">
-        <p>Ciclo seleccionado: {{cicloEscolar}} </p>
-    </div>
-    <div class="col-2">Plan de estudios Seleccionado: {{planEstudioSeleccionado}} </div>
 </div>
+
+
+<!-- aqui vamos a organizar lo nombres de las personas   -->
+
+<div class="contenedor animate__animated animate__zoomIn " *ngIf="organizarNombres && !organizarCalificaciones">
+<p class="lead text-center"> Organizador de nombres, separar por apellido paterno, materno y nombre(s)</p>
+    <!-- este es el  contenedor de la nota notificando que los nombres que tienen palabras compuestas no se organizaran -->
+   <div class="row justify-content-center align-items-center g-2 mt-3">
+    <div class=" col-8 alert alert-light d-flex gap-2  align-items-center animate__animated animate__zoomIn ">
+        <i [class]="iconos.Info"></i>
+        <b class="fw-semibold">  NOTA:</b> 
+    Los nombres con más de cuatro palabras se clasifican como compuestos y no se procesan automáticamente. Revísalos en la lista correspondiente debajo de la lista de nombres organizados
+    </div>
+    </div>
    
+
+
+    <div class="row animate__animated animate__zoomIn px-4 gap-2 d-flex justify-content-center mt-5">
+        <div class="entrada  col-3   text-center ">
+            <div class="acciones-nombres">
+                <button class="excel" mat-stroked-button (click)="preguntarOrden(textareaNombres.value)">Organizar</button>
+                <button class=" btn border format-btn btn-clean" mat-raised-button (click)="limpiarTextArea()">
+                    <label for="" class="label-button">Limpiar</label>
+                    <i [class]="iconos.Delete"></i>
+                </button>
+            </div>
+            <textarea class="form form-control textarea-nombres" placeholder="Ingrese el listado de nombres a organizar" name="" #textareaNombres id=""></textarea>
+        </div>
+        <div class="organizados col-6">
+            <div class="botones-copiar  d-flex flex-column ">
+                <p class="lead text-center py-2 ">Listado de nombre Organizados </p>
+               <div class="d-flex justify-content-around  py-2">
+                <!-- <div class="border text-center">
+                    <button class="btn btn-apellido format-btn btn-copiar" mat-raised-button>
+                        <label class="label-button" for="">Copiar apellido Materno </label>
+                        <i [class]="iconos.Clipboard"></i>
+                    </button>
+                </div> -->
+                <div class="border text-center">
+                    <button class="btn btn-apellido format-btn btn-copiar" mat-raised-button (click)="copiarApellidos()">
+                        <label class="label-button" for="">Copiar apellidos</label>
+                        <i [class]="iconos.Clipboard"></i>
+                    </button>
+                </div>
+                <div class="border text-center">
+                    <button class="btn btn-nombre format-btn btn-copiar" mat-raised-button (click)="copiarNombres()">
+                        <label class="label-button" for="">Copiar nombre(s)</label>
+                        <i [class]="iconos.Clipboard"></i>
+                    </button>
+                </div>
+               </div>
+            </div>
+            <div class="fila d-flex flex-column mt-4">
+                <div class="celda d-flex w-100">
+                    <div class="text-center nombre fw-semibold d-flex indice border  py-1">#  </div>
+                    <div class="w-100 fw-semibold text-center nombre border py-1" > Apellido Paterno </div>
+                    <div class="w-100 fw-semibold text-center nombre border py-1" > Apellido Materno </div>
+                    <div class="w-100 fw-semibold text-center nombre border py-1" > Nombre(s) </div>
+                </div>
+                <div class="celda d-flex w-100" *ngFor="let nombre of nombresOrganizados.organizados; let i =index">
+                    <div class="text-center nombre fw-semibold d-flex indice border  py-1">#  {{i+1}} </div>
+                    <div class="w-100 text-center nombre border py-1" > {{nombre.apellidoPaterno}} </div>
+                    <div class="w-100 text-center nombre border py-1" > {{nombre.apellidoMaterno}} </div>
+                    <div class="w-100 text-center nombre border py-1" > {{nombre.nombres}} </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3 extra"></div>
+        <div class="col-6 compuestos py-2" >
+            <p class="lead titulo-compuestos text-center ">Listado de nombres que se deben de organizar manualmente </p>
+            <div class=" d-flex w-100" *ngFor="let nombre of nombresOrganizados.compuestos; let i =index">
+                <div class="text-center nombre fw-semibold d-flex indice border  py-1">#  {{i+1}} </div>
+                <div class="w-100 text-center nombre-compuesto border py-1" > {{nombre}} </div>
+ 
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- organizar las calificaciones por plan de estudio -->
+ <div class="organizar-calificaciones-contenedor px-5" *ngIf="organizarCalificaciones">
+    <p class="lead text-center">Organizar calificaciones</p>
+
+    <div class="contenedor-calificaciones px-5 gap-2">
+        <div class="col-2 " >
+            <select class="form form-select " name="plan" #selectPlanEstudio  id="" (change)="changePlanesEstudio(selectPlanEstudio.value)">
+                <option value=""  > seleccione un plan de estudio </option>
+                <option *ngFor="let plan of planesEstudio" [value]="plan.valor"> {{plan.nombre}} </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="contenedor-calificaciones px-5 gap-2 mt-3">
+
+        <!-- este es el contenedor del textarea para la entrada de las calificaciones -->
+
+        <div class="px-2 py-2 rounded col-2">
+            <div class="d-flex align-items-center justify-content-center  ">
+                <button class="excel" mat-stroked-button (click)="ordenarCalificaciones(textareaCalificaciones.value)">Organizar</button>
+                <button class=" btn border format-btn btn-clean" mat-raised-button (click)="limpiarTextArea()">
+                    <label for="" class="label-button">Limpiar</label>
+                    <i [class]="iconos.Delete"></i>
+                </button>
+            </div>
+            <textarea class="form form-control textarea-nombres" placeholder="Ingrese el listado de calificaciones a organizar" name="" #textareaCalificaciones id=""></textarea>
+        </div>
+
+        <!-- aqui es donde organizaremos las calificaciones por las materias -->
+        <div class="px-2 py-2 rounded col-10">
+        
+            <div class="d-flex justify-content-center gap-3">
+  
+                <button (click)="copiarCalificacionesAlPortapapeles()" class="btn btn-apellido format-btn btn-copiarCal" mat-raised-button>
+                    <label class="label-button" for="">Copiar calificaciones </label>
+                    <i [class]="iconos.Clipboard"></i>
+                </button>
+            </div>
+
+            <table class="table mt-2">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" class="text-center" *ngFor="let mat of listadoMaterias">{{mat.nombre}}</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let registro of arregloCalificaciones; let i=index">
+                    <th scope="row"> {{i+1}} </th>
+                    <td class="text-center" *ngFor="let cal of registro">
+                        {{cal}}
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+ </div>

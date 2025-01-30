@@ -8,6 +8,7 @@ import { AsignarMateriasPlan } from '../../interfaces/respuestaOpcionesSelect.in
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { userService } from '../../Autenticacion1/servicios/user-service.service';
+import { GetNombreService } from '../../services/get-nombre.service';
 
 @Component({
   selector: 'app-asignar-materias-plan',
@@ -17,7 +18,7 @@ import { userService } from '../../Autenticacion1/servicios/user-service.service
 export class AsignarMateriasPlanComponent {
 
 
-  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private _router:Router, private fb:FormBuilder, private userService:userService){}
+  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private _router:Router, private fb:FormBuilder, private userService:userService,  private tituloPagina:GetNombreService){}
 
   public planesEstudio:opciones[]=[]
   public materias:opciones[]=[]
@@ -28,6 +29,7 @@ export class AsignarMateriasPlanComponent {
 
   datosPlan:FormGroup={} as FormGroup
   ngOnInit():void{
+    this.tituloPagina.setNombre='Asignar Materias'
     this.datosPlan=this.fb.group({
     idPlanEstudio:['', [Validators.required]],
     idNivel:['', [Validators.required]],

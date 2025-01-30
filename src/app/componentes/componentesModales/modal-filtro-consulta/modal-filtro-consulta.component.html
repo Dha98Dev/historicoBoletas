@@ -8,15 +8,15 @@
       <div class="modal-body">
         <div class="d-flex ">
           <!--  para consulta por curp -->
-          <app-input-text (onEmitValueInput)="recibirCurp($event)" [validadorCurp]="true" [mostrarValidacion]="true"
+          <app-input-text (onEmitValueInput)="recibirCurp($event)" [validadorCurp]="true" [mostrarValidacion]="false"
             *ngIf="tipoFiltro== '1'" class="w-100" [placeholder]="'Ingrese la curp que desea Buscar'"></app-input-text>
 
           <!-- para consulta de ciclo escolar y cct -->
           <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro== '2'">
             <app-input-text [validadorCct]="true" (onEmitValueInput)="recibirFiltroCicloYCct('cct', $event)"
-              [mostrarValidacion]="true" class="w-100"
+              [mostrarValidacion]="false" class="w-100"
               [placeholder]="'Ingrese la clave de centro de trabajo que desea Buscar'"></app-input-text>
-            <app-select-form (OnEmitValorSelect)="recibirFiltroCicloYCct('idCiclo', $event)" [smallIndicator]="true"
+            <app-select-form (OnEmitValorSelect)="recibirFiltroCicloYCct('idCiclo', $event)" [mostrarNotificacion]="false"  [smallIndicator]="false"
               class="w-100" [opciones]="opcionesSelect"></app-select-form>
           </div>
 
@@ -31,8 +31,8 @@
           <div class="filtro2 d-flex flex-column w-100 gap-2" *ngIf="tipoFiltro== '4'">
             <app-input-text (onEmitValueInput)="recibirfiltroNombreCct('nombre', $event)" [mostrarValidacion]="false"
               [placeholder]="'Ingrese el nombre que desea buscar'"></app-input-text>
-            <app-input-text [validadorCct]="true" (onEmitValueInput)="recibirfiltroNombreCct('cct', $event)"
-              [mostrarValidacion]="true" class="w-100"
+            <app-input-text [validadorCct]="false" (onEmitValueInput)="recibirfiltroNombreCct('cct', $event)"
+              [mostrarValidacion]="false" class="w-100"
               [placeholder]="'Ingrese la clave del centro de trabajo a buscar'"></app-input-text>
           </div>
 
@@ -52,7 +52,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-red" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-sky" data-bs-dismiss="modal" [disabled]="disabled"
+        <button type="button" class="btn btn-sky" data-bs-dismiss="modal" 
           (click)="realizarBusqueda()">Buscar</button>
       </div>
     </div>

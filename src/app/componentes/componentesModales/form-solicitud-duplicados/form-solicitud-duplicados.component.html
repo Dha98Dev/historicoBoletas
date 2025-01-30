@@ -1,0 +1,43 @@
+<div class="contenedor-confirmacion" [ngClass]="{'mostrar': mostrarModal}">
+    <div class="mensaje rounded d-flex flex-column py-5 px-2 animate__animated" [ngClass]="{'animate__zoomIn': mostrarModal}">
+        <p class="lead titulo fw-semibold fs-5">{{ titulo }}</p>
+        <form action="" [formGroup]="SolicitudCertificado" class="form mt-3 mb-3">
+            <select (change)="verificarEstadoFormulario()" formControlName="municipio" name="" id="municipio" class="form form-select">
+                <option value="" selected>Seleccione el municipio donde vive actualmente</option>
+                @for (municipio of municipios; track municipio) {
+                   <option [value]="municipio">{{municipio}}</option>
+                    }
+            </select>
+
+            <input class="form form-control" placeholder="Ingrese la localidad en que vive  actualmente" type="text" formControlName="localidad" (change)="eliminarEspaciosBlancos('localidad',1)" id="localidad">
+
+            <input class="form form-control" placeholder="Ingrese su direccion actual (Opcional)" type="text" formControlName="domicilio" (change)="eliminarEspaciosBlancos('domicilio',1)" id="domicilio">
+
+            <input class="form form-control" placeholder="Ingrese un numero de telefono vigente" type="text" formControlName="telefono" (change)="eliminarEspaciosBlancos('telefono',1)" id="telefono">
+
+            <pre>
+                ({{SolicitudCertificado.get('localidad')?.value}})
+            </pre>
+
+            <div class="estado">
+                <p>Estado de llenado de formulario:</p>
+                <div class="contenedor-barra">
+                  <i [class]="porcentajeLlenado === 100 ? 'fa fa-check-circle' : 'fa fa-times-circle'" [ngStyle]="{'color': porcentajeLlenado === 100 ? 'green' : '#db2777'}"></i>
+                  <div class="d-flex flex-column w-100">
+                    <small class="porcentaje-texto">{{ porcentajeLlenado }}% completado</small>
+                    <div class="barra-estado">
+                      <div class="relleno" [ngStyle]="{'width': porcentajeLlenado + '%', 'background': porcentajeLlenado === 100 ? 'green' : '#db2777', 'border-color': porcentajeLlenado === 100 ? 'green' : '#db2777'}"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+        </form>
+        <div class="footer-modal d-flex justify-content-center gap-4 mt-3">
+            <button class="btn btn-lila" (click)="EmitirDatos()" [disabled]="porcentajeLlenado != 100">Guardar Información</button>
+            <button class="btn btn-red" (click)="cancelar()">Cancelar</button>
+        </div>
+    </div>
+  </div>
+  

@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output, SimpleChanges } from '@angular/core';
+import { ValidacionesService } from '../../../services/validaciones.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input-text',
@@ -6,6 +8,8 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
   styleUrl: './input-number.component.css'
 })
 export class InputNumberComponent {
+
+  constructor(private Validaciones:ValidacionesService, private fb: FormBuilder) { }
 
   public campoTocado: boolean = false;
   public valorCajaTexto: string | number = '';
@@ -31,32 +35,40 @@ export class InputNumberComponent {
   @Input()
   public mostrarValidacion: boolean = false;
 
+  @Input() eliminarCaracteresEspeciales:boolean = true;
+
   public campoValido: boolean = true;
   public valorNoVacio: boolean = true; // Nuevo estado para verificar si el campo no está vacío
 
+  texto:FormGroup={} as FormGroup
+
+  ngOnInit(){
+    this.texto= this.fb.group({
+      texto:['',[Validators.required]]
+    })
+  }
+
   // Este método se encarga de enviar el valor solo si es válido.
   enviarValorIngresado(valor: string) {
-    let valido = this.validarCampo(valor);
-    console.log(valido);
-    if (!valido) {
+  
+    let valido = this.validarCampo();
+    if (!valido && valor != "") {
       this.campoValido = false;
       this.campoTocado = true;
     } else {
-      this.onEmitValueInput.emit(valor);
+      console.log(this.Validaciones.limpiarParaSQL(valor))
+      this.onEmitValueInput.emit(this.Validaciones.limpiarParaSQL(valor));
       this.campoValido = true;
     }
   }
 
   // Método para marcar el campo como tocado y validar cuando se pierde el foco (blur).
-  marcarTocado(valor: string | number) {
-    this.campoTocado = true;
-    this.validarCampo(valor);
-  }
+
 
   // Método de validación que verifica CURP, CCT y que el campo no esté vacío.
-  validarCampo(valor: string | number): boolean {
-    this.valorCajaTexto = valor.toString().toUpperCase();
-
+  validarCampo(): boolean {
+    let valor=this.texto.get('texto')?.value.trim()
+    this.texto.patchValue({texto: this.Validaciones.normalizeSpacesToUpperCase(valor.toString())}) 
     // Validación para campo no vacío
     if (!valor || valor.toString().trim() === '') {
       this.valorNoVacio = false;
@@ -74,7 +86,6 @@ export class InputNumberComponent {
     if (this.validadorCct && !this.validarCct(valor.toString())) {
       return false;
     }
-
     return true;
   }
 
@@ -87,7 +98,7 @@ export class InputNumberComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['Valor'] && this.Valor !== "") {
       this.campoTocado = true;
-      this.campoValido = this.validarCampo(this.Valor);
+      this.campoValido = this.validarCampo();
       this.enviarValorIngresado(changes['Valor'].currentValue);
     } else if (changes['Valor'] && this.Valor === "") {
       this.campoTocado = false;
@@ -95,14 +106,19 @@ export class InputNumberComponent {
   }
 
   // Validador para el formato de CURP.
+
   validarCurp(valor: string): boolean {
-    const patronCurp = /^([A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]{2})$/;
+    const patronCurp = /^([A-Za-z]{4}\d{6}[HhMm][A-Za-z]{5}[A-Za-z0-9]{2})$/;
     return patronCurp.test(valor);
   }
+  
 
   // Validador para el formato de CCT.
   validarCct(valor: string): boolean {
     const patronCct = /^18[A-Za-z]{3}[0-9]{4}[A-Za-z]$/;
     return patronCct.test(valor);
   }
+
+
+
 }

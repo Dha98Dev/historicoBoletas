@@ -6,6 +6,7 @@ import { HistorialBoletasGetService } from '../../services/historial-boletas-get
 import { listadoUsuarios } from '../../interfaces/listadoUsuarios.interface';
 import { Iconos } from '../../enums/iconos.enum';
 import { NotificacionesService } from '../../services/notificaciones.service';
+import { GetNombreService } from '../../services/get-nombre.service';
 
 @Component({
   selector: 'app-listado-usuarios',
@@ -22,10 +23,12 @@ export class ListadoUsuariosComponent implements OnInit, OnDestroy {
     private userService: userService,
     private updateService: HistorialBoletasUpdateService,
     private getService: HistorialBoletasGetService,
-    private notificacionService:NotificacionesService
+    private notificacionService:NotificacionesService,
+    private tituloPagina:GetNombreService
   ) {}
 
   ngOnInit() {
+    this.tituloPagina.setNombre='Listado de usuarios';
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -72,15 +75,25 @@ export class ListadoUsuariosComponent implements OnInit, OnDestroy {
     let estado= accion == 1 ? 'activo' : 'inactivo';
     let data = { token:this.userService.obtenerToken(), usuario:this.userService.Desencriptar(idUser.toString()), estado}
     console.log(data)
-    // this.updateService.updateEstadoUsuario(data).subscribe(response => {
-    //   if (!response.error) {
-    //     this.notificacionService.mostrarAlertaConIcono('Estado de usuario', response.mensaje, 'success');
-    //   }
-    //   else{
-    //     this.notificacionService.mostrarAlertaConIcono('Estado de usuario', response.mensaje, 'error');
-    //   }
-    // })
+    this.updateService.updateEstadoUsuario(data).subscribe(response => {
+      if (!response.error) {
+        this.actualizarEstado(idUser, estado)
+        this.notificacionService.mostrarAlertaConIcono('Estado de usuario', response.mensaje, 'success');
+      }
+      else{
+        this.notificacionService.mostrarAlertaConIcono('Estado de usuario', response.mensaje, 'error');
+      }
+    })
 
+  }
+
+  actualizarEstado(idUsuario:number | string, estado:string){
+    this.listadoUsuarios.forEach(user => {
+      if (user.id_usuario == idUsuario) {
+        console.log(user.id_usuario, idUsuario)
+        user.estado=estado
+      }
+    })
   }
 
 }

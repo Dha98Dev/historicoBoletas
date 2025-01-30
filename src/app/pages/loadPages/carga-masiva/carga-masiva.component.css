@@ -32,7 +32,7 @@ p {
   align-items: center;
   height: 300px;
   width: 400px;
-  border: 2px dashed #233dfd !important;
+  border: 2px dashed #233dfd ;
   border-radius: 10px;
   background-color: #f3f3f3;
   text-align: center;
@@ -57,12 +57,16 @@ p {
 
 .upload-area>button {
   padding: 5px 15px;
-  background-color: #555;
+  background-color: #020617;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   width: 70%;
+}
+
+.upload-area>button:hover{
+background: #334155;
 }
 
 .upload-area>i {

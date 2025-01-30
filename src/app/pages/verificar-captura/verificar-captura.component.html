@@ -1,7 +1,7 @@
 <app-loader *ngIf="loader"></app-loader>
 <div class="acciones d-flex justify-content-end gap-3 px-3 py-2 " >
 
-  <button class="btn-gray-dark text-uppercase" *ngIf="!infoAdicional"  mat-raised-button (click)="llenarInfoAcional()"> <i [class]="iconos.DownloadFile"></i> SOLICITUD DE DUPLICADOS Y SERVICIOS </button>
+  <button class="btn-gray-dark text-uppercase" (click)="formSolicitudDuplicados.mostrar()" *ngIf="!infoAdicional"  mat-raised-button > <i [class]="iconos.DownloadFile"></i> SOLICITUD DE DUPLICADOS Y SERVICIOS </button>
 
   <button class="btn-rose fs-6"  (click)="descargarSolicitudServicios()" *ngIf="infoAdicional"   matTooltip="Descargar Pdf" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.Pdf"></i>  </button>
 </div>
@@ -105,3 +105,7 @@
 </div>
 
 <app-previsualizador-archivos [pdfUrl]="pdfSeleccionado" ></app-previsualizador-archivos>
+
+<app-form-solicitud-duplicados #formSolicitudDuplicados (OnEmitInformacion)="recibirInfoSolicitudDuplicado($event)" ></app-form-solicitud-duplicados>
+
+<app-modal-confirmacion #modalSeleccionarTipoPromedio (accionConfirmada)="SeleccionarTipoPromedio($event)"  [titulo]="'¿Como desea visualizar el promedio final?'" [mensaje]="'seleccione como se deberia de mostrar el promedio, es decir,  redondeando los puntos decimales o mostrando los puntos decimales'" [textoBotonConfirmar]="'Redondeado'" [textoBotonCancelar]="'Con punto Decimal'"></app-modal-confirmacion>

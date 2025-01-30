@@ -1,11 +1,12 @@
-<div>
+<form [formGroup]="texto">
     <input class="form-control" 
+    formControlName="texto"
            placeholder="{{placeholder}}"  
            #input 
-           (input)="enviarValorIngresado(input.value)" 
-           [value]="valorCajaTexto"  
-           (blur)="marcarTocado(input.value)" 
-           [ngClass]="!campoValido && campoTocado ? 'error' : ''">
+           (blur)="enviarValorIngresado(input.value)" 
+           [ngClass]="!campoValido && campoTocado ? 'error' : ''"
+            #inputElement
+           >
            
     <app-label-input-completo
      [smallIndicador]="smallIndicator" 
@@ -18,5 +19,10 @@
     *ngIf="!campoValido && campoTocado && mostrarValidacion"
     [texto]="'El Campo no Tiene  Formato Valido'"
     ></app-label-input-incompleto>
-  </div>
+
+    <pre>
+       ({{this.texto.get('texto')?.value}})
+    </pre>
+
+  </form>
   

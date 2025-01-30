@@ -1,4 +1,4 @@
-import { Component, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, QueryList, Renderer2, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { opciones } from '../../../componentes/componentesInputs/select-form/select-form.component';
 import { HistorialBoletasGetService } from '../../../services/historial-boletas-get.service';
 import { HistorialBoletasAgregarService } from '../../../services/historial-boletas-agregar.service';
@@ -8,9 +8,14 @@ import { CentroTrabajo, Persona } from '../../../interfaces/datosCct.interface';
 import { NotificacionesService } from '../../../services/notificaciones.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, MinValidator, Validators } from '@angular/forms';
-import { min } from 'rxjs';
+import { max, min } from 'rxjs';
 import { userService } from '../../../Autenticacion1/servicios/user-service.service';
 import { Iconos } from '../../../enums/iconos.enum';
+import { GetNombreService } from '../../../services/get-nombre.service';
+import sanitizeHtml from 'sanitize-html';
+import { ValidacionesService } from '../../../services/validaciones.service';
+import { TextBoxComponent } from '../../../componentes/componentesInputs/text-box/text-box.component';
+import { ModalConfirmacionComponent } from '../../../componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
 
 @Component({
   selector: 'app-load-page',
@@ -33,7 +38,9 @@ export class LoadPageComponent {
   
   // variables que son arreglos
   public calificacionesPrimaria:calificacionesPrimaria[]=[]
-  public planesEstudio: opciones[]=[];
+  
+  private  planesEstudio: opciones[]=[];
+  public planesEstudiosSelect:opciones[]=[]
   public ciclosEscolares: opciones[]=[];
   private nivelesEducativos: opciones[]=[]
   public nivelEducativoSeleccionado:opciones[]=[]
@@ -45,15 +52,18 @@ export class LoadPageComponent {
   public animationClass:string =''
   public completoPrimaria:boolean=true
   public desmarcar:boolean=false
+  private redondeado:boolean=false
+  @ViewChildren('inputBox') inputBoxes!: QueryList<TextBoxComponent>;
+  @ViewChild('presentacionPromedio') checkbox!: ElementRef<HTMLInputElement>;
 
-
-  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService){}
+  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService,  private tituloPagina:GetNombreService, private Validaciones:ValidacionesService,  private renderer:Renderer2){}
 
   datosGeneralesForm: FormGroup= {}  as FormGroup;
   calificacioneSecundaria:FormGroup= {} as FormGroup
   egresado:FormGroup= {} as FormGroup
+  @ViewChild('modalSeleccionarTipoPromedio') modalSeleccionarTipoPromedio!: ModalConfirmacionComponent;
   ngOnInit():void{
-
+    this.tituloPagina.setNombre='Cargar certificado'
 
     // obtenemos la información de localStorage y si no hay nada hacemos las peticiones
     let Turnos= localStorage.getItem('Turnos')
@@ -67,16 +77,15 @@ export class LoadPageComponent {
     else{
       this.getTurnos();
     }
-    if (nivelesEducativos != null) {
-      this.nivelesEducativos=JSON.parse(nivelesEducativos);
-      this.nivelEducativoSeleccionado=this.nivelesEducativos
-    }else{
+    // if (nivelesEducativos != null) {
+    //   // this.nivelesEducativos=JSON.parse(nivelesEducativos);
+    //   this.nivelEducativoSeleccionado=this.nivelesEducativos
+    // }else{
       this.getNivelesEducativos();
-    }
+    // }
 
     if (ciclosEscolares!= null) {
       this.ciclosEscolares=JSON.parse(ciclosEscolares);
-      console.log(this.ciclosEscolares)
     }else{
       this.getCiclosEscolares();
     }
@@ -84,15 +93,15 @@ export class LoadPageComponent {
     this.getPlanesEstudio();
 
         this.datosGeneralesForm = this.fb.group({
-      claveCct: ['', [Validators.required, Validators.pattern(/^18[A-Za-z]{3}[0-9]{4}[A-Za-z]$/)]],
+      claveCct: ['', [Validators.required, Validators.pattern(/^18[A-Za-z]{3}[0-9]{4}[A-Za-z]$/),  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(10)]],
       cicloEscolar: ['', Validators.required],
       nivelEducativo: ['', Validators.required],
       planEstudio: ['', Validators.required],
-      zonaEscolar: ['', [Validators.required, Validators.min(1)]],
-      nombreCct: ['', Validators.required],
+      zonaEscolar: ['', [Validators.required, Validators.pattern(/^\d{1,3}$/)]],
+      nombreCct: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s"']+$/), Validators.maxLength(100)]],
       turno: ['', Validators.required],
-      grupo: ['', Validators.required],
-      localidad: ['', [Validators.required]],
+      grupo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/), Validators.maxLength(5)]],
+      localidad: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/), Validators.maxLength(100)]],
       directorCorrespondiente: ['', ]
     });
 
@@ -104,17 +113,24 @@ export class LoadPageComponent {
     })
 
     this.egresado= this.fb.group({
-      nombre: ['', Validators.required],
-      apellidoPaterno: ['', Validators.required],
-      apellidoMaterno: ['', Validators.required],
-      curp: ['', [ Validators.pattern(/^([A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]{2})$/)]],
-      folioBoleta: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/),  Validators.maxLength(60)]],
+      apellidoPaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)] ],
+      apellidoMaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)]],
+      curp: ['', [  Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
+      folioBoleta: ['', [Validators.required,  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/),  Validators.maxLength(60)] ],
     });  
 
 
   }
 
-
+  ngAfterViewChecked(): void {
+    if (this.datosGeneralesForm.get('nivelEducativo')?.value === 'fFC1jKUVKAMqnqYtpc9LRw==' && this.completoPrimaria) {
+      console.log('Referencias inicializadas:', this.inputBoxes.toArray());
+    }
+  }
+  // ngAfterViewInit() {
+  //   this.modalSeleccionarTipoPromedio.mostrar()
+  // }
 // Uso de la función para cada caso
 
 
@@ -123,7 +139,7 @@ export class LoadPageComponent {
     this.historialServiceGet.getNivelesEducativos(data).subscribe(response =>{
       if(!response.error){
         this.nivelesEducativos=response.data;
-        localStorage.setItem('nivelesEducativos', JSON.stringify(this.nivelesEducativos))
+        // localStorage.setItem('nivelesEducativos', JSON.stringify(this.nivelesEducativos))
       }
     })
   }
@@ -134,6 +150,7 @@ export class LoadPageComponent {
       if(!response.error){
       this.planesEstudio=response.data;
       this.ordernarPlanes(this.planesEstudio)
+      this.planesEstudiosSelect=this.planesEstudio
       }
     })
   }
@@ -164,15 +181,27 @@ getInfoCct(){
 if (this.datosGeneralesForm.controls['claveCct'].valid) {
   this.historialServiceGet.getDatosCct(data).subscribe(response => {
     if(!response.error){
-      console.log(response.data.centroTrabajo.claveCct)
       this.loader=false;
   // this.datosGeneralesForm.patchValue({nivelEducativo: response.data.centroTrabajo.id_nivel})
 if (response.data.centroTrabajo.claveCct !=undefined) {
   this.datosGeneralesForm.patchValue({zonaEscolar: response.data.centroTrabajo.zonaEscolar})
   this.datosGeneralesForm.patchValue({nombreCct: response.data.centroTrabajo.nombreCt})
+  this.datosGeneralesForm.patchValue({localidad: response.data.centroTrabajo.localidad})
+  this.datosGeneralesForm.patchValue({nivelEducativo: response.data.centroTrabajo.id_nivel})
   this.datosGeneralesForm.controls['zonaEscolar'].markAsTouched()
   this.datosGeneralesForm.controls['nombreCct'].markAsTouched()
-  
+  this.datosGeneralesForm.controls['localidad'].markAsTouched()
+  this.datosGeneralesForm.controls['nivelEducativo'].markAsTouched()
+}
+else{
+this.datosGeneralesForm.patchValue({zonaEscolar: ''})
+  this.datosGeneralesForm.patchValue({nombreCct: ''})
+  this.datosGeneralesForm.patchValue({localidad: ''})
+  this.datosGeneralesForm.patchValue({nivelEducativo: ''})
+  this.datosGeneralesForm.controls['zonaEscolar'].markAsUntouched()
+  this.datosGeneralesForm.controls['nombreCct'].markAsUntouched()
+  this.datosGeneralesForm.controls['localidad'].markAsUntouched()
+  this.datosGeneralesForm.controls['nivelEducativo'].markAsUntouched()
 }
 
 // contamos la longitud del arreglo y si es 0 es por que el centro de trabajo aun no se encuentra registrado y dejamos los dos niveles escolares
@@ -184,11 +213,19 @@ if (this.nivelEducativoSeleccionado.length == 0) {
       // creamos el arreglo de los directores
     let Directores:opciones[]=[];
     let Datadirectores=response.data.directores;
- for (let i = 0; i < Datadirectores.length; i++) {
-  let newDirector={"nombre": Datadirectores[i].nombre + " "+ Datadirectores[i].apellidoPaterno + " " + Datadirectores[i].apellidoMaterno , "valor": Datadirectores[i].id_persona}
-  Directores.push(newDirector);
-    this.Directores=Directores
+    console.log(response.data.directores)
+  if(response.data.directores.length > 0) {
+  for (let i = 0; i < Datadirectores.length; i++) {
+    if (Datadirectores[i].nombre != null && Datadirectores[i].apellidoPaterno != null && Datadirectores[i].apellidoMaterno != null) { 
+      let newDirector = {
+        "nombre": Datadirectores[i].nombre + " " + Datadirectores[i].apellidoPaterno + " " + Datadirectores[i].apellidoMaterno,
+        "valor": Datadirectores[i].id_persona
+      };
+      Directores.push(newDirector);
+    }
   }
+  this.Directores = Directores;
+}
   
   }else{
     this.nivelEducativoSeleccionado=this.nivelesEducativos
@@ -205,7 +242,6 @@ filtrarNivel() {
 
     if (clave && clave.length >= 5) {
       const tipo = clave.substring(2, 5); // Extrae el tipo de la clave
-      console.log("Tipo extraído:", tipo); // Verifica qué valor tiene tipo
 
       if (["DES", "DST", "EST"].includes(tipo)) {
         this.nivelEducativoSeleccionado = this.nivelesEducativos.filter(
@@ -217,13 +253,9 @@ filtrarNivel() {
         );
       } 
 
-      console.log("Niveles seleccionados:", this.nivelEducativoSeleccionado);
     } 
   } 
 }
-
-
-
 
 // estos siguentes dos metodos son para la animacion de cuando se fija la informacion de la cabecera
 toggleSelect() {
@@ -259,13 +291,13 @@ let disabled = false;
   '<input id="swal-input2" class="swal2-input" placeholder="APELLIDO PATERNO">' +
   '<input id="swal-input3" class="swal2-input" placeholder="APELLIDO MATERNO">' +
   '<input id="swal-input4" class="swal2-input" placeholder="CURP (OPCIONAL)">';
- html+='<input id="swal-input5" [disabled]="'+disabled+'" value="'+this.datosGeneralesForm.get('claveCct')?.value.toUpperCase() +'" class="swal2-input" placeholder="CLAVE  DEL CENTRO DE TRABAJO">'
+ html+='<input id="swal-input5" disabled value="'+this.datosGeneralesForm.get('claveCct')?.value.toUpperCase() +'" class="swal2-input" placeholder="CLAVE  DEL CENTRO DE TRABAJO">'
   
   const { value: formValues } = await Swal.fire({
     title: 'Información del nuevo director',
     html:
     html,
-    focusConfirm: false,
+    focusConfirm: true,
     showCancelButton: true,
     preConfirm: () => {
       const input1 = (document.getElementById('swal-input1') as HTMLInputElement).value.toUpperCase();
@@ -288,16 +320,17 @@ let disabled = false;
 
 let dataNewDirector={
   token:this.userService.obtenerToken(),
-  cct: this.datosGeneralesForm.get('claveCct')?.value,
-  nombreCct: this.datosGeneralesForm.get('nombreCct')?.value,
-  nivel: this.datosGeneralesForm.get('nivelEducativo')?.value,
-  zonaEscolar:this.datosGeneralesForm.get('zonaEscolar')?.value,
-  nombre:formValues[0],
-  apellidoPaterno:formValues[1],
-  apellidoMaterno:formValues[2],
-  curp: formValues[3],
+  cct: this.Validaciones.normalizeSpacesToUpperCase(this.Validaciones.limpiarParaSQL(this.datosGeneralesForm.get('claveCct')?.value)),
+  nombreCct: this.Validaciones.normalizeSpacesToUpperCase(this.Validaciones.limpiarParaSQL(this.datosGeneralesForm.get('nombreCct')?.value)),
+  nivel: this.Validaciones.limpiarParaSQL(this.datosGeneralesForm.get('nivelEducativo')?.value),
+  zonaEscolar:this.Validaciones.limpiarParaSQL(this.datosGeneralesForm.get('zonaEscolar')?.value),
+  nombre:this.Validaciones.normalizeSpacesToUpperCase(this.Validaciones.limpiarParaSQL(formValues[0])),
+  apellidoPaterno:this.Validaciones.normalizeSpacesToUpperCase(this.Validaciones.limpiarParaSQL(formValues[1])),
+  apellidoMaterno:this.Validaciones.normalizeSpacesToUpperCase(this.Validaciones.limpiarParaSQL(formValues[2])),
+  curp:this.Validaciones.normalizeSpacesToUpperCase( this.Validaciones.limpiarParaSQL(formValues[3])),
+  localidad:this.Validaciones.normalizeSpacesToUpperCase(this.Validaciones.limpiarParaSQL(this.datosGeneralesForm.get('localidad')?.value)),
+  cicloEscolar:this.Validaciones.normalizeSpacesToUpperCase(this.datosGeneralesForm.get('cicloEscolar')?.value),
 };
-console.log(dataNewDirector)
 this.guardarDirector(dataNewDirector)
   }
 }else{
@@ -305,12 +338,16 @@ this.guardarDirector(dataNewDirector)
 }
 }
 
+
+
 guardarDirector(data:any){
+  console.log(data)
 this.historialServiceAdd.agregarDirector(data).subscribe(response =>{
   if(!response.error){
     if (response.data.length > 0) {
       this.Directores=response.data
       this.NotificacionesService.mostrarAlertaSimple("Director Agregado Correctamente")
+      console.log(this.Directores)
     }
   }
   else{
@@ -320,15 +357,13 @@ this.historialServiceAdd.agregarDirector(data).subscribe(response =>{
 }
 getMaterias(){
   this.promedioPrimaria='0'
-  if (this.datosGeneralesForm.get('nivelEducativo')?.value == '1') {
+  if (this.datosGeneralesForm.get('nivelEducativo')?.value == 'fFC1jKUVKAMqnqYtpc9LRw==' ) {
     this.calificacionesPrimaria=[]
     
     let data={"token":this.userService.obtenerToken(), "idPlanEstudio":this.datosGeneralesForm.get("planEstudio")?.value}
-    console.log(data)
     this.historialServiceGet.getMaterias(data).subscribe(response =>{
       if (!response.error) {
-        this.materias= response.data;
-        console.log(this.materias)
+        this.materias= response.data;  
         this.desmarcar=true
   }
   
@@ -342,10 +377,8 @@ calcularPromedioSecundaria(){
   let segundo = isNaN(parseFloat(this.calificacioneSecundaria.get('Segundo')?.value)) ? 0 : parseFloat(this.calificacioneSecundaria.get('Segundo')?.value);
   let tercero = isNaN(parseFloat(this.calificacioneSecundaria.get('Tercero')?.value)) ? 0 : parseFloat(this.calificacioneSecundaria.get('Tercero')?.value);
   
-  console.log(primero, segundo, tercero);
   
   this.PromedioSecundaria = ((primero + segundo + tercero) / 3).toFixed(2); // Redondea a 2 decimales
-  console.log(this.PromedioSecundaria);
   
 }
 
@@ -357,14 +390,17 @@ enviarInfo(){
     
   this.datosFormulario.cicloEscolar=this.NotificacionesService.separarValor(this.datosGeneralesForm.get('cicloEscolar')?.value,' ')
   let data={}
-  if (this.datosGeneralesForm.get('nivelEducativo')?.value == 1) {
-    data={...this.datosGeneralesForm.value,...this.egresado.value, "token":this.userService.obtenerToken(),"calPrimaria":this.calificacionesPrimaria, "calSecundaria":""}
+  // esto es si el nivel es primaria
+  if (this.datosGeneralesForm.get('nivelEducativo')?.value == 'fFC1jKUVKAMqnqYtpc9LRw==') {
+    data={...this.datosGeneralesForm.value,...this.egresado.value, "token":this.userService.obtenerToken(),"calPrimaria":this.calificacionesPrimaria, "calSecundaria":"", "promedio": this.promedioPrimaria}
     
   }
+  // esto es si el nivel es secundaria
   else if(this.datosGeneralesForm.get('nivelEducativo')?.value == 2){
     this.calificacioneSecundaria.patchValue({calificacionFinal:this.PromedioSecundaria} )
      data={...this.datosGeneralesForm.value,...this.egresado.value,  "token":this.userService.obtenerToken(),"calPrimaria":"", "calSecundaria":this.calificacioneSecundaria.value}
   }
+
   console.log(data)
   
   this.historialServiceAdd.cargarBoleta(data).subscribe(response =>{
@@ -421,7 +457,6 @@ filtrarPlanEstudioByCiclo(){
     cicloEscolar=plan.nombre
   }
  })
- console.log(cicloEscolar)
 
  
   let cicloSeparado= cicloEscolar.split('-')
@@ -431,7 +466,6 @@ filtrarPlanEstudioByCiclo(){
 
   let continuar=true
 for (let i=this.planesEstudio.length -1; i>=0; i--) {
-  console.log(this.planesEstudio[i].nombre)
   let nombrePlan = this.planesEstudio[i].nombre.split(' ')
   // aqui vamos a obtener el numero siguiente  a plan 
     let inicioPlan:any = nombrePlan[1]
@@ -443,13 +477,44 @@ for (let i=this.planesEstudio.length -1; i>=0; i--) {
       this.datosGeneralesForm.patchValue({planEstudio: this.planesEstudio[i].valor})
       this.datosGeneralesForm.controls['planEstudio'].markAsTouched()
       continuar = false;
+      this.loader
     }
 }
 
-this.ordernarPlanes(planesEstudio)
-
-
+// this.ordernarPlanes(planesEstudio)
+this.ordenarPlanesEstudioSelect()
 }
+
+ordenarPlanesEstudioSelect(){
+  // extraemos el pla de estudios que fue seleccionado
+  let planesEstudiosPermitidos:opciones[]=[]
+  let planSeleccionado=''
+  this.planesEstudio.forEach(plan => {
+    if (plan.selected) {
+      planSeleccionado = plan.nombre
+    }
+  })
+
+  // obtenemos su valor numerico del año
+  let planSeparado= planSeleccionado.split(' ')
+  let anioPlanSeleccionado:number = parseInt(planSeparado[1])
+  // filtramos por los planes de estudios cuyo año
+
+  for (let i=this.planesEstudio.length -1; i>=0; i--) {
+    let nombrePlan = this.planesEstudio[i].nombre.split(' ')
+    // aqui vamos a obtener el numero siguiente  a plan 
+      let inicioPlan:any = nombrePlan[1]
+    if (inicioPlan <= anioPlanSeleccionado) {
+      planesEstudiosPermitidos.push(this.planesEstudio[i])
+    }
+      }
+      this.planesEstudiosSelect= planesEstudiosPermitidos
+
+    
+   
+}
+
+
 ordernarPlanes(planesEstudios:opciones[]){
   let planesEducIndigena:opciones[]=[]
   let planesGenerales:opciones[]=[]
@@ -465,9 +530,6 @@ ordernarPlanes(planesEstudios:opciones[]){
   
   let planesOrdenados=planesEducIndigena.reverse().concat(planesGenerales.reverse())
   
-  // console.log(planesEducIndigena)
-  console.log(planesOrdenados)
-  // console.log(planesGenerales.reverse())
   this.planesEstudio= planesOrdenados
   }
 
@@ -477,7 +539,7 @@ this.datosFormulario[nombreCampo] = event
 }
 
 recibirCalificacionesPrimaria(id: string, calificacion:any) {
-let cal:calificacionesPrimaria={id_materia: parseInt(id), calificacion: parseFloat(calificacion)}
+let cal:calificacionesPrimaria={id_materia:id, calificacion: parseFloat(calificacion)}
 let suma=0;
 
 this.calificacionesPrimaria.forEach((item, index) => {
@@ -486,14 +548,16 @@ this.calificacionesPrimaria.forEach((item, index) => {
   }
 });
 
-console.log(this.calificacionesPrimaria)
 this.calificacionesPrimaria.push(cal) ;
   
   this.calificacionesPrimaria.forEach(cal =>{
     suma+=cal.calificacion
   })
-  console.log(suma)
-  this.promedioPrimaria=(suma/this.materias.length).toString()
+  if (this.redondeado) {
+    this.promedioPrimaria = Math.round(suma / this.materias.length).toFixed(0);
+  } else {
+    this.promedioPrimaria = (suma / this.materias.length).toFixed(1);
+  }
 
 
 }
@@ -556,4 +620,48 @@ mantenerInfo(){
 }
 
 
+eliminarEspaciosBlancos(numeroFormulario:number, nombreCampo:string, tipoLimpieza:number){
+let formulario;
+  if(numeroFormulario==1){
+    formulario = this.datosGeneralesForm;
+  }
+  else if(numeroFormulario == 2){
+    formulario=this.egresado
+  }
+
+ if (tipoLimpieza== 1) {
+  formulario!.patchValue({[nombreCampo]: this.Validaciones.normalizeSpacesToUpperCase(formulario!.get(nombreCampo)?.value)})
+ }
+ else{
+  formulario!.patchValue({[nombreCampo]: this.Validaciones.normalizeSpaces(formulario!.get(nombreCampo)?.value)})
+ }
+
 }
+
+
+moveFocus(event: KeyboardEvent, nextIndex: number): void {
+  if (event.key === 'Enter') {
+    const textBoxArray = this.inputBoxes.toArray();
+    if (textBoxArray[nextIndex]) {
+      textBoxArray[nextIndex].inputElement.nativeElement.focus();
+    }
+    event.preventDefault(); // Evitar el comportamiento predeterminado
+  }
+}
+
+
+verificarCheckbox() {
+  let suma=0;
+  this.calificacionesPrimaria.forEach(cal =>{
+    suma+=cal.calificacion
+  })
+  if (this.checkbox.nativeElement.checked) {
+    this.redondeado=true
+    this.promedioPrimaria = Math.round(suma / this.materias.length).toFixed(0);
+  } else {
+    this.redondeado=false
+    this.promedioPrimaria = (suma / this.materias.length).toFixed(1);
+  }
+}
+}
+

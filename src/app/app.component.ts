@@ -7,9 +7,10 @@ import { userService } from './Autenticacion1/servicios/user-service.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  constructor(private userService: userService){}
+  
   title = 'HistoricosCalificaciones';
   loggedIn = false;
-constructor(private userService: userService){}
 ngOnInit() {
   this.userService.getLoggedInStatus().subscribe(status => {
     this.loggedIn = status;  // Actualiza el estado de loggedIn según el estado de autenticación
