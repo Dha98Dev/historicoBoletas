@@ -20,6 +20,7 @@ import { AuthRevisadorGuard } from './Autenticacion1/guards/revisador-guard.guar
 import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuarios.component';
 import { CargaMasivaComponent } from './pages/loadPages/carga-masiva/carga-masiva.component';
 import { PageNotFoundComponent } from './componentes/banners/page-not-found/page-not-found.component';
+import { CargaSimpleComponent } from './pages/loadPages/carga-simple/carga-simple.component';
 
 
 const routes: Routes = [
@@ -29,10 +30,11 @@ const routes: Routes = [
   { path: 'verificacion', component:RevisarPageComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'login', component: LoginComponent, canActivate:[AuthLoggedOutGuard] },
   { path: 'consulta', component: QueryPageComponent,canActivate:[AuthRevisadorGuard]},
-  { path: 'cargarInformacion', component: LoadPageComponent, canActivate:[AuthCapturistaGuard]},
+  { path: 'cargarInformacion', component: LoadPageComponent},
   { path: 'cargaMasiva', component: CargaMasivaComponent, canActivate:[AuthCapturistaGuard]},
   { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent},
+  { path: 'cargarPromedio', component: CargaSimpleComponent},
   { path: 'userList', component:ListadoUsuariosComponent, canActivate:[AuthAdminGuard]},
   {path:  'prueba', component: PaginaPruebaComponent},
   {path: 'notFound', component:PageNotFoundComponent},

@@ -52,6 +52,7 @@ import { SideBarComponent } from './componentes/componentesNavegacion/side-bar/s
 import { AppUpperCaseDirective } from './directivas/app-upper-case.directive';
 import { PageNotFoundComponent } from './componentes/banners/page-not-found/page-not-found.component';
 import { FormSolicitudDuplicadosComponent } from './componentes/componentesModales/form-solicitud-duplicados/form-solicitud-duplicados.component';
+import { CargaSimpleComponent } from './pages/loadPages/carga-simple/carga-simple.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { FormSolicitudDuplicadosComponent } from './componentes/componentesModal
     SideBarComponent,
     AppUpperCaseDirective,
     PageNotFoundComponent,
-    FormSolicitudDuplicadosComponent
+    FormSolicitudDuplicadosComponent,
+    CargaSimpleComponent
   ],
   imports: [
     BrowserModule,

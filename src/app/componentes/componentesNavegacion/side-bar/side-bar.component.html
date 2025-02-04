@@ -29,7 +29,9 @@
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="registro" routerLinkActive="activo">
       <i class="new-user" [class]="iconos.NewUser"></i>Nuevo Usuario
     </button>
-
+    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarPromedio" routerLinkActive="activo">
+      <i class="tools" [class]="iconos.Tools"></i>Carga por promedio
+    </button>
    </div>
   </div>
 </div>

@@ -1,0 +1,312 @@
+<app-loader *ngIf="loader"></app-loader>
+
+<div class="formulario" *ngIf="!boletaGuardada">
+  <div class="d-flex justify-content-center align-items-center " *ngIf="boletaGuardada">
+    <h2 class="lead">Boleta Guardada correctamente</h2>
+  </div>
+
+  <div class=" d-flex justify-content-center">
+    <div class="form-load-calificaciones col-11 d-flex gap-3 mt-3 flex-wrap">
+
+
+
+      <!-- esta es la informacion de la escuela como grado, grupo, turno e informacion del centro de trabajo -->
+
+
+
+      <form autocomplete="off" [formGroup]="datosGeneralesForm" class="accordion accordion-flush w-100 "
+        id="accordionFlushExamplee">
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button matTooltip="Ver u ocultar Campos del Formulario" matTooltipPosition="below"
+              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
+              type="button" data-bs-toggle="collapse" data-bs-target="#InformacionEscuela" aria-expanded="false"
+              aria-controls="InformacionEscuela">
+              Datos de la Escuela, Grado, Turno <i class="fas fa-arrow-circle-down fs-4"></i>
+            </button>
+          </h2>
+          <div id="InformacionEscuela" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body d-flex gap-3 flex-wrap">
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese la clave del centro de trabajo</label>
+                <div class="input-val w-100">
+                  <input (blur)="eliminarEspaciosBlancos(1,'claveCct',1)" placeholder="clave del centro de trabajo"
+                    minlength="1" maxlength="10" required="" (change)="filtrarNivel()" (change)="getInfoCct()"
+                    type="text" name="" class="form form-control" formControlName="claveCct" id="clavect">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'claveCct') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>seleccione el ciclo escolar</label>
+                <div class="input-val">
+                  <select   name=""
+                    formControlName="cicloEscolar" class="form form-select" id="ciclo">
+                    <option value="">Seleccione un ciclo escolar</option>
+                    <option *ngFor="let ciclo of ciclosEscolares" [value]="ciclo.valor"> {{ciclo.nombre}} </option>
+                  </select>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'cicloEscolar') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>seleccione el nivel</label>
+                <div class="input-val">
+                  <select  name="" formControlName="nivelEducativo" id="nivel"
+                    class="form form-select">
+                    <option value="" selected>Seleccione un nivel educativo</option>
+                    <option *ngFor="let nivel of nivelesEducativos" [value]="nivel.valor"> {{nivel.nombre}}
+                    </option>
+                  </select>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'nivelEducativo') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Seleccione el plan de estudio</label>
+                <div class="input-val">
+                  <select  name="" formControlName="planEstudio" class="form form-control"
+                    id="plan">
+                    <option value="" selected>seleccione el plan de estudios</option>
+                    <option *ngFor="let plan of planesEstudiosSelect" [value]="plan.valor"> {{plan.nombre}} </option>
+                  </select>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'planEstudio') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese zona Escolar</label>
+                <div class="input-val">
+                  <input placeholder="Ingrese la zona escolar" type="number" name="" class="form form-control"
+                    [value]="datosGeneralesForm.get('zonaEscolar')?.value" formControlName="zonaEscolar" id="zona">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'zonaEscolar') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese Localidad de ubicación</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(1,'localidad',1)"
+                    placeholder="Ingrese la localidad de ubicación" type="text" name="" class="form form-control"
+                    formControlName="localidad" id="localidad">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'localidad') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el nombre del centro de trabajo</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(1,'nombreCct',1)" placeholder="Nombre del centro de trabajo"
+                    type="text" name="" class="form form-control" formControlName="nombreCct" id="nombreCt">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'nombreCct') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Seleccione el Turno</label>
+                <div class="input-val">
+                  <select name="" formControlName="turno" id="turno" class="form form-select" formControlName="turno">
+                    <option value="" selected>seleccione el turno</option>
+                    <option *ngFor="let turno of Turnos" [value]="turno.valor"> {{turno.nombre}} </option>
+                  </select>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'turno') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el Grupo</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(1,'grupo',1)" placeholder="ingrese el grupo" type="text"
+                    name="" class="form form-control" formControlName="grupo" id="grupo">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(1,'grupo') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+              <!-- este es el div que va contener el checbox para mantener la informacion del encabezado -->
+
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-4 mb-2 d-flex gap-4 align-items-center">
+          <p class="fst-italic p-info text-uppercase p-mantener small">si la información que ingreso se repetirá, ¿desea
+            fijar la información ingresada?</p>
+          <label for="mantener-info" class="label-mantener shadow" [ngClass]=" fijarInformacion ? 'b-green' : 'b-red'"
+            matTooltip="Fijar Información" matTooltipPosition="right">
+            <input type="checkbox" name="" id="mantener-info" class="check-mantener" 
+              (click)="toggleSelect()">
+            <i [class]="iconos.Fijar"></i>
+          </label>
+          <p class="p-info fst-italic text-uppercase small " [ngClass]="animationClass" *ngIf="fijarInformacion">la
+            información se encuentra fijada</p>
+        </div>
+
+        <!-- aqui termina  la parte de fijar la informacion del encabezado -->
+
+
+
+        <!-- Informacion de la persona  que egreso de la escuela de la cual se ingresaran las calificaciones -->
+        <form autocomplete="off" [formGroup]="egresado" class="accordion-item">
+          <h2 class="accordion-header">
+            <button matTooltip="Ver u ocultar Campos del Formulario" matTooltipPosition="above"
+              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
+              type="button" data-bs-toggle="collapse" data-bs-target="#informacionEgresado" aria-expanded="false"
+              aria-controls="flush-collapseOne">
+              Información del Egresado <i class="fas fa-arrow-circle-down fs-4"></i>
+            </button>
+          </h2>
+          <div id="informacionEgresado" class="accordion-collapse collapse show"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body d-flex gap-3 flex-wrap">
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el/los nombres</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'nombre',1)" placeholder="ingrese nombre(s)" type="text"
+                    name="" class="form form-control" formControlName="nombre" id="nombre">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'nombre') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese su Apellido Paterno</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'apellidoPaterno',1)"
+                    placeholder="ingrese al apellido paterno" type="text" name="" class="form form-control"
+                    [value]="egresado.get('apellidoPaterno')?.value | uppercase" formControlName="apellidoPaterno"
+                    id="apellidoP">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'apellidoPaterno') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese su Apellido Materno </label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'apellidoMaterno',1)"
+                    placeholder="ingrese el apellido materno" type="text" name="" class="form form-control"
+                    formControlName="apellidoMaterno" id="apellidoM">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'apellidoMaterno') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese la Curp</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'curp',1)" placeholder="ingrese la curp" type="text" name=""
+                    class="form form-control" formControlName="curp" id="curp">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'curp') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+
+        <!-- formulario cargar promedio -->
+        <form autocomplete="off" [formGroup]="egresado" class="accordion-item mt-5 div-info-end">
+          <h2 class="accordion-header">
+            <button matTooltip="Ver u ocultar Campos del Formulario" matTooltipPosition="above"
+              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
+              type="button" data-bs-toggle="collapse" data-bs-target="#informacionPromedio" aria-expanded="false"
+              aria-controls="flush-collapseOne">
+              Información del registro de boleta<i class="fas fa-arrow-circle-down fs-4"></i>
+            </button>
+          </h2>
+          <div id="informacionPromedio" class="accordion-collapse collapse show"
+            data-bs-parent="#accordionFlushExample3">
+            <div class="accordion-body d-flex gap-3 flex-wrap">
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el promedio general</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'promedioGral',1)" placeholder="Ingrese el promedio general del egresado..." type="text"
+                    name="" class="form form-control" formControlName="promedioGral" id="promedioGral">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'promedioGral') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el folio del registro</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'folio',1)"
+                    placeholder="Ingrese el folio de registro del egresado..." type="text" name="" class="form form-control"
+                    [value]="egresado.get('folio')?.value | uppercase" formControlName="folio"
+                    id="folio">
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'folio') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese la foto de la boleta</label>
+                <div class="input-val">
+                  <input 
+                    placeholder="Ingrese la foto de la boleta donde se encuentra el egresado..." type="file" name="" class="form form-control"
+                    id="fotoBoleta" (change)="cargarArchivos($event)" accept="image/,.jpg,.jpeg,.png">
+                    @if(archivoCargado.nombreArchivo && !archivoCargado.isValid){
+                      <app-label-input-incompleto [smallIndicator]="true"></app-label-input-incompleto>
+                    }
+                  </div>
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+          </form>
+          
+        </form>
+        
+        <button matTooltip="Visualizar imagen" class="btn-visualizar animate__animated animate__backInLeft" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" *ngIf="archivoCargado.isValid">
+          <div class="img-content">
+            <img [src]="archivoCargado.base64url" alt="">
+          </div>
+          <div class="prev-text">
+            <p>{{archivoCargado.nombreArchivo.toLocaleUpperCase()}}</p>
+            <p>{{archivoCargado.tipo.toLocaleUpperCase()}} / {{archivoCargado.extension.toLocaleUpperCase()}}</p>
+          </div>
+        </button>
+      </div>
+      
+      
+    </div>
+    
+    <app-previsualizador-archivos [imageUrl] = "archivoCargado.base64url"></app-previsualizador-archivos>
+    
