@@ -1,9 +1,7 @@
 p{
     margin-bottom: 0px !important;
 }
-.capturada-por, .verificada-por{
 
-}
 .captura{
 background: #f59e0b;
 color: white    ;
@@ -15,11 +13,26 @@ color: white;
 .info-registro{
 
 }
+.promedio{
+    font-size: 14px !important;
+    height: 40px;
+
+}
+.c1{
+width: 45%;
+}
+
+.cont {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
 
 @media(max-width:1100px){
 .info-registro{
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     flex-wrap: wrap;
 }
 .info-registro > div{
@@ -43,5 +56,18 @@ justify-content: center !important;
     .info-registro > div{
         width: 100% !important;
         text-align: center;
+    }
+    .cont{
+        flex-direction: column-reverse;
+        padding: 0px !important;
+    }
+    .c1{
+        width: 100%;
+    }
+    .promedio{
+        margin-top: 10px !important;
+    }
+    .foto{
+        margin-top: 20px;
     }
     }

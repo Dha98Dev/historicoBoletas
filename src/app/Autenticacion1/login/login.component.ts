@@ -38,7 +38,7 @@ export class LoginComponent {
           this.userService.guardarDatosUsuario(data.data.usuario, data.data.token, data.data.fk_tipo_usuario.toString())
           
           if(data.data.fk_tipo_usuario ==1 || data.data.fk_tipo_usuario==3 || data.data.fk_tipo_usuario== 2){
-            this.router.navigate(['/cargarInformacion'])
+            this.router.navigate(['/cargarCertificado'])
             this.sweetAlerta('Bienvenido',data.mensaje,"success")  
           }
         }

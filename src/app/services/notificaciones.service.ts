@@ -60,8 +60,8 @@ Toastify(mensaje:string, clase:string){
   Toastify({
     text: mensaje,
     className: "info",
-    position:'left',
-    duration: 5000,
+    position:'center',
+    duration: 7000,
     offset: {
       x: 0, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
       y: 100 // vertical axis - can be a number or a string indicating unity. eg: '2em'

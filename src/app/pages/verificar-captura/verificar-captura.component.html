@@ -3,7 +3,7 @@
 
   <button class="btn-gray-dark text-uppercase" (click)="formSolicitudDuplicados.mostrar()" *ngIf="!infoAdicional"  mat-raised-button > <i [class]="iconos.DownloadFile"></i> SOLICITUD DE DUPLICADOS Y SERVICIOS </button>
 
-  <button class="btn-rose fs-6"  (click)="descargarSolicitudServicios()" *ngIf="infoAdicional"   matTooltip="Descargar Pdf" mat-raised-button data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" > <i [class]="iconos.Pdf"></i>  </button>
+  <button class="btn-rose fs-6"  (click)="descargarSolicitudServicios()" *ngIf="infoAdicional"   matTooltip="Descargar Pdf" mat-raised-button data-bs-toggle="modal" data-bs-target="#visualizadorPdf"> <i [class]="iconos.Pdf"></i>  </button>
 </div>
 <div class="conetenedor-verificar d-flex justify-content-center align-items-center flex-column mt-4">
     
@@ -51,8 +51,35 @@
         </div>
 
 
+
+        
+        
+        
+        <!-- esto es del promedio y el previsualizador de los archivos -->
+        <div class=" mt-2 text-dark  rounded  py-2 text-capitalize fs-6   cont  " >
+          <app-card-miniatura-imagen class="c1 foto"  [hojaCertificado]="hojaCertificado"  ></app-card-miniatura-imagen>
+          
+          <app-previsualizador-pdf [pdfUrl]="pdfSeleccionado" ></app-previsualizador-pdf>
+
+          <!-- <app-previsualizador-archivos [pdfUrl]="pdfSeleccionado" ></app-previsualizador-archivos> -->
+          
+           
+           <div
+           class="d-flex gap-2 promedio rounded px-3 py-2 c1 shadow"
+           [ngClass]="{'captura': datosCaptura.estado_boleta == 'En Captura', 'revisado': datosCaptura.estado_boleta == 'Revisado'}" > 
+           <p class=" text-dark fw-semibold">promedio: </p> <p class="text-dark">10</p></div>
+          </div>
+          
+
+
+
+
+
+
+
+
         <!-- informacion de las calificaciones en caso de que sea primaria -->
-        <div class="primaria mt-4 mb-4" *ngIf="datosCaptura.nivel =='PRIMARIA'">
+        <div class="primaria mt-4 mb-4" *ngIf="datosCaptura.nivel =='PRIMARIA' && promedioPrimaria  ">
             <div class="calificaciones d-flex ">
                 <div class="materia-header lead text-center w-100 border py-2  fw-bold">Materia</div>
                 <div class="calificacion-header lead text-center w-100 border py-2 fw-bold">Calificación</div>
@@ -74,7 +101,7 @@
         
         
         <!-- informacion de las calificaciones en caso de que sea secundaria -->
-        <div class="SECUNDARIA mt-4 mb-4" *ngIf=" datosCaptura.nivel== 'SECUNDARIA'">
+        <div class="SECUNDARIA mt-4 mb-4" *ngIf=" datosCaptura.nivel== 'SECUNDARIA' && datosCaptura.calificacionesSecundaria.calificacionFinal > 0 ">
             <div class="calificaciones d-flex ">
                 <div class="materia-header lead text-center w-100 border py-2  fw-bold">Grado</div>
                 <div class="calificacion-header lead text-center w-100 border py-2 fw-bold">Calificación</div>
@@ -96,7 +123,10 @@
                 <div class="fs-6 lead text-center w-100 border py-2">{{datosCaptura.calificacionesSecundaria.calificacionFinal}} </div>
               </div>
         </div>
-        <div class="botones d-flex justify-content-end w-100 gap-4" *ngIf="datosCaptura.estado_boleta != 'Revisado'">
+
+ 
+
+        <div class="botones d-flex justify-content-end w-100 gap-4 mt-4" *ngIf="datosCaptura.estado_boleta != 'Revisado'">
             <button class="btn-teal" (click)="ConfirmarVerificacion()" mat-raised-button> <i [class]="iconos.Check"></i> Confirmar Vericidad</button>
             <button class="btn-yellow-dark" (click)="RedireccionarAEditar()" mat-raised-button> <i [class]="iconos.Update"></i> Editar Informacion</button>
         </div>
@@ -104,8 +134,7 @@
     </div>
 </div>
 
-<app-previsualizador-archivos [pdfUrl]="pdfSeleccionado" ></app-previsualizador-archivos>
 
 <app-form-solicitud-duplicados #formSolicitudDuplicados (OnEmitInformacion)="recibirInfoSolicitudDuplicado($event)" ></app-form-solicitud-duplicados>
 
-<app-modal-confirmacion #modalSeleccionarTipoPromedio (accionConfirmada)="SeleccionarTipoPromedio($event)"  [titulo]="'¿Como desea visualizar el promedio final?'" [mensaje]="'seleccione como se deberia de mostrar el promedio, es decir,  redondeando los puntos decimales o mostrando los puntos decimales'" [textoBotonConfirmar]="'Redondeado'" [textoBotonCancelar]="'Con punto Decimal'"></app-modal-confirmacion>
+<!-- <app-modal-confirmacion #modalSeleccionarTipoPromedio (accionConfirmada)="SeleccionarTipoPromedio($event)"  [titulo]="'¿Como desea visualizar el promedio final?'" [mensaje]="'seleccione como se deberia de mostrar el promedio, es decir,  redondeando los puntos decimales o mostrando los puntos decimales'" [textoBotonConfirmar]="'Redondeado'" [textoBotonCancelar]="'Con punto Decimal'"></app-modal-confirmacion> -->

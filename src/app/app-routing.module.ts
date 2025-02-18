@@ -34,7 +34,7 @@ const routes: Routes = [
   { path: 'cargaMasiva', component: CargaMasivaComponent, canActivate:[AuthCapturistaGuard]},
   { path: 'verificarCaptura/:idBoleta', component: VerificarCapturaComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent},
-  { path: 'cargarPromedio', component: CargaSimpleComponent},
+  { path: 'cargarCertificado', component: CargaSimpleComponent},
   { path: 'userList', component:ListadoUsuariosComponent, canActivate:[AuthAdminGuard]},
   {path:  'prueba', component: PaginaPruebaComponent},
   {path: 'notFound', component:PageNotFoundComponent},

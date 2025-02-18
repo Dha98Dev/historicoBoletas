@@ -13,6 +13,7 @@ import { GetNombreService } from '../../services/get-nombre.service';
 import { ValidacionesService } from '../../services/validaciones.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalConfirmacionComponent } from '../../componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
+import { hojaCertificado } from '../../interfaces/archivo.interface';
 
 @Component({
   selector: 'app-verificar-captura',
@@ -29,10 +30,14 @@ export class VerificarCapturaComponent {
   public promedioPrimaria: number = 0
   public pdfUrlSolicitud: string = 'http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta='
   public pdfSeleccionado: string = ''
+  private pdfTemporal: string =''
   public infoAdicional = false
   public mostrarSeleccionTipoPromedio = true
   public loader: boolean = true;
   private tipoPresentacionPromedio:number=0
+  private verHojaCertificado:boolean=false
+  private hojaTemporal:string=''
+  public hojaCertificado:hojaCertificado = {} as hojaCertificado
   municipios: string[] = [
     'Acaponeta',
     'Ahuacatlán',
@@ -116,6 +121,13 @@ export class VerificarCapturaComponent {
           let opcion = this.separarDatos(datoPersona)
           this.dataPersona.push(opcion)
         })
+        this.hojaCertificado={
+          url_path: this.datosCaptura.url_path != null ? this.tituloPagina.urlImagenes+ this.datosCaptura.url_path : '',
+          nombre_hoja: this.datosCaptura.nombre_hoja,
+          tipo_archivo: this.datosCaptura.tipo_archivo,
+          extension_archivo: this.datosCaptura.extension_archivo,
+          fecha_registro: this.datosCaptura.fecha_registro_hoja
+        }
       }
       else {
         this.loader = false;
@@ -215,5 +227,6 @@ export class VerificarCapturaComponent {
         break;
     }
   }
+
 
 }

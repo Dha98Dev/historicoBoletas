@@ -32,5 +32,9 @@ export enum Iconos {
     Delete='fas fa-trash-alt',
     Menu='fas fa-bars',
     Tools='fas fa-tools',
-    SortLetter= 'fas fa-sort-alpha-up'
+    SortLetter= 'fas fa-sort-alpha-up',
+    ZoomMas= 'fas fa-search-plus',
+    ZoomMenos= 'fas fa-search-minus',
+    RotateLeft ='fas fa-undo',
+    Restore = 'fas fa-sync-alt',
   }

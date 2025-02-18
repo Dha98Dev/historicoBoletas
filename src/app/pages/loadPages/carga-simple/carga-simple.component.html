@@ -15,17 +15,12 @@
 
 
       <form autocomplete="off" [formGroup]="datosGeneralesForm" class="accordion accordion-flush w-100 "
-        id="accordionFlushExamplee">
+       >
 
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button matTooltip="Ver u ocultar Campos del Formulario" matTooltipPosition="below"
-              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
-              type="button" data-bs-toggle="collapse" data-bs-target="#InformacionEscuela" aria-expanded="false"
-              aria-controls="InformacionEscuela">
-              Datos de la Escuela, Grado, Turno <i class="fas fa-arrow-circle-down fs-4"></i>
-            </button>
-          </h2>
+        <div class="contenedor">
+            <div class=" d-flex justify-content-between align-items-center bg-dark text-white px-4 py-3 rounded text-uppercase fs-6">
+              Datos de la Escuela, Grado, Turno
+          </div>
           <div id="InformacionEscuela" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
             <div class="accordion-body d-flex gap-3 flex-wrap">
 
@@ -33,7 +28,7 @@
                 <label>Ingrese la clave del centro de trabajo</label>
                 <div class="input-val w-100">
                   <input (blur)="eliminarEspaciosBlancos(1,'claveCct',1)" placeholder="clave del centro de trabajo"
-                    minlength="1" maxlength="10" required="" (change)="filtrarNivel()" (change)="getInfoCct()"
+                    minlength="1" maxlength="10" required="" (change)="filtrarNivel()" (change)="getInfoCct()" (change)="getHojaCertificado()"
                     type="text" name="" class="form form-control" formControlName="claveCct" id="clavect">
                   <app-label-input-incompleto *ngIf="getFieldStatus(1,'claveCct') == 2"
                     [smallIndicator]="true"></app-label-input-incompleto>
@@ -46,7 +41,7 @@
                 <label>seleccione el ciclo escolar</label>
                 <div class="input-val">
                   <select   name=""
-                    formControlName="cicloEscolar" class="form form-select" id="ciclo">
+                    formControlName="cicloEscolar" class="form form-select" id="ciclo" (change)="filtrarPlanEstudioByCiclo()" (change)="getHojaCertificado()">
                     <option value="">Seleccione un ciclo escolar</option>
                     <option *ngFor="let ciclo of ciclosEscolares" [value]="ciclo.valor"> {{ciclo.nombre}} </option>
                   </select>
@@ -123,7 +118,7 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Seleccione el Turno</label>
                 <div class="input-val">
-                  <select name="" formControlName="turno" id="turno" class="form form-select" formControlName="turno">
+                  <select name="" formControlName="turno" id="turno" class="form form-select" formControlName="turno" (change)="getHojaCertificado()">
                     <option value="" selected>seleccione el turno</option>
                     <option *ngFor="let turno of Turnos" [value]="turno.valor"> {{turno.nombre}} </option>
                   </select>
@@ -137,7 +132,7 @@
                 <label>Ingrese el Grupo</label>
                 <div class="input-val">
                   <input (blur)="eliminarEspaciosBlancos(1,'grupo',1)" placeholder="ingrese el grupo" type="text"
-                    name="" class="form form-control" formControlName="grupo" id="grupo">
+                    name="" class="form form-control" formControlName="grupo" id="grupo" (change)="getHojaCertificado()">
                   <app-label-input-incompleto *ngIf="getFieldStatus(1,'grupo') == 2"
                     [smallIndicator]="true"></app-label-input-incompleto>
                 </div>
@@ -170,20 +165,13 @@
 
 
 
-        <!-- Informacion de la persona  que egreso de la escuela de la cual se ingresaran las calificaciones -->
-        <form autocomplete="off" [formGroup]="egresado" class="accordion-item">
-          <h2 class="accordion-header">
-            <button matTooltip="Ver u ocultar Campos del Formulario" matTooltipPosition="above"
-              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
-              type="button" data-bs-toggle="collapse" data-bs-target="#informacionEgresado" aria-expanded="false"
-              aria-controls="flush-collapseOne">
-              Información del Egresado <i class="fas fa-arrow-circle-down fs-4"></i>
-            </button>
-          </h2>
-          <div id="informacionEgresado" class="accordion-collapse collapse show"
-            data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body d-flex gap-3 flex-wrap">
-
+        <form class="contenedor d-flex  flex-column  "  [formGroup]="egresado">
+          <div class="encabezado-form bg-dark text-white px-4 py-3 rounded text-uppercase fs-6 " >
+            Información  del Egresado y certificado
+          </div>
+          <div class="body-form px-4 py-3">
+            <!-- este es el div de los campos del egresado -->
+            <div class="egresado d-flex gap-3 flex-wrap ">
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese el/los nombres</label>
                 <div class="input-val">
@@ -230,25 +218,10 @@
                 </div>
 
               </div>
-
             </div>
 
-          </div>
-        </form>
-
-        <!-- formulario cargar promedio -->
-        <form autocomplete="off" [formGroup]="egresado" class="accordion-item mt-5 div-info-end">
-          <h2 class="accordion-header">
-            <button matTooltip="Ver u ocultar Campos del Formulario" matTooltipPosition="above"
-              class="accordion-button btn-stone-dark collapsed d-flex justify-content-between align-items-center fs-5"
-              type="button" data-bs-toggle="collapse" data-bs-target="#informacionPromedio" aria-expanded="false"
-              aria-controls="flush-collapseOne">
-              Información del registro de boleta<i class="fas fa-arrow-circle-down fs-4"></i>
-            </button>
-          </h2>
-          <div id="informacionPromedio" class="accordion-collapse collapse show"
-            data-bs-parent="#accordionFlushExample3">
-            <div class="accordion-body d-flex gap-3 flex-wrap">
+            <!-- este es el div de los campos de la informacion de la boleta -->
+             <div class="boleta d-flex gap-3 flex-wrap mt-4">
 
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese el promedio general</label>
@@ -264,9 +237,9 @@
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese el folio del registro</label>
                 <div class="input-val">
-                  <input (blur)="eliminarEspaciosBlancos(2,'folio',1)"
-                    placeholder="Ingrese el folio de registro del egresado..." type="text" name="" class="form form-control"
-                    [value]="egresado.get('folio')?.value | uppercase" formControlName="folio"
+                  <input (blur)="eliminarEspaciosBlancos(2,'folioBoleta',1)"
+                    placeholder="Ingrese el folioBoleta de registro del egresado..." type="text" name="" class="form form-control"
+                    [value]="egresado.get('folioBoleta')?.value | uppercase" formControlName="folioBoleta"
                     id="folio">
                   <app-label-input-incompleto *ngIf="getFieldStatus(3,'folio') == 2"
                     [smallIndicator]="true"></app-label-input-incompleto>
@@ -274,39 +247,54 @@
 
               </div>
 
-              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
-                <label>Ingrese la foto de la boleta</label>
-                <div class="input-val">
-                  <input 
-                    placeholder="Ingrese la foto de la boleta donde se encuentra el egresado..." type="file" name="" class="form form-control"
-                    id="fotoBoleta" (change)="cargarArchivos($event)" accept="image/,.jpg,.jpeg,.png">
-                    @if(archivoCargado.nombreArchivo && !archivoCargado.isValid){
-                      <app-label-input-incompleto [smallIndicator]="true"></app-label-input-incompleto>
-                    }
+              @if(!hojaCargada){
+                <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                  <label>Ingrese la foto de la boleta</label>
+                  <div class="input-val">
+                    <input 
+                      #file
+                      placeholder="Ingrese la foto de la boleta donde se encuentra el egresado..." type="file" name="" class="form form-control"
+                      id="fotoBoleta" (change)="cargarArchivos($event)" accept="image/,.jpg,.jpeg,.png">
+                      @if(archivoCargado.nombreArchivo && !archivoCargado.isValid){
+                        <app-label-input-incompleto [smallIndicator]="true"></app-label-input-incompleto>
+                      }
+                    </div>
+                    
                   </div>
-                  
-                </div>
-                
-              </div>
-              
+              }
+
+             </div>
+             
             </div>
           </form>
           
+          
         </form>
+
         
-        <button matTooltip="Visualizar imagen" class="btn-visualizar animate__animated animate__backInLeft" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" *ngIf="archivoCargado.isValid">
-          <div class="img-content">
-            <img [src]="archivoCargado.base64url" alt="">
-          </div>
-          <div class="prev-text">
-            <p>{{archivoCargado.nombreArchivo.toLocaleUpperCase()}}</p>
-            <p>{{archivoCargado.tipo.toLocaleUpperCase()}} / {{archivoCargado.extension.toLocaleUpperCase()}}</p>
-          </div>
-        </button>
+        <div class="py-4 col-5">
+          <app-card-miniatura-imagen class="w-100" [hojaCertificado]="hojaCertificado" [mostrarBotonEliminar]="EliminarArchivo" (emitClick)="eliminarHojaCargada()" *ngIf="hojaCertificado.url_path"></app-card-miniatura-imagen>
+        </div>
       </div>
       
       
     </div>
     
-    <app-previsualizador-archivos [imageUrl] = "archivoCargado.base64url"></app-previsualizador-archivos>
     
+    <div class="d-flex justify-content-center mt-2">
+      <button class="btn btn-lila px-4  " (click)="guardarBoleta()">
+        <i [class]="iconos.Save"></i> Guardar información
+      </button>
+    </div>
+    
+    
+    <!-- componentes  -->
+    <!-- <app-previsualizador-archivos [imageUrl] = "archivoCargado.base64url"></app-previsualizador-archivos> -->
+
+
+    <!-- <app-card-toast [iconoSeleccionado]="iconos.XToCloseRounded" [Valido]="true" [tituloToast]="'hoja de certificados encontrada'" [mensajeToast]="'la fotografia de la hoja  perteneciente a la informacion ingresada ya se encuentra en el servidor'" ></app-card-toast> -->
+
+    <app-card-toast #toast [mostrar]="dataToast.mostrar" [iconoSeleccionado]="dataToast.icono" [Valido]="dataToast.valido" [tituloToast]="dataToast.titulo" [mensajeToast]="dataToast.mensaje" ></app-card-toast>
+
+    <!-- <app-previsualizador-archivos [imageUrl]="hojaCertificado.url_path"></app-previsualizador-archivos> -->
+    <!-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">hola</button> -->

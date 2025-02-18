@@ -1,0 +1,18 @@
+
+.btn-close{
+  background:none ;
+}
+.btn-close:hover{
+  background: red;
+}
+.btn-danger{
+  background: red;
+  color: white;
+}
+.btn{
+  border: none;
+}
+
+.modal{
+  background: red;
+}

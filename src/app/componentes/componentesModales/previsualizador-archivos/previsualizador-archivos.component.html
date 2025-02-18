@@ -1,20 +1,79 @@
-<div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
-    <div class="d-flex justify-content-end boton">
-      <button type="button" class="btn-close btn" data-bs-dismiss="offcanvas" aria-label="Close" ><i
-          class="fas fa-times-circle"></i>Cerrar</button>
-    </div>
-    <div class="offcanvas-body">
-     <div class="d-flex justify-content-center contenedor-img align-items-center" *ngIf=" imageUrl != ''">
-      <img [src]="imageUrl" alt="">
-    </div>      
+<!-- <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+  <div class="d-flex justify-content-end boton">
+    <button class="btn btn-lila px-5" (click)="girarImagen()"> <i [class]="iconos.Reload" matTooltip="Girar Imagen" matTooltipPosition="after"></i> </button>
+    <button type="button" class="btn-close btn" data-bs-dismiss="offcanvas" aria-label="Close">
+      <i class="fas fa-times-circle"></i> Cerrar
+    </button>
+  </div>
+  <div class="offcanvas-body">
     
-      <iframe
-      *ngIf=" pdfUrl != ''" 
-      [src]="safeUrl"
-      width=100% height=600></iframe>
+    <ng-container *ngIf="imageUrl || pdfUrl">
+      <div class="d-flex justify-content-center align-items-center">
+        <div #imageElement class="contenedor-img" *ngIf="imageUrl">
+          <img  [src]="imageUrl" alt="" >
+        </div>
+
+        <iframe *ngIf="pdfUrl" [src]="safeUrl" width="100%" height="600"></iframe>
+      </div>
+    </ng-container>
+
+    <div *ngIf="!imageUrl && !pdfUrl" class="bg-light px-4 py-4 rounded">
+      <p class="fw-semibold">
+        <i [class]="iconos.Info"></i> No hay documentos disponibles para mostrar en este momento
+      </p>
+    </div>
+
+  </div>
+</div> -->
+
+<div class="modal fade" id="visualizadorArchivos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between px-4">
+          <h1 class="modal-title fs-4 fw-semibold " id="exampleModalLabel">Visualizador de Imagenes </h1>
+
+        <button type="button" class=" cerrar px-3 py-2 d-flex justify-content-center align-items-center rounded text-white  "  data-bs-dismiss="modal" aria-label="btn-red"> <i [class]="iconos.XToClose"></i> </button>
+      </div>
       
+      <div class="modal-body">
+        <div class="image-wrapper" >
+          <div class="image-container" #imageContainer >
+            <img 
+              [src]="imageUrl" 
+              alt="Imagen" 
+              class="img-zoom"
+              [style.transform]="'scale(' + scale + ') rotate(' + rotation + 'deg)'"
+              (mousedown)="startDrag($event)"
+              (mouseup)="endDrag()"
+              (mousemove)="dragImage($event)">
+          </div>
+        </div>
+        
+
+        <!-- <div class="w-100 h-100 d-flex justify-content-center align-items-center ">
+          <iframe *ngIf="pdfUrl" [src]="safeUrl" width="80%" height="100%"></iframe>
+        </div>
+           -->
+          
+      </div>
+
+      <div class="modal-footer d-flex justify-content-center">
+        <button matTooltip="Girar izquierda" class="btn btn-secondary me-2" (click)="rotateImage(-90)">
+          <i [class]="iconos.RotateLeft"></i>
+        </button>
+        <button matTooltip="Girar Derecha" class="btn btn-secondary me-2" (click)="rotateImage(90)">
+        <i [class]="iconos.Reload"></i>
+        </button>
+        <button class="btn btn-primary me-2" (click)="zoomImage(0.2)">
+          <i [class]="iconos.ZoomMas"></i> 
+        </button>
+        <button class="btn btn-primary me-2" (click)="zoomImage(-0.2)">
+          <i [class]="iconos.ZoomMenos"></i> 
+        </button>
+        <button class="btn btn-danger" (click)="resetImage()">
+          <i [class]="iconos.Restore"></i> 
+        </button>
+      </div>
     </div>
   </div>
-  
-  <!-- <h1 class="text-white" *ngIf=" imageUrl != ''"> {{imageUrl}} </h1> -->
-  <!-- <h1 class="text-white" *ngIf=" pdfUrl != ''" > {{pdfUrl}} </h1> -->
+</div>

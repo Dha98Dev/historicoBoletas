@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { GetNombreService } from '../../../services/get-nombre.service';
@@ -7,7 +7,11 @@ import { userService } from '../../../Autenticacion1/servicios/user-service.serv
 import { HistorialBoletasGetService } from '../../../services/historial-boletas-get.service';
 import { ValidacionesService } from '../../../services/validaciones.service';
 import { Iconos } from '../../../enums/iconos.enum';
-import { archivos } from '../../../interfaces/archivo.interface';
+import { archivos, hojaCertificado, toastData } from '../../../interfaces/archivo.interface';
+import { NotificacionesService } from '../../../services/notificaciones.service';
+import { error } from 'jquery';
+import { CardToastComponent } from '../../../componentes/componentesCards/card-toast/card-toast.component';
+import { HistorialBoletasAgregarService } from '../../../services/historial-boletas-agregar.service';
 
 @Component({
   selector: 'app-carga-simple',
@@ -15,7 +19,8 @@ import { archivos } from '../../../interfaces/archivo.interface';
   styleUrl: './carga-simple.component.css'
 })
 export class CargaSimpleComponent {
-  constructor(private tituloPagina: GetNombreService, private fb: FormBuilder, private userService: userService, private historialServiceGet: HistorialBoletasGetService, private Validaciones: ValidacionesService) { }
+  constructor(private tituloPagina: GetNombreService, private fb: FormBuilder, private userService: userService, private historialServiceGet: HistorialBoletasGetService, private Validaciones: ValidacionesService, private notificacionesService:NotificacionesService, private boletasAdd: HistorialBoletasAgregarService) { }
+
   datosGeneralesForm: FormGroup = {} as FormGroup
   calificacioneSecundaria: FormGroup = {} as FormGroup
   egresado: FormGroup = {} as FormGroup
@@ -32,6 +37,13 @@ export class CargaSimpleComponent {
   public iconos = Iconos
   public boletaGuardada: boolean = false;
   public archivoCargado: archivos = {} as archivos;
+  public  hojaCertificado:hojaCertificado = {} as hojaCertificado
+  public dataToast:toastData = {} as toastData;
+  public EliminarArchivo:boolean=false
+  public hojaCargada:boolean=false 
+
+  @ViewChild('toast') toast!:CardToastComponent
+  @ViewChild('file', { static: false }) fileInput!: ElementRef;
 
   ngOnInit(): void {
 
@@ -57,6 +69,7 @@ export class CargaSimpleComponent {
       this.getCiclosEscolares();
     }
     this.getPlanesEstudio();
+    this.getNiveles()
     
 
     this.datosGeneralesForm = this.fb.group({
@@ -84,13 +97,13 @@ export class CargaSimpleComponent {
       apellidoPaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(60)]],
       apellidoMaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(60)]],
       curp: ['', [Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
-      folioBoleta: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/), Validators.maxLength(60)]],
+      folioBoleta: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/), Validators.maxLength(60)]],
       promedioGral: ['', [Validators.required, Validators.pattern(/^[0-9]{1,2}(\.[0-9])?$/), Validators.max(10)]],
-      folio: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/)]],
+
     });
 
     this.getNiveles()
-
+    this.dataToast.mostrar=false;
   }
 
   getNiveles() {
@@ -98,14 +111,11 @@ export class CargaSimpleComponent {
  this.historialServiceGet.getNivelesEducativos(data).subscribe(response => {
   if(!response.error){
    this.nivelesEducativos=response.data
-   console.log(this.nivelesEducativos)
   }
  })
   }
 
-  algox(){
-   this.getNiveles()
-  }
+  
 
 
   getPlanesEstudio() {
@@ -177,7 +187,6 @@ export class CargaSimpleComponent {
           // creamos el arreglo de los directores
           let Directores: opciones[] = [];
           let Datadirectores = response.data.directores;
-          console.log(response.data.directores)
           if (response.data.directores.length > 0) {
             for (let i = 0; i < Datadirectores.length; i++) {
               if (Datadirectores[i].nombre != null && Datadirectores[i].apellidoPaterno != null && Datadirectores[i].apellidoMaterno != null) {
@@ -249,6 +258,45 @@ export class CargaSimpleComponent {
 
 
   }
+  filtrarPlanEstudioByCiclo(){
+    let cicloEscolar:any=''
+    this.planesEstudio.forEach(plan => {
+      plan.selected=false;
+    })
+  
+   this.ciclosEscolares.forEach(plan => {
+    if (plan.valor == this.datosGeneralesForm.get('cicloEscolar')?.value) {
+      cicloEscolar=plan.nombre
+    }
+   })
+  
+   
+    let cicloSeparado= cicloEscolar.split('-')
+    let cicloInicio = parseInt(cicloSeparado[0])
+    let cicloFin=cicloSeparado[1]
+    let planesEstudio=[]
+  
+    let continuar=true
+  for (let i=this.planesEstudio.length -1; i>=0; i--) {
+    let nombrePlan = this.planesEstudio[i].nombre.split(' ')
+    // aqui vamos a obtener el numero siguiente  a plan 
+      let inicioPlan:any = nombrePlan[1]
+    
+      planesEstudio.push(this.planesEstudio[i])
+      inicioPlan=parseInt(inicioPlan)
+      if (continuar && inicioPlan <= cicloInicio) {
+        this.planesEstudio[i].selected = true
+        this.datosGeneralesForm.patchValue({planEstudio: this.planesEstudio[i].valor})
+        this.datosGeneralesForm.controls['planEstudio'].markAsTouched()
+        continuar = false;
+        this.loader
+      }
+  }
+  
+  // this.ordernarPlanes(planesEstudio)
+  this.ordenarPlanesEstudioSelect()
+  }
+  
 
   // estos siguentes dos metodos son para la animacion de cuando se fija la informacion de la cabecera
   toggleSelect() {
@@ -369,10 +417,21 @@ export class CargaSimpleComponent {
 
       };
 
+      this.hojaCertificado={
+        "url_path": base64Url,
+        "nombre_hoja": nombre.toString(),
+        "tipo_archivo": type,
+        "extension_archivo": subtipo,
+        "fecha_registro": new Date().toISOString(),
+      }
+      console.log(this.hojaCertificado)
+      this.mostrarToast(5)
+
       this.archivoCargado = documento;
       this.imageFileValidator(this.archivoCargado);
     };
-    reader.readAsDataURL(archivo);    
+    reader.readAsDataURL(archivo);   
+    this.EliminarArchivo=true; 
   }
 
   imageFileValidator(control: archivos) {
@@ -382,10 +441,119 @@ export class CargaSimpleComponent {
       const validExtensions = ['jpg', 'jpeg', 'png'];
       if (validExtensions.includes(extension)) {
         control.isValid = true;
+        this.dataToast={
+          titulo: 'Archivo subido',
+          mensaje: `El archivo ${control.nombreArchivo} se ha subido correctamente`,
+          icono: Iconos.UploadFile,
+          valido: true,
+          mostrar: true
+        }
       }
-      return;
+      else{
+        control.isValid = false;
+        this.dataToast={
+          titulo: 'Archivo invalido',
+          mensaje: `El archivo ${control.nombreArchivo} debe ser una imagen con extension jpg, jpeg o png`,
+          icono: Iconos.Exclamation,
+          valido: false,
+          mostrar: true
+        }
+      }
     }
-    control.isValid = false;
+
+  }
+  guardarBoleta(){
+    const isObjectEmpty = (obj: object): boolean => {
+      return Object.keys(obj).length === 0;
+    };
+    
+  if((this.datosGeneralesForm.valid && this.egresado.valid) && (!isObjectEmpty(this.archivoCargado ) || this.hojaCargada) ){    
+  let data = {...this.egresado.value, ...this.datosGeneralesForm.value,...this.archivoCargado, token:this.userService.obtenerToken() }
+  console.log(data)
+
+    let descripcionIds = this.getDatosDeIdentificadores( data.cicloEscolar, data.turno)
+    data = {...data,...descripcionIds}
+
+    console.log(data)
+    this.boletasAdd.cargarBoletaSoloPromedio(data).subscribe(response =>{
+      if(!response.error){
+        this.notificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
+        console.log()
+        this.EliminarArchivo=false
+        if(this.fijarInformacion) {
+          this.egresado.reset()
+          this.hojaCertificado=response.data
+          this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
+        }else{
+          this.datosGeneralesForm.reset()
+          this.egresado.reset()
+          this.archivoCargado={} as archivos
+          this.hojaCertificado= {} as hojaCertificado
+        }
+      }else{
+        this.notificacionesService.mostrarAlertaConIcono('error al agregar boleta', response.mensaje +response.data, 'error' )
+      }
+    })
+  }
+  else{
+    this.notificacionesService.mostrarAlertaConIcono('llenado de formulario', 'todos los campos son requeridos', 'error' )
+  }
+  }
+
+  getDatosDeIdentificadores(cicloEscolarId: string,turnoId:string,  ){
+    let turno = this.Turnos.filter((turno) => turno.valor == turnoId)
+    let cicloEscolar = this.ciclosEscolares.filter((cicloEscolar) => cicloEscolar.valor == cicloEscolarId)
+    return {turnoDes: turno[0].nombre, cicloDes: cicloEscolar[0].nombre}
+  }
+  getHojaCertificado(){
+    let form = this.datosGeneralesForm 
+    if (this.datosGeneralesForm.valid) {
+      let data = {"ctClave": form.get('claveCct')?.value, "idCiclo": form.get('cicloEscolar')?.value, 'idTurno': form.get('turno')?.value,  'grupo': form.get('grupo')?.value,'token' : this.userService.obtenerToken()}
+      this.historialServiceGet.getHojaCertificado(data).subscribe(response =>{
+        if(!response.error){
+          let dataToast:toastData ={
+            titulo:'hoja de certificados encontrada',
+            mensaje:'La fotografia de la hoja  perteneciente a la informacion ingresada ya se encuentra en el servidor',
+            icono:this.iconos.Check,
+            valido:true,
+            mostrar:true
+          } 
+          this.hojaCargada=true
+          this.dataToast=dataToast
+          this.hojaCertificado=response.data
+          this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
+          this.EliminarArchivo = false
+          this.mostrarToast(7)
+          console.log(this.hojaCertificado.url_path)
+        }
+        else{
+          let dataToast:toastData ={
+            titulo:'Error al buscar hoja de certificado',
+            mensaje: 'Aun no hay fotografia de los certificados de la información ingresada',
+            icono:this.iconos.XToCloseRounded,
+            valido:false,
+            mostrar:true
+          
+          }
+          this.hojaCargada=false
+          this.hojaCertificado={} as hojaCertificado
+          this.dataToast=dataToast
+          this.mostrarToast(7)
+        }
+      })
+    }
+  }
+
+  mostrarToast(tiempo:number){
+    this.dataToast.mostrar=true;
+    setTimeout(() => {
+      this.dataToast.mostrar=false;
+    }, tiempo*1000);
+  }
+  eliminarHojaCargada(){
+    this.archivoCargado={} as archivos
+    this.hojaCertificado={} as hojaCertificado
+    this.fileInput.nativeElement.value=''
   }
 
 }

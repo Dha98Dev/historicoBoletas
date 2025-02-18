@@ -1,0 +1,32 @@
+.toast{
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    background: #fafafa;
+    border: none;
+    width: 400px;   
+}
+.correcto{
+    color:#00bc7d;
+}
+.incorrecto{
+    color: red;
+}
+.borde-correcto{
+    border-left: 7px solid #00bc7d;
+}
+.borde-incorrecto{
+    border-left: 7px solid red;
+}
+.mensaje{
+    text-align: left;
+}
+b{
+    text-transform: uppercase;
+}
+.mostrar{
+    opacity:1;
+}
+.ocultar{
+    opacity:0;
+}

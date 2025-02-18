@@ -1,0 +1,23 @@
+
+<!-- @if (hojaCertificado.url_path != null) { -->
+<div class="animate__animated animate__backInLeft   contenedor rounded px-2 shadow d-flex align-items-center py-2  " #contenedor >
+  <button matTooltip="Visualizar imagen" class="btn-visualizar" data-bs-toggle="modal" data-bs-target="#visualizadorArchivos">
+    <div class="img-content">
+      <img *ngIf="hojaCertificado.url_path && hojaCertificado.nombre_hoja; sinHoja" class="img-fluid" [src]="hojaCertificado.url_path" alt="">
+    </div>
+    <div class="prev-text" *ngIf="hojaCertificado.nombre_hoja; textoDefault">
+      <p class="fw-semibold">{{hojaCertificado.nombre_hoja}}</p>
+      <small>{{hojaCertificado.tipo_archivo.toLocaleUpperCase()}} / {{hojaCertificado.extension_archivo.toLocaleUpperCase()}}</small>
+    </div>
+    <div #textoDefault class="prev-text text-vacio bg-primary text-white  rounded gap-1" *ngIf="!hojaCertificado.nombre_hoja || hojaCertificado.nombre_hoja ==''">
+      <i [class]="iconos.Info"></i>
+      <small class="text-center w-100 fw-semibold ">Sin  imagen Disponible</small>
+    </div>
+  </button>
+  
+  @if(mostrarBotonEliminar){
+    <button class="btn btn-red"  (click)="activarSalida()"> <i [class]="iconos.XToCloseRounded"></i> </button>
+  }
+</div>
+  
+  <app-previsualizador-archivos *ngIf="hojaCertificado.url_path != ''" [imageUrl] ="hojaCertificado.url_path"></app-previsualizador-archivos>

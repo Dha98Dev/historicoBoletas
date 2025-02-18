@@ -91,6 +91,7 @@ export class LoadPageComponent {
     }
 
     this.getPlanesEstudio();
+    this.getNivelesEducativos()
 
         this.datosGeneralesForm = this.fb.group({
       claveCct: ['', [Validators.required, Validators.pattern(/^18[A-Za-z]{3}[0-9]{4}[A-Za-z]$/),  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(10)]],
@@ -139,7 +140,7 @@ export class LoadPageComponent {
     this.historialServiceGet.getNivelesEducativos(data).subscribe(response =>{
       if(!response.error){
         this.nivelesEducativos=response.data;
-        // localStorage.setItem('nivelesEducativos', JSON.stringify(this.nivelesEducativos))
+        console.log(this.nivelesEducativos);
       }
     })
   }

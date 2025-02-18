@@ -4,13 +4,16 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" > <i [class]="iconos.XToCloseRounded"></i> </button>
   </div>
   <div class="offcanvas-body">
-   <div class="d-flex flex-column gap-3">
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="consulta" routerLinkActive="activo">
-      <i class="query" [class]="iconos.Consulta"></i> Consultar
-    </button> 
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarInformacion" routerLinkActive="activo">
+    <div class="d-flex flex-column gap-3">
+      <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="consulta" routerLinkActive="activo">
+        <i class="query" [class]="iconos.Consulta"></i> Consultar
+      </button> 
+      <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarCertificado" routerLinkActive="activo">
+        <i class="load"  [class]="iconos.Tools"></i>Cargar certificado
+      </button>
+    <!-- <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarInformacion" routerLinkActive="activo">
       <i class="load" [class]="iconos.DataBase"></i> Cargar calificaciones
-    </button>
+    </button> -->
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargaMasiva" routerLinkActive="activo">
       <i class="load-masiva" [class]="iconos.ExcelFile"></i>Carga Masiva
     </button>
@@ -20,17 +23,14 @@
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="verificacion" routerLinkActive="activo">
       <i class="verificacion" [class]="iconos.Check"></i>Verificación <small class="text-danger fw-bold"> {{boletas}} </small> 
     </button>
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="prueba" routerLinkActive="activo">
+    <!-- <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="prueba" routerLinkActive="activo">
       <i class="tools" [class]="iconos.Tools"></i>Herramientas
     </button>
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1'" routerLink="planesEstudio" routerLinkActive="activo">
       <i class="planes" [class]="iconos.Book"></i>Planes de Estudio
-    </button>
+    </button> -->
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="registro" routerLinkActive="activo">
       <i class="new-user" [class]="iconos.NewUser"></i>Nuevo Usuario
-    </button>
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarPromedio" routerLinkActive="activo">
-      <i class="tools" [class]="iconos.Tools"></i>Carga por promedio
     </button>
    </div>
   </div>

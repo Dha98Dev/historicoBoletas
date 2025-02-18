@@ -13,4 +13,8 @@ this.titulo.setTitle(this.nombrePagina)
 }
 
   constructor(private titulo:Title) { }
+
+  get urlImagenes(){
+    return 'http://localhost'
+  }
 }

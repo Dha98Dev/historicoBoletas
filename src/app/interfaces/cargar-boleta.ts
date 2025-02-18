@@ -66,6 +66,11 @@ export interface Calificacion {
     calificacionesPrimaria: Calificacion[];
     calificacionesSecundaria: calificacionesSecundaria;
     director_ct: string;
+    url_path: string;
+    nombre_hoja: string;
+    tipo_archivo: string;
+    extension_archivo: string;
+    fecha_registro_hoja?: string;
     [key: string]: any;
   }
  

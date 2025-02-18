@@ -53,6 +53,9 @@ import { AppUpperCaseDirective } from './directivas/app-upper-case.directive';
 import { PageNotFoundComponent } from './componentes/banners/page-not-found/page-not-found.component';
 import { FormSolicitudDuplicadosComponent } from './componentes/componentesModales/form-solicitud-duplicados/form-solicitud-duplicados.component';
 import { CargaSimpleComponent } from './pages/loadPages/carga-simple/carga-simple.component';
+import { CardToastComponent } from './componentes/componentesCards/card-toast/card-toast.component';
+import { CardMiniaturaImagenComponent } from './componentes/componentesCards/card-miniatura-imagen/card-miniatura-imagen.component';
+import { PrevisualizadorPdfComponent } from './componentes/componentesModales/previsualizador-pdf/previsualizador-pdf.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +102,10 @@ import { CargaSimpleComponent } from './pages/loadPages/carga-simple/carga-simpl
     AppUpperCaseDirective,
     PageNotFoundComponent,
     FormSolicitudDuplicadosComponent,
-    CargaSimpleComponent
+    CargaSimpleComponent,
+    CardToastComponent,
+    CardMiniaturaImagenComponent,
+    PrevisualizadorPdfComponent
   ],
   imports: [
     BrowserModule,
