@@ -128,6 +128,7 @@ export class VerificarCapturaComponent {
           extension_archivo: this.datosCaptura.extension_archivo,
           fecha_registro: this.datosCaptura.fecha_registro_hoja
         }
+        console.log(this.datosCaptura.calificacionesPrimaria)
       }
       else {
         this.loader = false;

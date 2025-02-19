@@ -71,6 +71,7 @@ export interface Calificacion {
     tipo_archivo: string;
     extension_archivo: string;
     fecha_registro_hoja?: string;
+    promedioGral:string
     [key: string]: any;
   }
  

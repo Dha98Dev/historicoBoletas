@@ -11,18 +11,25 @@ export class ModalCalificacionesComponent {
 
 
 public promedioPrimaria:number = 0;
+public mostrarCalificaciones:boolean = false;
 
   @Input()
   public boletaSeleccionada:Boleta= {} as Boleta
 
   ngOnChanges(changes: SimpleChanges){
-    if(changes['boletaSeleccionada']  && this.boletaSeleccionada.calificacionesPrimaria){
-      let suma =0;
+    let suma =0; 
+    if(changes['boletaSeleccionada']){
       this.boletaSeleccionada.calificacionesPrimaria.forEach(cal =>{
-      suma +=parseFloat(cal.calificacion)
+        suma+=parseInt(cal.calificacion)
       })
-      this.promedioPrimaria = parseFloat( (suma/this.boletaSeleccionada.calificacionesPrimaria.length).toFixed(1));
     }
+    if ((suma > 0 && !isNaN(suma)) || !isNaN(this.boletaSeleccionada.calificacionesSecundaria.calificacionFinal) ) {
+      this.mostrarCalificaciones=true;
+    }
+    else{
+      this.mostrarCalificaciones=false;
+    }
+
   }
 
 }

@@ -67,7 +67,7 @@
            <div
            class="d-flex gap-2 promedio rounded px-3 py-2 c1 shadow"
            [ngClass]="{'captura': datosCaptura.estado_boleta == 'En Captura', 'revisado': datosCaptura.estado_boleta == 'Revisado'}" > 
-           <p class=" text-dark fw-semibold">promedio: </p> <p class="text-dark">10</p></div>
+           <p class=" text-dark fw-semibold">promedio: </p> <p class="text-dark"> {{datosCaptura.promedioGral}} </p></div>
           </div>
           
 
@@ -91,7 +91,7 @@
               </div>
               <div class="calificaciones d-flex ">
                 <div class="fs-6 lead text-center w-100 border py-2  fw-semibold">Promedio Final</div>
-                <div class="fs-6 lead text-center w-100 border py-2 fw-bold"> {{ promedioPrimaria }} </div>
+                <div class="fs-6 lead text-center w-100 border py-2 fw-bold"> {{ datosCaptura.promedioGral }} </div>
               </div>
         </div>
 

@@ -16,6 +16,8 @@ import sanitizeHtml from 'sanitize-html';
 import { ValidacionesService } from '../../../services/validaciones.service';
 import { TextBoxComponent } from '../../../componentes/componentesInputs/text-box/text-box.component';
 import { ModalConfirmacionComponent } from '../../../componentes/componentesModales/modal-confirmacion/modal-confirmacion.component';
+import { GetFilesService, ResponseGetFile } from '../../../services/get-files.service';
+import { archivos, hojaCertificado, toastData } from '../../../interfaces/archivo.interface';
 
 @Component({
   selector: 'app-load-page',
@@ -53,10 +55,17 @@ export class LoadPageComponent {
   public completoPrimaria:boolean=true
   public desmarcar:boolean=false
   private redondeado:boolean=false
+  public archivoCargado:archivos={} as archivos
+  public hojaCertificado:hojaCertificado= {} as hojaCertificado
+  public toastData = {} as toastData
+  public hojaCargada:boolean=false
+  public EliminarArchivo:boolean=false
+
+
   @ViewChildren('inputBox') inputBoxes!: QueryList<TextBoxComponent>;
   @ViewChild('presentacionPromedio') checkbox!: ElementRef<HTMLInputElement>;
-
-  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService,  private tituloPagina:GetNombreService, private Validaciones:ValidacionesService,  private renderer:Renderer2){}
+  @ViewChild('file') fileInput!: ElementRef
+  constructor(private historialServiceGet: HistorialBoletasGetService, private historialServiceAdd:HistorialBoletasAgregarService, private NotificacionesService:NotificacionesService, private fb: FormBuilder, private userService:userService,  private tituloPagina:GetNombreService, private Validaciones:ValidacionesService,  private renderer:Renderer2, private getFileSErvice:GetFilesService){}
 
   datosGeneralesForm: FormGroup= {}  as FormGroup;
   calificacioneSecundaria:FormGroup= {} as FormGroup
@@ -110,7 +119,7 @@ export class LoadPageComponent {
       Primero:['',[Validators.required,Validators.min(1), Validators.max(10)]],
       Segundo:['',[Validators.required,Validators.min(1), Validators.max(10)]],
       Tercero:['',[Validators.required,Validators.min(1), Validators.max(10)]],
-      calificacionFinal:['',[Validators.required]]
+      calificacionFinal:['',[Validators.required, Validators.pattern(/^\d+$/), Validators.min(0), Validators.max(10)]]
     })
 
     this.egresado= this.fb.group({
@@ -119,6 +128,7 @@ export class LoadPageComponent {
       apellidoMaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)]],
       curp: ['', [  Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
       folioBoleta: ['', [Validators.required,  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/),  Validators.maxLength(60)] ],
+      promedioGral: ['',[Validators.required, Validators.pattern(/^\d+$/), Validators.min(0), Validators.max(10)]]
     });  
 
 
@@ -248,7 +258,7 @@ filtrarNivel() {
         this.nivelEducativoSeleccionado = this.nivelesEducativos.filter(
           nivel => nivel.nombre === "SECUNDARIA"
         );
-      } else if (["DPB", "DPR"].includes(tipo)) {
+      } else if (["DPB", "DPR", "DZC"].includes(tipo)) {
         this.nivelEducativoSeleccionado = this.nivelesEducativos.filter(
           nivel => nivel.nombre === "PRIMARIA"
         );
@@ -383,10 +393,14 @@ calcularPromedioSecundaria(){
   
 }
 
+agregarPromedio(){
+  this.egresado.patchValue({promedioGral: this.calificacioneSecundaria.get('calificacionFinal')?.value} )
+}
 
 enviarInfo(){
+  this.egresado.patchValue({promedioGral:this.calificacioneSecundaria.get('calificacionFinal')?.value} )
 
-  if ((this.datosGeneralesForm.valid && this.calificacioneSecundaria.valid && this.egresado.valid) || (this.datosGeneralesForm.valid && this.calificacionesPrimaria.length == this.materias.length && this.egresado.valid)) {
+  if ((this.datosGeneralesForm.valid && this.calificacioneSecundaria.valid && this.egresado.valid ) || (this.datosGeneralesForm.valid && this.calificacionesPrimaria.length == this.materias.length && this.egresado.valid && this.datosGeneralesForm.get('nivelEducativo')?.value == 'fFC1jKUVKAMqnqYtpc9LRw==')) {
     
     
   this.datosFormulario.cicloEscolar=this.NotificacionesService.separarValor(this.datosGeneralesForm.get('cicloEscolar')?.value,' ')
@@ -397,10 +411,14 @@ enviarInfo(){
     
   }
   // esto es si el nivel es secundaria
-  else if(this.datosGeneralesForm.get('nivelEducativo')?.value == 2){
-    this.calificacioneSecundaria.patchValue({calificacionFinal:this.PromedioSecundaria} )
+  else if(this.datosGeneralesForm.get('nivelEducativo')?.value == 'LEqkvDj0WZNGZXc28I79mQ=='){
+
+    
      data={...this.datosGeneralesForm.value,...this.egresado.value,  "token":this.userService.obtenerToken(),"calPrimaria":"", "calSecundaria":this.calificacioneSecundaria.value}
   }
+  let descripcionIds = this.getDatosDeIdentificadores( this.datosGeneralesForm.get('cicloEscolar')?.value, this.datosGeneralesForm.get('turno')?.value)
+    data = {...data,...descripcionIds, ...this.archivoCargado}
+
 
   console.log(data)
   
@@ -439,7 +457,25 @@ enviarInfo(){
 
     }
   })
-  
+  // this.historialServiceAdd.cargarBoletaSoloPromedio(data).subscribe(response =>{
+  //   if(!response.error){
+  //     this.NotificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
+  //     console.log()
+  //     this.EliminarArchivo=false
+  //     if(this.fijarInformacion) {
+  //       this.egresado.reset()
+  //       this.hojaCertificado=response.data
+  //       this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
+  //     }else{
+  //       this.datosGeneralesForm.reset()
+  //       this.egresado.reset()
+  //       this.archivoCargado={} as archivos
+  //       this.hojaCertificado= {} as hojaCertificado
+  //     }
+  //   }else{
+  //     this.NotificacionesService.mostrarAlertaConIcono('error al agregar boleta', response.mensaje +response.data, 'error' )
+  //   }
+  // })
   }else{
     this.NotificacionesService.mostrarAlertaSimple("Por favor, complete el formulario correctamente")
     this.datosGeneralesForm.markAllAsTouched()
@@ -663,6 +699,79 @@ verificarCheckbox() {
     this.redondeado=false
     this.promedioPrimaria = (suma / this.materias.length).toFixed(1);
   }
+}
+async cargarArchivos(event: any) {
+  try {
+      // Usamos await para esperar a que la promesa se resuelva
+      const data: ResponseGetFile = await this.getFileSErvice.cargarArchivos(event, true);
+
+      // Accedemos a los datos una vez que la promesa se ha resuelto
+      this.toastData = data.dataToast;
+      this.hojaCertificado = data.hojaCertificado;
+      this.archivoCargado = data.archivoCargado;
+
+      // Verificamos si el archivo se cargó correctamente
+      this.hojaCargada = !!this.hojaCertificado.nombre_hoja;
+
+      console.log("Datos cargados:", data);
+  } catch (error) {
+      console.error("Error:");
+  }
+}
+getDatosDeIdentificadores(cicloEscolarId: string,turnoId:string,  ){
+  let turno = this.Turnos.filter((turno) => turno.valor == turnoId)
+  let cicloEscolar = this.ciclosEscolares.filter((cicloEscolar) => cicloEscolar.valor == cicloEscolarId)
+  return {turnoDes: turno[0].nombre, cicloDes: cicloEscolar[0].nombre}
+}
+getHojaCertificado(){
+  let form = this.datosGeneralesForm 
+  if (this.datosGeneralesForm.valid) {
+    let data = {"ctClave": form.get('claveCct')?.value, "idCiclo": form.get('cicloEscolar')?.value, 'idTurno': form.get('turno')?.value,  'grupo': form.get('grupo')?.value,'token' : this.userService.obtenerToken()}
+    this.historialServiceGet.getHojaCertificado(data).subscribe(response =>{
+      if(!response.error){
+        let dataToast:toastData ={
+          titulo:'hoja de certificados encontrada',
+          mensaje:'La fotografia de la hoja  perteneciente a la informacion ingresada ya se encuentra en el servidor',
+          icono:this.iconos.Check,
+          valido:true,
+          mostrar:true
+        } 
+        this.hojaCargada=true
+        this.toastData=dataToast
+        this.hojaCertificado=response.data
+        this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
+        this.EliminarArchivo = false
+        this.mostrarToast(7)
+        console.log(this.hojaCertificado.url_path)
+      }
+      else{
+        let toastData:toastData ={
+          titulo:'Error al buscar hoja de certificado',
+          mensaje: 'Aun no hay fotografia de los certificados de la información ingresada',
+          icono:this.iconos.XToCloseRounded,
+          valido:false,
+          mostrar:true
+        
+        }
+        this.hojaCargada=false
+        this.hojaCertificado={} as hojaCertificado
+        this.toastData=toastData
+        this.mostrarToast(7)
+      }
+    })
+  }
+}
+
+mostrarToast(tiempo:number){
+  this.toastData.mostrar=true;
+  setTimeout(() => {
+    this.toastData.mostrar=false;
+  }, tiempo*1000);
+}
+eliminarHojaCargada(){
+  this.archivoCargado={} as archivos
+  this.hojaCertificado={} as hojaCertificado
+  this.fileInput.nativeElement.value=''
 }
 }
 

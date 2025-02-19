@@ -4,7 +4,8 @@
     right: 40px;
     background: #fafafa;
     border: none;
-    width: 400px;   
+    width: 400px;  
+    z-index: 1000; 
 }
 .correcto{
     color:#00bc7d;
