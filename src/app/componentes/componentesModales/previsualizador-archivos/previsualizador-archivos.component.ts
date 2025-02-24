@@ -33,13 +33,11 @@ translateY = 0;
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit(){
-    console.log('inicializando visor imagenes')
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['imageUrl'] && changes['imageUrl'].currentValue) {
       this.imageUrl= this.imgTemporal != ''? this.imgTemporal : this.imageUrl
-      console.log('la url de la imagen es ' +  this.imageUrl);
     }
   }
 
@@ -56,43 +54,49 @@ translateY = 0;
   lastX = 0;
   lastY = 0;
   
-  rotateImage(degrees: number): void {
-    this.rotation += degrees;
-  }
-  
-  zoomImage(amount: number): void {
-    this.scale = Math.max(0.5, Math.min(3, this.scale + amount));
-  }
-  
-  // Restablecer la imagen
-  resetImage(): void {
-    this.scale = 1;
-    this.rotation = 0;
-    this.offsetX = 0;
-    this.offsetY = 0;
-  }
-  
-  // Métodos para arrastrar la imagen
   startDrag(event: MouseEvent): void {
     this.dragging = true;
     this.lastX = event.clientX;
     this.lastY = event.clientY;
   }
-  
+
   endDrag(): void {
     this.dragging = false;
   }
-  
+
   dragImage(event: MouseEvent): void {
     if (this.dragging) {
       this.offsetX += event.clientX - this.lastX;
       this.offsetY += event.clientY - this.lastY;
       this.lastX = event.clientX;
       this.lastY = event.clientY;
-      const img = document.querySelector('.img-zoom') as HTMLElement;
-      img.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.scale}) rotate(${this.rotation}deg)`;
+      this.applyTransform();
     }
   }
-  
 
+  // Aplicar todas las transformaciones juntas
+  applyTransform(): void {
+    const img = document.querySelector('.img-zoom') as HTMLElement;
+    img.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.scale}) rotate(${this.rotation}deg)`;
+  }
+
+  // Métodos para zoom y rotación
+  zoomImage(amount: number): void {
+    this.scale = Math.max(0.5, Math.min(3, this.scale + amount));
+    this.applyTransform(); // Aplicar transformación después del zoom
+  }
+
+  rotateImage(degrees: number): void {
+    this.rotation += degrees;
+    this.applyTransform(); // Aplicar transformación después de la rotación
+  }
+
+  // Restablecer la imagen
+  resetImage(): void {
+    this.scale = 1;
+    this.rotation = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.applyTransform(); // Aplicar transformación después del reset
+  }
 }

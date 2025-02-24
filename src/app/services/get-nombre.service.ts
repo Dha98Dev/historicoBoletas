@@ -15,6 +15,6 @@ this.titulo.setTitle(this.nombrePagina)
   constructor(private titulo:Title) { }
 
   get urlImagenes(){
-    return 'http://localhost'
+    return 'https://srv37app003.sepen.gob.mx'
   }
 }

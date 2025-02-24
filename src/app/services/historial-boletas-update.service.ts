@@ -10,11 +10,11 @@ import { userService } from '../Autenticacion1/servicios/user-service.service';
 })
 export class HistorialBoletasUpdateService {
 
-  private UrlHistorialBoletas:string='http://localhost/historicoCalificaciones/api/';
+  private UrlHistorialBoletas:string='https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/api/';
   constructor(private http:HttpClient, private userService:userService) { }
 
   updateEstadoBoleta(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/cambiarEstadoCaptura', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/cambiarEstadoCaptura.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -24,7 +24,7 @@ export class HistorialBoletasUpdateService {
       )
   }
   updateInformacionComplementaria(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateDatosPersona', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateDatosPersona.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -35,7 +35,7 @@ export class HistorialBoletasUpdateService {
   }
 
   updateInfoBoleta(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateInfoBoleta', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateInfoBoleta.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -45,7 +45,7 @@ export class HistorialBoletasUpdateService {
       )
   }
   updateEstadoUsuario(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateEstadoUsuario', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'update/updateEstadoUsuario.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)

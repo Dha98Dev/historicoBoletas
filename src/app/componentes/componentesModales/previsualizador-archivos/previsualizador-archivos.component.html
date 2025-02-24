@@ -36,24 +36,19 @@
       </div>
       
       <div class="modal-body">
-        <div class="image-wrapper" >
-          <div class="image-container" #imageContainer >
-            <img 
-              [src]="imageUrl" 
-              alt="Imagen" 
+        <div class="image-wrapper">
+          <div class="image-container" #imageContainer>
+            <img
+              [src]="imageUrl"
+              alt="Imagen"
               class="img-zoom"
-              [style.transform]="'scale(' + scale + ') rotate(' + rotation + 'deg)'"
+              [style.transform]="'translate(' + offsetX + 'px, ' + offsetY + 'px) scale(' + scale + ') rotate(' + rotation + 'deg)'"
               (mousedown)="startDrag($event)"
               (mouseup)="endDrag()"
               (mousemove)="dragImage($event)">
           </div>
         </div>
         
-
-        <!-- <div class="w-100 h-100 d-flex justify-content-center align-items-center ">
-          <iframe *ngIf="pdfUrl" [src]="safeUrl" width="80%" height="100%"></iframe>
-        </div>
-           -->
           
       </div>
 

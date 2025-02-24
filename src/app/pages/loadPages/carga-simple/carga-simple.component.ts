@@ -142,6 +142,7 @@ export class CargaSimpleComponent {
   getTurnos() {
     let data = { "token": this.userService.obtenerToken(), }
     this.historialServiceGet.getTurnos(data).subscribe(response => {
+      console.log(response.data)
       if (!response.error) {
         this.Turnos = response.data;
         localStorage.setItem('Turnos', JSON.stringify(this.Turnos));
@@ -424,7 +425,6 @@ export class CargaSimpleComponent {
         "extension_archivo": subtipo,
         "fecha_registro": new Date().toISOString(),
       }
-      console.log(this.hojaCertificado)
       this.mostrarToast(5)
 
       this.archivoCargado = documento;
@@ -469,16 +469,13 @@ export class CargaSimpleComponent {
     
   if((this.datosGeneralesForm.valid && this.egresado.valid) && (!isObjectEmpty(this.archivoCargado ) || this.hojaCargada) ){    
   let data = {...this.egresado.value, ...this.datosGeneralesForm.value,...this.archivoCargado, token:this.userService.obtenerToken() }
-  console.log(data)
 
     let descripcionIds = this.getDatosDeIdentificadores( data.cicloEscolar, data.turno)
     data = {...data,...descripcionIds}
 
-    console.log(data)
     this.boletasAdd.cargarBoletaSoloPromedio(data).subscribe(response =>{
       if(!response.error){
         this.notificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
-        console.log()
         this.EliminarArchivo=false
         if(this.fijarInformacion) {
           this.egresado.reset()
@@ -524,7 +521,6 @@ export class CargaSimpleComponent {
           this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
           this.EliminarArchivo = false
           this.mostrarToast(7)
-          console.log(this.hojaCertificado.url_path)
         }
         else{
           let dataToast:toastData ={

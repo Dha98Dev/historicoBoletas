@@ -11,13 +11,13 @@
 .banner1{
 width: 100%;
 height: 50%;
-background: #10b981;
+background: linear-gradient(to right, #FFFFFF 20%, #CAB39E 100%);
 z-index: -100;
 }
 .banner2{
     width: 100%;
     height: 50%;
-    background: white;
+    /* background: linear-gradient(to right, #FFFFFF 20%, #CAB39E 100%); */
 z-index: -100;    
 }
   .contenedor-login{
@@ -26,9 +26,7 @@ z-index: -100;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* background: #10b981; */
-      /* background: linear-gradient(180deg, rgba(201,179,158,1) 0%, rgba(229,218,208,1) 41%, rgba(238,230,224,1) 41%, rgba(238,232,226,1) 41%, rgba(231,221,212,1) 41%, rgba(241,241,241,1) 41%); */
-    
+
   }
   
   .form{
@@ -37,8 +35,9 @@ z-index: -100;
     flex-direction: column;
     position: relative;
     z-index: 100;
-    box-shadow: 1px 1px 4px #aaa;
+    background: white;
     border-radius: 20px;
+    box-shadow: 0px 0px 10px 0px #aaa;
   }
   .form>form{
     display: flex;
@@ -47,6 +46,16 @@ z-index: -100;
     background: white;
     border-radius: 20px;
     
+  }
+  .icono>img{
+width: 100%;
+  }
+  form>p, form>small{
+    align-self: flex-start;
+    padding-left: 30px;
+  }
+  form>small{
+    color: #a3a3a3 !important; 
   }
   
   .contenedor-input{
@@ -61,7 +70,10 @@ z-index: -100;
     padding: 10px 15px;
     width: 95%;
     border-radius: 5px;
-    /* border-bottom:1px solid var(--fondo-cafe); */
+    background: #dfdfdf;
+  }
+  input:focus{
+    background: white;
   }
   input::placeholder{
     color: #aaa;
@@ -77,46 +89,18 @@ z-index: -100;
     border: none;
     border-radius: 10px;
     margin-top: 20px;
-    background: #a1a1aa;
+    background: #181830;
     color: white;
   }
   .login-button:hover{
-background: #374151;
+background: #3a3a64;
   }
   p{
     font-size: 27px;
     margin-top: 60px;
     margin-bottom: 10px;
   }
-  .icono{
-    width: 120px;
-    height: 120px;
-    background: #fff;
-    margin-bottom: 20px;
-    border-radius: 50%;
-    align-self: center;
-    position: relative;
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .icono>svg{
-    width: 90px;
-    height: 90px;
-    fill: var(--fondo-cafe);;
-  }
-  
-  .icono>.flecha{
-    position: absolute;
-    width: 30px ;
-    height: 30px;
-    border-right:15px solid white;
-    border-bottom: 15px solid white;
-    rotate:45deg;
-    bottom: -10px;
-    left: 38%; 
-  }
+
   .enlaces{
     display: flex;
     flex-direction: column;

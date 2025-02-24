@@ -27,7 +27,7 @@ ngAfterViewInit() {
 
 openModal() {
   const modalElement = this.modal.nativeElement;
-  console.log(modalElement)
+
   const mensajeElement = this.mensaje.nativeElement;
 
   modalElement.classList.remove('animate__fadeOut')

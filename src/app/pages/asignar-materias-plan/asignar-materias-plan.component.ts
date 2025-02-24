@@ -79,7 +79,6 @@ export class AsignarMateriasPlanComponent {
       }
     })
 
-    console.log(this.planesEstudio)
   }
   getMaterias(){
     let data={"token":this.userService.obtenerToken(), "idPlanEstudio":"" }
@@ -87,7 +86,6 @@ export class AsignarMateriasPlanComponent {
 this.historialServiceGet.getMaterias(data).subscribe(response =>{
 if (!response.error) {
 this.materias=response.data
-console.log(response.data)
 this.materias.forEach(materia =>{
   materia.valor=materia.valor +"-" + materia.nombre;
 })
@@ -97,7 +95,6 @@ else{
 }
 })
 
-console.log(this.materias)
   }
 
   obtenerValor(valor:string){
@@ -190,7 +187,6 @@ console.log(this.materias)
         planSeleccionado=plan.nombre
       }
     })
-    console.log(planSeleccionado)
 
     let listaMaterias="";
     materiasSelecciondas.forEach(m =>{
@@ -207,7 +203,6 @@ console.log(this.materias)
       // Verificar si el usuario hizo clic en "Aceptar"
       if (result.isConfirmed) {
       let data={"token": this.userService.obtenerToken(), "materias":valorMateriasSeleccionadas, "idPlanEstudio":this.datosPlan.get("idPlanEstudio")?.value, "nivel":this.datosPlan.get("nivel")?.value}
-     console.log(data)
       this.historialServiceAdd.asignarMaterias(data).subscribe(response => {
         if (!response.error) {
           this.NotificacionesService.mostrarAlertaSimple(response.mensaje)

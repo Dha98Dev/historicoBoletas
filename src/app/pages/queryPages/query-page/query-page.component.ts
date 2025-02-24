@@ -91,7 +91,6 @@ export class QueryPageComponent {
     };
 
 
-    console.log('Inicializando datatable...')
   }
   // 
 
@@ -126,7 +125,6 @@ export class QueryPageComponent {
         data.cct = (event.data.cct.toUpperCase())
         tieneInformacion = this.validarBusquedaVacia(data.idCiclo) &&  this.validarBusquedaVacia(data.cct) 
         data.numeroFiltro = event.numeroFiltro
-        console.log(tieneInformacion)
         break;
       case '3':
         data.folio = event.data
@@ -135,7 +133,6 @@ export class QueryPageComponent {
         break;
       case '4':
         data.nombre = event.data.nombre ? (event.data.nombre).toUpperCase() : ''
-        console.log(data.nombre)
 
         data.cct = event.data.cct ?  (event.data.cct).toUpperCase() : ''
         tieneInformacion = this.validarBusquedaVacia(data.nombre) &&  this.validarBusquedaVacia(data.cct) 
@@ -146,14 +143,12 @@ export class QueryPageComponent {
         data.nombre = (event.data).toUpperCase()
         tieneInformacion = this.validarBusquedaVacia(data.nombre)
         data.numeroFiltro = '5'
-        // console.log(event.data)
         break;
 
       case '6':
         data.localidad = event.data.toUpperCase()
         tieneInformacion = this.validarBusquedaVacia(data.localidad)
         data.numeroFiltro = '6'
-        // console.log(event.data)
         break;
 
       default:
@@ -180,7 +175,6 @@ if(tieneInformacion){
 
       } else {
         this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
-        console.log(response.data)
         this.vacio = true;
         this.loader=false;
       }
@@ -214,10 +208,8 @@ return ValorCampo != ''  ? true : false;
       this.calificacionesSeleccionadaPrimaria = calificacionesFiltrdadas[0].calificacionesPrimaria
       this.nivelSelecionado = nivel
       this.estadoCaptura=calificacionesFiltrdadas[0].estado_boleta
-      // console.log(this.estadoCaptura)
       this.capturador = calificacionesFiltrdadas[0].capturado_por
       this.verificador=calificacionesFiltrdadas[0].verificado
-      console.log(this.verificador)
       this.Egresado=calificacionesFiltrdadas[0].nombre+ ' ' + calificacionesFiltrdadas[0].apellido_paterno+ ' ' + calificacionesFiltrdadas[0].apellido_materno
     }
     else {
@@ -226,7 +218,6 @@ return ValorCampo != ''  ? true : false;
       this.estadoCaptura=calificacionesFiltrdadas[0].estado_boleta
       this.capturador = calificacionesFiltrdadas[0].capturado_por
       this.verificador=calificacionesFiltrdadas[0].verificado
-      console.log(this.verificador)
     }
   }
 

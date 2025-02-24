@@ -214,7 +214,6 @@ async ordenarCalificaciones(listadoCalificaciones: string) {
   if (this.planesEstudioSeleccionado && listadoCalificaciones.trim() !== '') {
     try {
       this.arregloCalificaciones = await this.separarCalificaciones(listadoCalificaciones); // Esperar el resultado
-      console.log(this.arregloCalificaciones)
     } catch (error) {
 
     }

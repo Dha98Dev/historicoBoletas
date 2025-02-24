@@ -127,7 +127,7 @@ export class LoadPageComponent {
       apellidoPaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)] ],
       apellidoMaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)]],
       curp: ['', [  Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
-      folioBoleta: ['', [Validators.required,  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/),  Validators.maxLength(60)] ],
+      folioBoleta: ['', [Validators.required,  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/),  Validators.maxLength(60)]],
       promedioGral: ['',[Validators.required, Validators.pattern(/^\d+$/), Validators.min(0), Validators.max(10)]]
     });  
 
@@ -136,7 +136,6 @@ export class LoadPageComponent {
 
   ngAfterViewChecked(): void {
     if (this.datosGeneralesForm.get('nivelEducativo')?.value === 'fFC1jKUVKAMqnqYtpc9LRw==' && this.completoPrimaria) {
-      console.log('Referencias inicializadas:', this.inputBoxes.toArray());
     }
   }
   // ngAfterViewInit() {
@@ -150,7 +149,6 @@ export class LoadPageComponent {
     this.historialServiceGet.getNivelesEducativos(data).subscribe(response =>{
       if(!response.error){
         this.nivelesEducativos=response.data;
-        console.log(this.nivelesEducativos);
       }
     })
   }
@@ -224,7 +222,6 @@ if (this.nivelEducativoSeleccionado.length == 0) {
       // creamos el arreglo de los directores
     let Directores:opciones[]=[];
     let Datadirectores=response.data.directores;
-    console.log(response.data.directores)
   if(response.data.directores.length > 0) {
   for (let i = 0; i < Datadirectores.length; i++) {
     if (Datadirectores[i].nombre != null && Datadirectores[i].apellidoPaterno != null && Datadirectores[i].apellidoMaterno != null) { 
@@ -352,13 +349,11 @@ this.guardarDirector(dataNewDirector)
 
 
 guardarDirector(data:any){
-  console.log(data)
 this.historialServiceAdd.agregarDirector(data).subscribe(response =>{
   if(!response.error){
     if (response.data.length > 0) {
       this.Directores=response.data
       this.NotificacionesService.mostrarAlertaSimple("Director Agregado Correctamente")
-      console.log(this.Directores)
     }
   }
   else{
@@ -393,12 +388,9 @@ calcularPromedioSecundaria(){
   
 }
 
-agregarPromedio(){
-  this.egresado.patchValue({promedioGral: this.calificacioneSecundaria.get('calificacionFinal')?.value} )
-}
+
 
 enviarInfo(){
-  this.egresado.patchValue({promedioGral:this.calificacioneSecundaria.get('calificacionFinal')?.value} )
 
   if ((this.datosGeneralesForm.valid && this.calificacioneSecundaria.valid && this.egresado.valid ) || (this.datosGeneralesForm.valid && this.calificacionesPrimaria.length == this.materias.length && this.egresado.valid && this.datosGeneralesForm.get('nivelEducativo')?.value == 'fFC1jKUVKAMqnqYtpc9LRw==')) {
     
@@ -412,8 +404,7 @@ enviarInfo(){
   }
   // esto es si el nivel es secundaria
   else if(this.datosGeneralesForm.get('nivelEducativo')?.value == 'LEqkvDj0WZNGZXc28I79mQ=='){
-
-    
+    this.calificacioneSecundaria.patchValue({calificacionFinal:this.egresado.get('promedioGral')?.value})    
      data={...this.datosGeneralesForm.value,...this.egresado.value,  "token":this.userService.obtenerToken(),"calPrimaria":"", "calSecundaria":this.calificacioneSecundaria.value}
   }
   let descripcionIds = this.getDatosDeIdentificadores( this.datosGeneralesForm.get('cicloEscolar')?.value, this.datosGeneralesForm.get('turno')?.value)
@@ -421,7 +412,6 @@ enviarInfo(){
 
 
   console.log(data)
-  
   this.historialServiceAdd.cargarBoleta(data).subscribe(response =>{
     if(!response.error){
       this.NotificacionesService.mostrarAlertaSimple(response.mensaje)
@@ -460,7 +450,6 @@ enviarInfo(){
   // this.historialServiceAdd.cargarBoletaSoloPromedio(data).subscribe(response =>{
   //   if(!response.error){
   //     this.NotificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
-  //     console.log()
   //     this.EliminarArchivo=false
   //     if(this.fijarInformacion) {
   //       this.egresado.reset()
@@ -713,9 +702,7 @@ async cargarArchivos(event: any) {
       // Verificamos si el archivo se cargó correctamente
       this.hojaCargada = !!this.hojaCertificado.nombre_hoja;
 
-      console.log("Datos cargados:", data);
   } catch (error) {
-      console.error("Error:");
   }
 }
 getDatosDeIdentificadores(cicloEscolarId: string,turnoId:string,  ){
@@ -742,7 +729,6 @@ getHojaCertificado(){
         this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
         this.EliminarArchivo = false
         this.mostrarToast(7)
-        console.log(this.hojaCertificado.url_path)
       }
       else{
         let toastData:toastData ={

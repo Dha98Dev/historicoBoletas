@@ -31,7 +31,6 @@ let mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2); // Los meses van de 0 
 let dia = ('0' + fechaActual.getDate()).slice(-2);
 
 this.hoy = `${año}-${mes}-${dia}`;
-console.log(this.hoy)
 
 this.agregarPlan=this.fb.group({
   nombrePlan: ['',[Validators.required]],
@@ -43,11 +42,9 @@ this.getPlanesEstudios()
 
   getPlanesEstudios(){
     let data={"token":this.userService.obtenerToken()}
-    console.log(data)
     this.historialServiceGet.getPlanesEstudio(data).subscribe(response=>{
       if (!response.error) {
         this.listadoPlanesEstudio=response.data
-        console.log(this.listadoPlanesEstudio)
       }
       else{
         this.notificacionesService.mostrarAlertaSimple('Error al obtener planes de estudio');
@@ -92,13 +89,11 @@ this.getPlanesEstudios()
     }
 
     recibirFechas(nombre:string, event:any){
-      console.log(nombre, event);
       this.agregarPlan.patchValue({[nombre]:event})
       this.agregarPlan.controls[nombre].markAllAsTouched()
     }
 
     guardarPlan(){
-      console.log(this.agregarPlan.value) // Obtiene los valores del formulario.
       if (this.agregarPlan.valid){
         let data= {...this.agregarPlan.value, token:this.userService.obtenerToken()}
         this.HistorialServiceAdd.agregarPlan(data).subscribe(response => {
@@ -107,7 +102,6 @@ this.getPlanesEstudios()
             this.listadoPlanesEstudio=response.data
           }
           else{
-            console.log(response)
           }
         })
       }

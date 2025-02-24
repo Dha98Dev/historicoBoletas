@@ -1,24 +1,7 @@
-<!-- <div class="contenedor-mensaje " #modal>
-    <div class="mensaje px-3 d-flex justify-content-around align-items-center flex-column" #mensaje>
-      <div class="cerrar"><button class="close btn-rose" (click)="closeModal()"> <i [class]="iconos.XToClose"></i>
-        </button></div>
-      <div class="icono"> <i class="fs-2 animate__animated  text-warning " #iconoMensaje
-          [class]="iconos.Notification"></i> </div>
-      <div class="descripcion  text-uppercase  "> {{mensajeNotificacion}} </div>
-      <div class="accion">
-        <button mat-raised-button class="text-capitalize btn aceptar" (click)="closeModal()"> Aceptar </button>
-      </div>
-    </div>
-  </div> -->
-
-  
-  
-  
-
-     @if(tituloToast != null || this.tituloToast != "") {
+ @if(tituloToast != null || this.tituloToast != "") {
         <div class="toast d-flex  gap-2 align-items-center px-2 justify-content-between ocultar " [ngClass]="Valido ? 'borde-correcto': 'borde-incorrecto'" #mensaje >
           <div class="icon"> <i [ngClass]=" Valido ? 'correcto': 'incorrecto'" [class]="iconoSeleccionado"></i> </div>
-          <div class="mensaje d-flex flex-column" >
+          <div class="mensaje1 d-flex flex-column" >
               <b [ngClass]=" Valido ? 'correcto': 'incorrecto'"> {{tituloToast}} </b>
               <p> {{mensajeToast}} </p>
             </div>

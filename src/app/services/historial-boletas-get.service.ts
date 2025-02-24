@@ -11,11 +11,11 @@ import { userService } from '../Autenticacion1/servicios/user-service.service';
 })
 export class HistorialBoletasGetService {
 
-  private UrlHistorialBoletas:string='http://localhost/historicoCalificaciones/api/';
+  private UrlHistorialBoletas:string='https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/api/';
   constructor(private http:HttpClient, private userService:userService) { }
 
   getNivelesEducativos(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNivelesEducativos', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNivelesEducativos.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -26,7 +26,7 @@ export class HistorialBoletasGetService {
   }    
 
   getPlanesEstudio(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getPlanesEstudios', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getPlanesEstudios.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -37,7 +37,7 @@ export class HistorialBoletasGetService {
   }    
 
   getCiclosEscolares(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getCiclosEscolares', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getCiclosEscolares.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -48,7 +48,7 @@ export class HistorialBoletasGetService {
   }
   
   getTurnos(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getTurnos', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getTurnos.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -59,7 +59,7 @@ export class HistorialBoletasGetService {
   }
 
   getDatosCct(data:any):Observable<InfoCctDirectores>{
-    return this.http.post<InfoCctDirectores>(`${this.UrlHistorialBoletas}`+'get/getDatosCct', JSON.stringify(data)).pipe(
+    return this.http.post<InfoCctDirectores>(`${this.UrlHistorialBoletas}`+'get/getDatosCct.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -70,7 +70,7 @@ export class HistorialBoletasGetService {
   }
 
   getMaterias(data:any):Observable<RespuestaOpciones>{
-    return this.http.post<RespuestaOpciones>(`${this.UrlHistorialBoletas}`+'get/getMaterias', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaOpciones>(`${this.UrlHistorialBoletas}`+'get/getMaterias.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -81,7 +81,7 @@ export class HistorialBoletasGetService {
   }
 
   getDatosBoleta(data:any):Observable<RespuestaGetCalificaciones>{
-    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'get/getCalificaciones', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaGetCalificaciones>(`${this.UrlHistorialBoletas}`+'get/getCalificaciones.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -91,7 +91,7 @@ export class HistorialBoletasGetService {
       )
   }
   getTiposUsuarios(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getTipoUsuarios', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getTipoUsuarios.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -102,7 +102,7 @@ export class HistorialBoletasGetService {
   } 
 
   numeroBoletasXVerificar(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNumeroBoletasPorVerificar', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNumeroBoletasPorVerificar.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -114,7 +114,7 @@ export class HistorialBoletasGetService {
 
 
   getUsuarios(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getListadoUsuarios', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getListadoUsuarios.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)
@@ -125,7 +125,7 @@ export class HistorialBoletasGetService {
   } 
 
   getHojaCertificado(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getImagenCertificado', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getImagenCertificado.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           this.userService.tokenInvalido(response.mensaje)

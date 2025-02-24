@@ -1,104 +1,37 @@
-/* 
-.offcanvas-top{
-    height: 100% !important;
-  } */
-  /* .offcanvas-body{
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-  }
-  
-  .offcanvas-body>iframe{
-    width: 80%;
-    height: 100vh;
-    padding: 20px;
-  }
-  .boton{
-    position: absolute;
-    right: 30px;
-    top: 15px;
-    z-index: 100;
-  }
-  .btn-close{
-    margin:5px 40px;
-    width: 100px;
-    height: 35px;
-    padding: 5px ;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color:  white;
-    gap: 10px;
-    background: none;
-    background: #dc2626;
-    opacity: 1;
-  }
-  
-  .offcanvas{
-    background: rgba(91, 91, 91,0.5);
-  } */
+*{
+  border: none;
+ }
+.image-wrapper {
+  width: 100%;
+  height: 80vh;
+  overflow: auto; /* Habilita el scroll cuando la imagen crece */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 
+.image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
 
-  /* .contenedor-img{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%; 
-    height: 100%; 
-    background:red;
-    overflow: auto;
-    transition: transform 0.3s ease-in-out;
-  }
+.img-zoom {
+  max-width: none;
+  max-height: none;
+  cursor: grab;
+}
 
-  .modal-body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; 
-    overflow-y: auto; 
-    overflow-x: auto;
-  } */
-  
-  /* .img-zoom {
-    width: 100%;
-    height: auto; 
-    transition: transform 0.2s ease-in-out;
-    cursor: zoom-in;
-  } */
-   *{
-    border: none;
-   }
-  .image-wrapper {
-    width: 100%;
-    height: 80vh;
-    overflow: auto; /* Habilita el scroll cuando la imagen crece */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  
-  .image-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .img-zoom {
-    max-width: none;
-    max-height: none;
-    cursor: grab;
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .modal-header{
-    display: flex;
-    justify-content: center; 
-    width: 100%; 
-  }
+.modal-header{
+  display: flex;
+  justify-content: center; 
+  width: 100%; 
+}
 .cerrar{
-  background: red;
+background: red;
 }

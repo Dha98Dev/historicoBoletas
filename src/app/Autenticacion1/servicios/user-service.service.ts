@@ -6,12 +6,13 @@ import * as CryptoJS from 'crypto-js';
 
 import Swal from 'sweetalert2'
 import { RespuestaPeticionHistorial } from '../../interfaces/respuesta.interface';
+import { NotificacionesService } from '../../services/notificaciones.service';
 
 @Injectable({providedIn: 'root'})
 export class userService {
-    constructor(private http:HttpClient, private router:Router, ) { }
- private url:string='http://localhost/historicoCalificaciones/Auth/'
- private urlGet:string = 'http://localhost/historicoCalificaciones/api/'
+    constructor(private http:HttpClient, private router:Router,private notificacionesService:NotificacionesService ) { }
+ private url:string='https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/Auth/'
+ private urlGet:string = 'https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/api/'
 
 
  
@@ -101,7 +102,7 @@ export class userService {
     }
 
     agregarUsuario(data:any):Observable<RespuestaPeticionHistorial>{
-      return this.http.post<RespuestaPeticionHistorial>(`${this.url}`+'nuevaCuenta', JSON.stringify(data)).pipe(
+      return this.http.post<RespuestaPeticionHistorial>(`${this.url}`+'nuevaCuenta.php', JSON.stringify(data)).pipe(
         tap(response =>{
           if(response.error && !response.isValidToken){
             // this.userService.tokenInvalido(response.mensaje)
@@ -120,6 +121,11 @@ export class userService {
       } else {
         errorMessage = `Código de error ${error.status}, mensaje: ${error.error}`;
       }
+      Swal.fire({
+        title: "Ocurrio un Error",
+        text: "Ocurrio un error , intentelo mas tarde",
+        icon: "error"
+      });
       return throwError(errorMessage);
     }
   

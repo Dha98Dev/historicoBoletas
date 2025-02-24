@@ -30,10 +30,8 @@ export class LoginComponent {
   iniciarSesion(){
     if (this.login.valid) {
       const datos= {usuario:this.login.get('usuario')?.value, password:this.login.get('password')?.value}
-      console.log(datos)
       this.userService.iniciarSesion(datos).subscribe(data=>{
 
-        console.log(datos)
         if(!data.error){
           this.userService.guardarDatosUsuario(data.data.usuario, data.data.token, data.data.fk_tipo_usuario.toString())
           

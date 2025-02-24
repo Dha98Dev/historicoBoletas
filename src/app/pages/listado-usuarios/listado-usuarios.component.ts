@@ -61,7 +61,6 @@ export class ListadoUsuariosComponent implements OnInit, OnDestroy {
           u.id_usuario=this.userService.Encriptar(u.id_usuario.toString().toString())
         })
         this.dtTrigger.next(); // Notifica a DataTables que los datos están listos
-        console.log(this.listadoUsuarios);
       }
     });
   }
@@ -74,7 +73,6 @@ export class ListadoUsuariosComponent implements OnInit, OnDestroy {
   habilitarEInhabilitar(idUser:string | number, accion:number){
     let estado= accion == 1 ? 'activo' : 'inactivo';
     let data = { token:this.userService.obtenerToken(), usuario:this.userService.Desencriptar(idUser.toString()), estado}
-    console.log(data)
     this.updateService.updateEstadoUsuario(data).subscribe(response => {
       if (!response.error) {
         this.actualizarEstado(idUser, estado)
@@ -90,7 +88,6 @@ export class ListadoUsuariosComponent implements OnInit, OnDestroy {
   actualizarEstado(idUsuario:number | string, estado:string){
     this.listadoUsuarios.forEach(user => {
       if (user.id_usuario == idUsuario) {
-        console.log(user.id_usuario, idUsuario)
         user.estado=estado
       }
     })

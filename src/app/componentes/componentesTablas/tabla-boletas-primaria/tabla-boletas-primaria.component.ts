@@ -14,7 +14,7 @@ export class TablaBoletasPrimariaComponent {
 
 ngOnChanges(changes: SimpleChanges){
 if (changes['BoletasPrimaria']) {
-  console.log(this.BoletasPrimaria) 
+
 }
 }
 }

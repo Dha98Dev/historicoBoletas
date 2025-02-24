@@ -179,7 +179,6 @@ public updateFlag:boolean = false;
         this.avanceCapturistas=response.data['avanceCapturistas']
         this.avanceEstado=response.data['estadosDeBoleta']
         this.totalboletas=response.data['totalBoletasRegistradas']
-        console.log(this.avanceEstado)
         this.inicializarGraficaSemanal()
 
         this.avanceMensual.forEach(item => {
@@ -198,7 +197,6 @@ public updateFlag:boolean = false;
         this.inicializarGraficaEstado()
       }
       else{
-        console.log("Ocurrio un error al realizar la peticion")
       }
     })
   }
@@ -212,7 +210,6 @@ public updateFlag:boolean = false;
       categoriasSemanas[i] = element;
     }
     
-    console.log(categoriasSemanas)
 
     
 
@@ -302,7 +299,6 @@ inicializarGraficaEstado() {
       // Forzamos la actualización del gráfico
       this.updateFlag = true;
   } else {
-      console.error("La serie no está definida.");
   }
 }
 

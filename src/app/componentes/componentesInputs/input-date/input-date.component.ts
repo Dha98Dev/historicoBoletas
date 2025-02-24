@@ -49,7 +49,6 @@ else{
   this.esCampoValido=false 
 }
 
-// console.log("fecha enviada "+ this.formFecha.get('fecha')?.value)
   }
 
   marcarTocado(valor:string|number){

@@ -50,7 +50,6 @@ export class ModalFiltroConsultaComponent {
 
 
   emitirValor(filtro: any) {
-    // console.log(filtro)
     this.OnEmitFiltro.emit(filtro);
   }
   recibirCurp(event: any) {
@@ -92,7 +91,6 @@ this.filtroSeleccionado='5'
   }
   recibirLocalidad(nombreCampo: string, event: any){
     this.filtroLocalidad=event;
-    console.log(this.filtroLocalidad)
     this.filtroSeleccionado='6'
     // if (this.filtroLocalidad!= '') {
     //   this.disabled=false
@@ -124,7 +122,6 @@ this.filtroSeleccionado='5'
       default:
         break;
     }
-    console.log(filtro)
     this.emitirValor(filtro);
   }
 }

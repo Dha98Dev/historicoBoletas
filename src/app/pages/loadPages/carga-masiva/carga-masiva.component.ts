@@ -249,7 +249,6 @@ export class CargaMasivaComponent {
                 let cicloValido = this.validarCicloEscolar(data.ciclo.trim());
                 let boletaValida = true;
                 let cctValido =this.validarLongitudCentroTrabajo(data.clave_ct)
-                console.log(cctValido)
 
                 // validamos la longitud del  arreglo de materias 
                 if (materias.length== 0) {
@@ -379,7 +378,6 @@ export class CargaMasivaComponent {
         let calSecundaria = { Primero: 0, Segundo: 0, Tercero: 0, calificacionFinal: 0 }
         let data = { "token": this.userService.obtenerToken(), "calPrimaria": bol.materias, calSecundaria, "claveCct": bol.clave_ct, "nombreCct": bol.nombre_ct, "cicloEscolar": bol.ciclo, "zonaEscolar": bol.zona, "planEstudio": bol.plan_estudio, "nivelEducativo": bol.nivel, "localidad": bol.localidad, "turno": bol.turno, "grupo": bol.grupo, "folioBoleta": bol.folio, "directorCorrespondiente": "", "nombre": bol.nombre, "apellidoPaterno": bol.apellido_paterno, "apellidoMaterno": bol.apellido_materno, "curp": bol.curp }
 
-    console.log(data)
 
 
         await this.enviarBoletaPrimaria(data, bol);
@@ -469,7 +467,6 @@ export class CargaMasivaComponent {
   }
   
   async enviarBoletaPrimaria(data: any, boleta: boletaPrimaria) {
-    // console.log(data)
     try {
       const response = await firstValueFrom(this.historialServiceAdd.cargarBoletaExcel(data));
       if (!response.error) {

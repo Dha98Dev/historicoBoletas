@@ -1,12 +1,12 @@
 <div class="contenedor-mensaje " #modal>
     <div class="mensaje px-3 d-flex justify-content-around align-items-center flex-column" #mensaje>
-      <div class="cerrar"><button class="close btn-rose" (click)="closeModal()"> <i [class]="iconos.XToClose"></i>
+      <div class="cerrar"><button class="close btn btn-rose" mat-raised-button (click)="closeModal()"> <i [class]="iconos.XToClose"></i>
         </button></div>
       <div class="icono"> <i class="fs-2 animate__animated  text-warning " #iconoMensaje
           [class]="iconos.Notification"></i> </div>
-      <div class="descripcion  text-uppercase  "> {{mensajeNotificacion}} </div>
+      <div class="descripcion  text-uppercase fw-semibold fs-6  "> {{mensajeNotificacion}} </div>
       <div class="accion">
-        <button mat-raised-button class="text-capitalize btn aceptar" (click)="closeModal()"> Aceptar </button>
+        <button mat-raised-button class="text-capitalize btn  aceptar" (click)="closeModal()"> Aceptar </button>
       </div>
     </div>
   </div>

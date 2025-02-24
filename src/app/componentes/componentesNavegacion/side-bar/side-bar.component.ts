@@ -54,7 +54,7 @@ setInterval(() => {
 boletasPorVerificar() {
   let token= this.userService.obtenerToken() != null ? this.userService.obtenerToken() : ""
   const data = { token};
-  // console.log(data);
+
   if(token!=""){
     this.boletasXVerificar.numeroBoletasXVerificar(data).subscribe(response =>{
       if(!response.error){

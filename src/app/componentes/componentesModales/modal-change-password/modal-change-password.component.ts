@@ -88,7 +88,6 @@ export class ModalChangePasswordComponent {
 
   limpiarFormulario() {
    this.newPassword.reset();
-   console.log("el formulario ya se reinicio")
   }
 
   getFieldStatus(field: string): number {

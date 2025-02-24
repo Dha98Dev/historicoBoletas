@@ -170,8 +170,10 @@
                     </form>
                 </div>
                 
+
                 <h2 class="text-center mt-2">Calificaciones</h2>
 
+                @if(mostrarCalificaciones){
                    <!-- informacion de las calificaciones en caso de que sea primaria -->
                    <div class="primaria mt-4 mb-4" *ngIf="datosCaptura.nivel =='PRIMARIA'">
                     <div class="calificaciones d-flex">
@@ -203,10 +205,10 @@
                     
                     </div>
                   
-                    <div class="calificaciones d-flex">
+                    <!-- <div class="calificaciones d-flex">
                       <div class="fs-6 lead text-center w-100 border py-2 fw-semibold">Promedio Final</div>
-                      <div class="fs-6 lead text-center w-100 border py-2 fw-bold"> {{ promedioPrimaria }} </div>
-                    </div>
+                      <div class="fs-6 lead text-center w-100 border py-2 fw-bold"> {{ datosCaptura.promedioGral  }} </div>
+                    </div> -->
                   </div>
                   
         
@@ -232,16 +234,23 @@
                 <div class="fs-6 lead text-center w-100 border ">3er año</div>
                 <input (change)="validarCalificacionesSecundaria($event)" id="tercero" type="number" class="form form-control text-center w-100" formControlName="Tercero"  >
               </div>
-              <div class="calificaciones d-flex ">
+              <!-- <div class="calificaciones d-flex ">
                 <div class=" lead fs-6 text-center w-100 border fw-semibold">Promedio final</div>
-                <input class="form-control text-center " type="text" [value]="calificacionesSecundaria.get('calificacionFinal')?.value" aria-label="Disabled input example" disabled readonly>
-              </div>
+                <input class="form-control text-center " type="text" [value]="calificacionesSecundaria.get('calificacionFinal')?.value" aria-label="Disabled input example" >
+              </div> -->
             </form>
-
-
-            </div>
+            
+          }
+          <form [formGroup]="persona" class="d-flex flex-wrap">
+            <div class="border rounded fw-semibold text-center w-50"> Promedio General:</div>
+            <input type="text" class=" form form-control w-50 text-center border" placeholder="Ingrese el promedio general" [value]="persona.get('promedioGral')?.value" formControlName="promedioGral">
+          </form>
+<pre>
+  {{datosCaptura.promedioGral}}
+</pre>
+          </div>
         </div>
-    </div>
+      </div>
 
     <div class="update d-flex justify-content-center w-100 ">
 

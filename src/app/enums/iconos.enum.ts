@@ -37,4 +37,6 @@ export enum Iconos {
     ZoomMenos= 'fas fa-search-minus',
     RotateLeft ='fas fa-undo',
     Restore = 'fas fa-sync-alt',
+    MoreFile='fas fa-file-signature',
+    List='fas fa-list'
   }

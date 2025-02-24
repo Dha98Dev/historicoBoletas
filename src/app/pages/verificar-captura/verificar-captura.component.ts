@@ -28,7 +28,7 @@ export class VerificarCapturaComponent {
   public dataEscuela: opciones[] = []
   public iconos = Iconos
   public promedioPrimaria: number = 0
-  public pdfUrlSolicitud: string = 'http://localhost/historicoCalificaciones/pdfs/solicitudBoleta.php?boleta='
+  public pdfUrlSolicitud: string = 'https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/pdfs/solicitudBoleta.php?boleta='
   public pdfSeleccionado: string = ''
   private pdfTemporal: string =''
   public infoAdicional = false
@@ -78,8 +78,6 @@ export class VerificarCapturaComponent {
 
 
         } catch (error) {
-          console.error('Error al desencriptar o procesar idBoleta:', error);
-
           // Redirigir en caso de error
           this._route.navigate(['verificacion']);
         }
@@ -94,19 +92,10 @@ export class VerificarCapturaComponent {
 
   getInfoCaptura() {
     let data: datosFiltro = { folio: "", curp: "", localidad: "", cct: "", boleta: this.idBoleta.toString(), numeroFiltro: "7", estado: "", token: this.userService.obtenerToken(), idCiclo: "", nombre: "" }
-    console.log(data);
     this.historialGet.getDatosBoleta(data).subscribe(response => {
       if (!response.error) {
         this.datosCaptura = response.data[0]
-        let suma = 0
-        let contador = 0;
-        this.datosCaptura.calificacionesPrimaria.forEach(cal => {
-          if (cal.nombre_materia != 'LENGUA QUE HABLA') {
-            suma += parseFloat(cal.calificacion)
-            contador++;
-          }
-        })
-        this.promedioPrimaria = Number((suma / contador).toFixed(1))
+        console.log(this.datosCaptura)
 
         this.loader = false;
         let datosEscuela = ["clave_centro_trabajo", "nombre_cct", "grupo", "turno", "ciclo", "nivel", "plan_estudio", "zona", "localidad", "director_ct"];
@@ -128,7 +117,6 @@ export class VerificarCapturaComponent {
           extension_archivo: this.datosCaptura.extension_archivo,
           fecha_registro: this.datosCaptura.fecha_registro_hoja
         }
-        console.log(this.datosCaptura.calificacionesPrimaria)
       }
       else {
         this.loader = false;
@@ -172,7 +160,6 @@ export class VerificarCapturaComponent {
 
   descargarSolicitudServicios() {
     this.pdfSeleccionado = this.pdfUrlSolicitud + this.datosCaptura.boletaSolicitudServicio + '&tpp=' + this.tipoPresentacionPromedio
-    console.log(this.pdfSeleccionado)
   }
 
   RedireccionarAEditar() {
@@ -209,7 +196,6 @@ export class VerificarCapturaComponent {
 
   recibirInfoSolicitudDuplicado(Event: any) {
     let data = { ...Event, token: this.userService.obtenerToken(), idBoleta: this.datosCaptura.id_boleta }
-    console.log(data);
     this.llenarInfoAcional(data)
   }
 

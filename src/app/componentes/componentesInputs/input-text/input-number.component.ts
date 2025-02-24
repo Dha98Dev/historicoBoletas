@@ -56,7 +56,6 @@ export class InputNumberComponent {
       this.campoValido = false;
       this.campoTocado = true;
     } else {
-      console.log(this.Validaciones.limpiarParaSQL(valor))
       this.onEmitValueInput.emit(this.Validaciones.limpiarParaSQL(valor));
       this.campoValido = true;
     }

@@ -14,12 +14,11 @@ export class AuthCapturistaGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
     const tipoUsuario = parseInt(this.userService.obtenerTipoUsuario());
     const isLoggedIn = this.userService.isLoggedIn();
-    console.log(isLoggedIn, tipoUsuario);
 
     if (isLoggedIn && (tipoUsuario ==1 || tipoUsuario == 2 || tipoUsuario == 3)) {
       return true;
     } else {
-      return this.router.createUrlTree(['/auth/login']);
+      return this.router.createUrlTree(['/login']);
     }
   }
   }

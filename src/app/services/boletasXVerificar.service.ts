@@ -9,13 +9,13 @@ import { RespuestaPeticionHistorial } from '../interfaces/respuesta.interface';
 export class BoletasXVerificarService {
 
     private numeroBoletas: number = 0;
-  private UrlHistorialBoletas:string='http://localhost/historicoCalificaciones/api/';
+  private UrlHistorialBoletas:string='https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/api/';
   constructor(private http:HttpClient) { }
 
   
 
   numeroBoletasXVerificar(data:any):Observable<RespuestaPeticionHistorial>{
- return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNumeroBoletasPorVerificar', JSON.stringify(data))
+ return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'get/getNumeroBoletasPorVerificar.php', JSON.stringify(data))
 
   } 
 

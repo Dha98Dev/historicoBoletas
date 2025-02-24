@@ -367,14 +367,6 @@
             (keydown)="moveFocus($event, i + 1)" [valorMinimo]="-1" [valorMaximo]="10"
             [smallIndicator]="true"></app-text-box>
         </div>
-        <form [formGroup]="egresado" class="calificaciones-item d-flex">
-          <div class="materia border w-50 py-2  lead text-center fw-semibold">Promedio Final</div>
-         <div class="w-50  p-relative">
-          <input class="text-center form form-control " formControlName="promedioGral">
-          <app-label-input-incompleto *ngIf="getFieldStatus(3,'promedioGral') == 2"
-          [smallIndicator]="true"></app-label-input-incompleto>
-         </div>
-        </form>
       </div>
     </div>
 
@@ -425,12 +417,15 @@
               [smallIndicator]="true"></app-label-input-incompleto>
           </div>
         </div>
-        <div class="calificaciones-item d-flex">
-          <div class="materia border w-100 lead text-center">Promedio Final</div>
-        <input type="number" class="form form-control" formControlName="calificacionFinal" (change)="agregarPromedio()">
-        </div>
       </form>
     </div>
+
+<div class="d-flex justify-content-center">
+  <form [formGroup]="egresado" class="calificaciones-item d-flex mt-3 col-11">
+    <div class="materia border w-100 lead text-center fw-semibold">Promedio Final</div>
+  <input type="number" class="form form-control" formControlName="promedioGral" >
+  </form>
+</div>
   
   </div>
 
@@ -448,3 +443,7 @@
 <!-- <app-modal-confirmacion></app-modal-confirmacion> -->
 <!-- 
 <app-modal-confirmacion #modalSeleccionarTipoPromedio (accionConfirmada)="SeleccionarTipoPromedio($event)"  [titulo]="'¿Como desea visualizar el promedio final?'" [mensaje]="'seleccione como se deberia de mostrar el promedio, es decir,  redondeando los puntos decimales o mostrando los puntos decimales'" [textoBotonConfirmar]="'Redondeado'" [textoBotonCancelar]="'Con punto Decimal'"></app-modal-confirmacion> -->
+
+<!-- <app-modal-mensaje-notificacion [mensajeNotificacion]="'Esta es una version preeliminar  del sistema, aun no se encuentra liberado para captura masiva, solo para  pruebas de funcionamiento correcto'" [mostrar]="true"></app-modal-mensaje-notificacion> -->
+
+<app-modal-confirmacion></app-modal-confirmacion>

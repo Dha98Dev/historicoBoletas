@@ -82,7 +82,6 @@ else{
 
 marcarTocado(valor:string|number){
   this.campoTocado=true;
-  // console.log("el campo datepickr fue tocado y el valor es:  " + valor)
 this.validarCampo(valor)
 }
 
@@ -95,7 +94,6 @@ validarCampo(valor: string|number){
 
 convertirMayusculas(valor:string|number){
   this.valorCajaTexto=valor.toString().toUpperCase()
-  // console.log(this.valorCajaTexto)
 }
 ngOnChanges(changes: SimpleChanges){
 if (changes['Valor'] && this.Valor != "" ) {

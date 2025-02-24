@@ -22,7 +22,7 @@ export class PrevisualizadorPdfComponent {
     
       if (changes['pdfUrl'] && changes['pdfUrl'].currentValue) {
         this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrl);
-        console.log('la url del pdf es ' +  this.pdfUrl);
+
       }
     }
 

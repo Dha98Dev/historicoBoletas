@@ -41,7 +41,7 @@ export class EditarBoletaComponent {
   public calificacionesValidas: boolean = true
   public completo: boolean = false
   public promedioSecundaria: number = 0
-
+  public mostrarCalificaciones: boolean = false
 
   datosCct: FormGroup = {} as FormGroup
   persona: FormGroup = {} as FormGroup
@@ -91,7 +91,8 @@ export class EditarBoletaComponent {
       apellidoMaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
       curp: ['', [Validators.pattern(
         /^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/i
-      )]]
+      )]],
+      promedioGral:['', [Validators.required, Validators.min(0), Validators.max(10)]]
     });
 
     this.calificacionesSecundaria = this.fb.group({
@@ -108,32 +109,19 @@ export class EditarBoletaComponent {
   }
 
   asignarValores() {
-    if (this.datosCaptura.calificacionesPrimaria.length > 0) {
-      let suma = 0;
-      let contador=0
-      this.datosCaptura.calificacionesPrimaria.forEach(element => {
-        if (element.nombre_materia!='LENGUA QUE HABLA') {
-          suma += parseFloat(element.calificacion)
-          contador++;
-        }
-      });
-      this.promedioPrimaria = (suma / contador).toFixed(1);
-      console.log(this.promedioPrimaria)
-      this.calificacionesPrimaria
+    if (this.datosCaptura.calificacionesPrimaria.length > 0 && this.datosCaptura.calificacionesPrimaria[0].calificacion != null) {
+     this.mostrarCalificaciones=true;
     }
 
     if (this.datosCaptura.nivel == 'SECUNDARIA') {
-      // this.promedioSecundaria=parseFloat(this.datosCaptura.calificacionesSecundaria.Primero)+ parseFloat(this.datosCaptura.calificacionesSecundaria.Segundo)
-      this.promedioSecundaria = (parseFloat(this.datosCaptura.calificacionesSecundaria.Primero as unknown as string) + parseFloat(this.datosCaptura.calificacionesSecundaria.Segundo as unknown as string) + parseFloat(this.datosCaptura.calificacionesSecundaria.Tercero as unknown as string)) / 3
-
-
-
-
+      if (this.datosCaptura.calificacionesSecundaria.Primero > 0) {
+        this.mostrarCalificaciones=true;
+      }
       this.calificacionesSecundaria.patchValue({
         Primero: this.datosCaptura.calificacionesSecundaria.Primero,
         Segundo: this.datosCaptura.calificacionesSecundaria.Segundo,
         Tercero: this.datosCaptura.calificacionesSecundaria.Tercero,
-        calificacionFinal: this.promedioSecundaria
+        calificacionFinal: this.datosCaptura.promedioGral
       });
 
 
@@ -142,7 +130,8 @@ export class EditarBoletaComponent {
       nombre: this.datosCaptura.nombre,
       apellidoPaterno: this.datosCaptura.apellido_paterno,
       apellidoMaterno: this.datosCaptura.apellido_materno,
-      curp: this.datosCaptura.curp
+      curp: this.datosCaptura.curp,
+      promedioGral:this.datosCaptura.promedioGral
     })
     this.datosCct.patchValue({
       claveCt: this.datosCaptura.clave_centro_trabajo,
@@ -200,26 +189,6 @@ export class EditarBoletaComponent {
       }
     })
   }
-
-
-  // recibirCalificacionesPrimaria(id:number, calificacion:any, nombre_materia:string) {
-  //   let cal:Calificacion={calificacion:calificacion, id_calificacion_primaria:id, nombre_materia:nombre_materia}
-  //   let suma=0;
-
-  //   this.calificacionesPrimaria.forEach((item, index) => {
-  //     if (item.id_calificacion_primaria === cal.id_calificacion_primaria) {
-  //       this.calificacionesPrimaria .splice(index, 1); // Eliminar el elemento
-  //     }
-  //   });
-
-  //   this.calificacionesPrimaria.push(cal) ;
-
-  //     this.calificacionesPrimaria.forEach(cal =>{
-  //       suma+=parseFloat(cal.calificacion)
-  //     })
-  //     this.promedioPrimaria=(suma/this.datosCaptura.calificacionesPrimaria.length).toString()
-  //   }
-
 
   trackById(index: number, item: any): number {
     return item.id; // o alguna propiedad única
@@ -347,24 +316,31 @@ export class EditarBoletaComponent {
 
 
   actualizarInformacion() {
+
+    if (this.datosCaptura.nivel== 'SECUNDARIA') {
+      this.calificacionesSecundaria.patchValue({calificacionFinal:this.persona.get('promedioGral')?.value})
+    }
+
     if ((this.datosCct.valid && this.persona.valid && this.calificacionesValidas) || (this.datosCct.valid && this.persona.valid && this.calificacionesSecundaria.valid)) {
-      let data = { token: this.userService.obtenerToken(), ...this.persona.value, ...this.datosCct.value, calificacionesSecundaria: this.calificacionesSecundaria.value, calificacionesPrimaria: this.calificacionesPrimaria }
+
+      let data = { token: this.userService.obtenerToken(), ...this.persona.value, ...this.datosCct.value, calificacionesSecundaria: this.calificacionesSecundaria.value, calificacionesPrimaria: this.calificacionesPrimaria,updateCalificaciones:this.mostrarCalificaciones }
       
-      console.log(data);
       this.serviceUpdate.updateInfoBoleta(data).subscribe(response => {
-        
+        console.log(data)
         if (!response.error) {
-          console.log('informacion actualizada correctamente')
+          this.notificacionesService.mostrarAlertaConIcono('Actualizar informacion', response.mensaje,'success')
+          this.mostrarCalificaciones=false;
+          this.getInfoCaptura()
         }
         else{
-          this.notificacionesService.mostrarAlertaConIcono("Correccion de la información", "ocurrio un error al corregir la información", 'error');
+          this.notificacionesService.mostrarAlertaConIcono("Correccion de la información", response.mensaje, 'error');
         }
       })
 
-    }
-    else {
-      this.notificacionesService.mostrarAlertaConIcono('Actualizar informacion', 'Verifique que la informacion que ingreso sea valida', 'error')
-    }
+      }
+      else {
+        this.notificacionesService.mostrarAlertaConIcono('Actualizar informacion', 'Verifique que la informacion que ingreso sea valida', 'error')
+      }
 
   }
 

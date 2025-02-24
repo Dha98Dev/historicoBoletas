@@ -87,8 +87,9 @@ public listadoTUsuarios:tUsuarios[] = []
           }
           else{
             this.notificacionesService.mostrarAlertaConIcono("Agregar Usuario",response.mensaje,'error' )
-            console.log(response)
+
           }
+          console.log(response)
         })
       }
       else{
@@ -104,7 +105,6 @@ this.historialGet.getTiposUsuarios(data).subscribe(response => {
     this.listadoTUsuarios = response.data
   }
   else{
-    console.log(response)
   }
 })
     }
@@ -114,11 +114,9 @@ this.historialGet.getTiposUsuarios(data).subscribe(response => {
        
        if (opcionLimpieza === 1) {
         nuevaCadena = this.Validaciones.normalizeSpacesToUpperCase(event.target.value);
-        console.log(nombreCampo + ' ------------ ' + nuevaCadena); 
        }
        else{
         nuevaCadena = this.Validaciones.normalizeSpaces(event.target.value);
-        console.log(nombreCampo + ' ------------ ' + nuevaCadena); 
        }
        
         this.newUser.patchValue({ [nombreCampo]: nuevaCadena });

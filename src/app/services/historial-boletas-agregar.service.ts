@@ -8,11 +8,11 @@ import { RespuestaPeticionHistorial } from '../interfaces/respuesta.interface';
 })
 export class HistorialBoletasAgregarService {
 
-  private UrlHistorialBoletas:string='http://localhost/historicoCalificaciones/api/';
+  private UrlHistorialBoletas:string='https://srv37app003.sepen.gob.mx/historicosCertificadosBackend/api/';
   constructor(private http:HttpClient) { }
 
   agregarMateria(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarMateria', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarMateria.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)
@@ -22,7 +22,7 @@ export class HistorialBoletasAgregarService {
       )
   }    
   agregarDirector(data:any):Observable<any>{
-    return this.http.post<any>(`${this.UrlHistorialBoletas}`+'agregar/agregarDirector', JSON.stringify(data)).pipe(
+    return this.http.post<any>(`${this.UrlHistorialBoletas}`+'agregar/agregarDirector.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)
@@ -33,7 +33,7 @@ export class HistorialBoletasAgregarService {
   }  
   
   asignarMaterias(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/asignarMaterias', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/asignarMaterias.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)
@@ -43,7 +43,7 @@ export class HistorialBoletasAgregarService {
       )
   }  
   cargarBoleta(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarBoleta', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarBoleta.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)
@@ -54,7 +54,7 @@ export class HistorialBoletasAgregarService {
   }  
 
   agregarPlan(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarPlanEstudio', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarPlanEstudio.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)
@@ -66,7 +66,7 @@ export class HistorialBoletasAgregarService {
 
   
   cargarBoletaExcel(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarBoletasExcel', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarBoletasExcel.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)
@@ -77,7 +77,7 @@ export class HistorialBoletasAgregarService {
   }  
 
   cargarBoletaSoloPromedio(data:any):Observable<RespuestaPeticionHistorial>{
-    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarBoletaSimple  ', JSON.stringify(data)).pipe(
+    return this.http.post<RespuestaPeticionHistorial>(`${this.UrlHistorialBoletas}`+'agregar/agregarBoletaSimple.php', JSON.stringify(data)).pipe(
       tap(response =>{
         if(response.error && !response.isValidToken){
           // this.userService.tokenInvalido(response.mensaje)

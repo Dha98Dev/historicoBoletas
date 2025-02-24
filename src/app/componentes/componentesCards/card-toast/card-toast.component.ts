@@ -55,7 +55,6 @@ export class CardToastComponent {
   
   ngOnChanges(changes: SimpleChanges) {
   if (changes['mostrar']) {
-    console.log(changes['mostrar'])
     if (this.mostrar) {
       this.openModal()
     } else {

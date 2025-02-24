@@ -28,10 +28,9 @@ export class ValidacionesService {
     const numero = parseInt(aValidar, 10);
     
     if (!Number.isNaN(numero)) {
-      console.log('Sí es un número');
       return true;
     } else {
-      console.log('No es un número' + aValidar);
+
       return false;
     }
   }

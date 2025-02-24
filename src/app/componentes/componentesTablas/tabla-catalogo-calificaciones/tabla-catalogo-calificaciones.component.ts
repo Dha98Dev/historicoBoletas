@@ -81,7 +81,6 @@ public OnEmitRegistroSeleccionado:EventEmitter<any> = new EventEmitter();
     };
 
 
-    // console.log('Inicializando datatable...')
   }
   // 
 
@@ -115,7 +114,6 @@ public OnEmitRegistroSeleccionado:EventEmitter<any> = new EventEmitter();
   ngOnChanges(changes: SimpleChanges) {
     if (changes['datosBoleta']) {
       this.inicializarDatatable()
-      console.log("Datos de boleta", this.datosBoleta)
     }
   }
 

@@ -25,12 +25,9 @@ export class RevisarPageComponent {
 
   getRegistros(){
     let data: datosFiltro  = { cct: "", idCiclo: "", boleta: "",estado:'En Captura', nombre: "", localidad: "", folio: "", curp: "", numeroFiltro: "", "token": this.userService.obtenerToken() }
-    console.log(data)
-    // console.log(data)
     this.historialGet.getDatosBoleta(data).subscribe(response =>{
       if(!response.error){
         this.registros = response.data
-        console.log(this.registros)
 
         // creamos un ciclo para encriptar el  id de la boleta
 
@@ -40,7 +37,6 @@ export class RevisarPageComponent {
 
       }
       else{
-        console.log(response.mensaje)
       }
     })
   }

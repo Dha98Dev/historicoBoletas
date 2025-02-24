@@ -9,30 +9,34 @@
         <i class="query" [class]="iconos.Consulta"></i> Consultar
       </button> 
       <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarCertificado" routerLinkActive="activo">
-        <i class="load"  [class]="iconos.Tools"></i>Cargar certificado
+        <i class="load"  [class]="iconos.MoreFile"></i>Cargar certificado solo promedio
       </button>
-    <!-- <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarInformacion" routerLinkActive="activo">
-      <i class="load" [class]="iconos.DataBase"></i> Cargar calificaciones
-    </button> -->
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargaMasiva" routerLinkActive="activo">
-      <i class="load-masiva" [class]="iconos.ExcelFile"></i>Carga Masiva
-    </button>
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1'" routerLink="avance" routerLinkActive="activo">
-      <i class="avance" [class]="iconos.Chart"></i>Avance
+    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargarInformacion" routerLinkActive="activo">
+      <i class="load" [class]="iconos.DataBase"></i> Cargar certificado con calificaciones
     </button>
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="verificacion" routerLinkActive="activo">
       <i class="verificacion" [class]="iconos.Check"></i>Verificación <small class="text-danger fw-bold"> {{boletas}} </small> 
     </button>
+    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="userList" routerLinkActive="activo">
+      <i class="planes" [class]="iconos.List"></i> Listado de Usuarios
+    </button> 
+    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="registro" routerLinkActive="activo">
+      <i class="new-user" [class]="iconos.NewUser"></i>Nuevo Usuario
+    </button>
+    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="avance" routerLinkActive="activo">
+      <i class="avance" [class]="iconos.Chart"></i>Avance
+    </button>
+    <!-- <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="cargaMasiva" routerLinkActive="activo">
+      <i class="load-masiva" [class]="iconos.ExcelFile"></i>Carga Masiva
+    </button> -->
     <!-- <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='2' || getTipoUsuario() =='3' " routerLink="prueba" routerLinkActive="activo">
       <i class="tools" [class]="iconos.Tools"></i>Herramientas
     </button>
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1'" routerLink="planesEstudio" routerLinkActive="activo">
       <i class="planes" [class]="iconos.Book"></i>Planes de Estudio
     </button> -->
-    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="registro" routerLinkActive="activo">
-      <i class="new-user" [class]="iconos.NewUser"></i>Nuevo Usuario
-    </button>
    </div>
   </div>
 </div>
   
+caad191003hvzbrla3

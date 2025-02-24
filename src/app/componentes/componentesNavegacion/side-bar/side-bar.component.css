@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Merienda:wght@300&family=Oleo+Script:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Merienda:wght@900&family=Oleo+Script:wght@400;700&family=Varela+Round&display=swap');
+
 
 
 .side-bar{
-    width: 250px !important;
+    width: 350px !important;
 }
 .btn-close{
     background: none;
@@ -32,38 +33,6 @@ button{
     font-weight: 300;
     font-style: normal;
 }
-.text-danger{
-    color: yellow;
+i{
+    color: #9ca3af;
 }
-.activo{
-    background: #414548;
-}
-.query {
-    color: #4CAF50; /* Verde para consultas, asociado a éxito o búsqueda */
-  }
-  
-  .load {
-    color: #FF9800; /* Naranja para cargas, relacionado con procesos activos */
-  }
-  .load-masiva{
-    color: #2dd4bf;
-  }
-  
-  .planes {
-    color: #FFC107; /* Amarillo para planes, simboliza conocimiento */
-  }
-  .new-user{
-    color: #9333ea;
-  }
-  .avance {
-    color: #2196F3; /* Azul para progreso, simboliza confianza */
-  }
-  
-  .verificacion {
-    color: #F44336; /* Rojo para verificaciones, asociado a alertas o revisión */
-  }
-  
-  .tools {
-    color: #9E9E9E; /* Gris para herramientas, neutral y técnico */
-  }
-  
