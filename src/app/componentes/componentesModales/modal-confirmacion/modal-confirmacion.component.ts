@@ -13,16 +13,16 @@ constructor(){}
 
 // estos son los inputs 
 @Input()
-public titulo:string = '¿Desea confirmar la Veracidad de la informacion ?'
+public titulo:string = '¿Desea confirmar la Veracidad de la información ?'
 
 @Input()
-public mensaje:string = 'La informacion se marcará como revisada, dando por echo que la informacion capturada es correcta '
+public mensaje:string = 'La información se marcará como revisada, dando por hecho que la información capturada es correcta '
 
 @Input()
 public textoBotonConfirmar:string = 'Confirmar'
 
 @Input()
-public textoBotonCancelar:string = 'Cancelar'
+public textoBotonCancelar:string = 'No Confirmar'
 
 @Output() accionConfirmada = new EventEmitter<boolean>();
 mostrarModal: boolean = false;

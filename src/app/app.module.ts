@@ -56,6 +56,9 @@ import { CargaSimpleComponent } from './pages/loadPages/carga-simple/carga-simpl
 import { CardToastComponent } from './componentes/componentesCards/card-toast/card-toast.component';
 import { CardMiniaturaImagenComponent } from './componentes/componentesCards/card-miniatura-imagen/card-miniatura-imagen.component';
 import { PrevisualizadorPdfComponent } from './componentes/componentesModales/previsualizador-pdf/previsualizador-pdf.component';
+import { DeleteRegistroComponent } from './pages/delete-registro/delete-registro.component';
+import { CardMensajeComponent } from './componentes/componentesCards/card-mensaje/card-mensaje.component';
+import { ModalMotivoBajaComponent } from './componentes/componentesModales/modal-motivo-baja/modal-motivo-baja.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +108,10 @@ import { PrevisualizadorPdfComponent } from './componentes/componentesModales/pr
     CargaSimpleComponent,
     CardToastComponent,
     CardMiniaturaImagenComponent,
-    PrevisualizadorPdfComponent
+    PrevisualizadorPdfComponent,
+    DeleteRegistroComponent,
+    CardMensajeComponent,
+    ModalMotivoBajaComponent
   ],
   imports: [
     BrowserModule,

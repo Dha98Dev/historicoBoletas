@@ -4,7 +4,7 @@ p{
 
 .captura{
 background: #f59e0b;
-color: white    ;
+color: #000;
 }
 .revisado{
 background: #14b8a6;
@@ -26,6 +26,9 @@ width: 45%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+}
+.botones button{
+font-size: 15px  !important;
 }
 
 @media(max-width:1100px){

@@ -60,6 +60,19 @@
     .presentacion-promedio{
         width: 90%;
     }
+
+    .clean-form{
+      background: #FFCCD3;
+      color: #4D0218;
+    }
+    .autoincrementar{
+      background: #D0FAE5;
+      color: #002C22;
+    }
+    .no-increment{
+     background: #FFEDD4;
+     color: #441306; 
+    }
     
     
     

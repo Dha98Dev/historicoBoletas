@@ -54,7 +54,7 @@ if(mensaje != '' || mensaje !=  undefined || mensaje != null){
 
 
 Toastify(mensaje:string, clase:string){
-  let background= clase == 'error' ? 'linear-gradient(270deg, hsla(311, 94%, 50%, 1) 20%, hsla(0, 96%, 46%, 1) 100%)' : ' linear-gradient(270deg, hsla(107, 100%, 31%, 1) 20%, hsla(121, 100%, 29%, 1) 100%)'
+  let background= clase == 'error' ? 'linear-gradient(270deg, hsla(311, 94%, 50%, 1) 20%, hsla(0, 96%, 46%, 1) 100%)' : 'linear-gradient(90deg, hsla(165, 60%, 11%, 1) 0%, hsla(149, 54%, 31%, 1) 100%)'
 
   
   Toastify({
@@ -64,7 +64,7 @@ Toastify(mensaje:string, clase:string){
     duration: 7000,
     offset: {
       x: 0, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
-      y: 100 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+      y: 800 // vertical axis - can be a number or a string indicating unity. eg: '2em'
     },
     style: {
       background: background,

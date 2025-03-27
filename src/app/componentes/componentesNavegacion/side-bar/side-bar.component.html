@@ -1,6 +1,6 @@
 <div class="offcanvas offcanvas-start side-bar" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title w-100" id="offcanvasWithBothOptionsLabel">Menu de Navegacion</h5>
+    <h5 class="offcanvas-title w-100 fs-6"  id="offcanvasWithBothOptionsLabel">Menu de Navegacion</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" > <i [class]="iconos.XToCloseRounded"></i> </button>
   </div>
   <div class="offcanvas-body">
@@ -15,13 +15,16 @@
       <i class="load" [class]="iconos.DataBase"></i> Cargar certificado con calificaciones
     </button>
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="verificacion" routerLinkActive="activo">
-      <i class="verificacion" [class]="iconos.Check"></i>Verificación <small class="text-danger fw-bold"> {{boletas}} </small> 
+      <i class="verificacion" [class]="iconos.Check"></i>Verificación <small class="fw-bold"> {{boletas}} </small> 
     </button>
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="userList" routerLinkActive="activo">
       <i class="planes" [class]="iconos.List"></i> Listado de Usuarios
     </button> 
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="registro" routerLinkActive="activo">
       <i class="new-user" [class]="iconos.NewUser"></i>Nuevo Usuario
+    </button>
+    <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() == '1' " routerLink="EliminarRegistro" routerLinkActive="activo">
+      <i class="new-user" [class]="iconos.Delete"></i>Eliminar Registro
     </button>
     <button class="text-left d-flex justify-content-start"  *ngIf="getTipoUsuario() =='1' || getTipoUsuario() =='3' " routerLink="avance" routerLinkActive="activo">
       <i class="avance" [class]="iconos.Chart"></i>Avance

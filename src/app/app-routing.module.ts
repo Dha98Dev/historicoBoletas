@@ -21,6 +21,7 @@ import { ListadoUsuariosComponent } from './pages/listado-usuarios/listado-usuar
 import { CargaMasivaComponent } from './pages/loadPages/carga-masiva/carga-masiva.component';
 import { PageNotFoundComponent } from './componentes/banners/page-not-found/page-not-found.component';
 import { CargaSimpleComponent } from './pages/loadPages/carga-simple/carga-simple.component';
+import { DeleteRegistroComponent } from './pages/delete-registro/delete-registro.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'editarBoleta/:idBoleta', component: EditarBoletaComponent, canActivate:[AuthRevisadorGuard]},
   { path: 'cargarCertificado', component: CargaSimpleComponent, canActivate:[AuthCapturistaGuard]},
   { path: 'userList', component:ListadoUsuariosComponent, canActivate:[AuthAdminGuard]},
+  { path: 'EliminarRegistro', component:DeleteRegistroComponent, canActivate:[AuthAdminGuard]},
   // {path:  'prueba', component: PaginaPruebaComponent},
   {path: 'notFound', component:PageNotFoundComponent},
   {

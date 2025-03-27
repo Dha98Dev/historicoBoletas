@@ -1,9 +1,16 @@
 <app-loader *ngIf="loader"></app-loader>
 
-<div class="formulario" *ngIf="!boletaGuardada">
-  <div class="d-flex justify-content-center align-items-center " *ngIf="boletaGuardada">
-    <h2 class="lead">Boleta Guardada correctamente</h2>
+<div class="d-flex justify-content-center  ">
+  <div class="col-11  d-flex gap-3 flex-wrap d-flex align-items-center ">
+    <button class="btn clean-form fw-semibold text-uppercase" (click)="limpiarFormulario()">Limpiar Formulario <i [class]="iconos.Delete"></i> </button>
+    <button class="btn fw-semibold text-uppercase" [ngClass]=" autoincrementarFolio ? 'autoincrementar ' : 'no-increment'" (click)="incrementFolio()">autoincrementar folio <i [class]="iconos.Incrementar"></i></button>
+    <small *ngIf="autoincrementarFolio" class="fw-semibold fs-6"> ---->   Esta activado  autoincrementar Folio</small>
+    <small *ngIf="!autoincrementarFolio" class="fw-semibold fs-6"> ---->  No  Esta activado  autoincrementar Folio</small>
   </div>
+</div>
+
+
+
 
   <div class=" d-flex justify-content-center">
     <div class="form-load-calificaciones col-11 d-flex gap-3 mt-3 flex-wrap">
@@ -299,4 +306,7 @@
     <!-- <app-previsualizador-archivos [imageUrl]="hojaCertificado.url_path"></app-previsualizador-archivos> -->
     <!-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">hola</button> -->
 
-    <app-modal-mensaje-notificacion [mensajeNotificacion]="'Esta es una version preeliminar  del sistema, aun no se encuentra liberado para captura masiva, solo para  pruebas de funcionamiento correcto'" [mostrar]="true"></app-modal-mensaje-notificacion>
+
+    <app-modal-motivo-baja #modalBaja [titulo]="'Ingrese el motivo por el que este registro no tendrá calificacion ni folio asignado'" (OnEmitInformacion)="recibirMotivo($event)" ></app-modal-motivo-baja>
+
+    <!-- <button (click)="modalBaja.mostrar()">mostrar modal de baja</button> -->

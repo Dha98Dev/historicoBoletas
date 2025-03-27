@@ -1,5 +1,5 @@
 <form [formGroup]="texto">
-    <input class="form-control" 
+    <input class="form-control input" 
     formControlName="texto"
            placeholder="{{placeholder}}"  
            #input 
@@ -20,9 +20,7 @@
     [texto]="'El Campo no Tiene  Formato Valido'"
     ></app-label-input-incompleto>
 
-    <pre>
-       ({{this.texto.get('texto')?.value}})
-    </pre>
+
 
   </form>
   

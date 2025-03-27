@@ -36,7 +36,7 @@
 
             <div class="verificada-por d-flex gap-3 align-items-center py-1 rounded px-3 w-100 shadow bg-light">
                 <p class="fw-semibold">Folio Boleta :  </p>
-                <p>{{datosCaptura.folio}}</p>
+                <p>{{datosCaptura.folio != '' ? datosCaptura.folio : 'No hay folio registrado'}}</p>
             </div>
 
             <div  matTooltip="Estado de la Captura"
@@ -67,11 +67,9 @@
            <div
            class="d-flex gap-2 promedio rounded px-3 py-2 c1 shadow"
            [ngClass]="{'captura': datosCaptura.estado_boleta == 'En Captura', 'revisado': datosCaptura.estado_boleta == 'Revisado'}" > 
-           <p class=" text-dark fw-semibold">promedio: </p> <p class="text-dark"> {{datosCaptura.promedioGral}} </p></div>
+           <p class=" text-dark fw-semibold">promedio: </p> <p class="text-dark"> {{datosCaptura.promedioGral  != '' ? datosCaptura.promedioGral : 'no se registró promedio' }} </p></div>
           </div>
-          <pre>
-            
-          </pre>
+        
           
 
 
@@ -131,7 +129,7 @@
 
         <div class="botones d-flex justify-content-end w-100 gap-4 mt-4" *ngIf="datosCaptura.estado_boleta != 'Revisado'">
             <button class="btn-teal" (click)="ConfirmarVerificacion()" mat-raised-button> <i [class]="iconos.Check"></i> Confirmar Vericidad</button>
-            <button class="btn-yellow-dark" (click)="RedireccionarAEditar()" mat-raised-button> <i [class]="iconos.Update"></i> Editar Informacion</button>
+            <button  (click)="RedireccionarAEditar()" mat-raised-button> <i [class]="iconos.Update"></i> Editar Informacion</button>
         </div>
         
     </div>

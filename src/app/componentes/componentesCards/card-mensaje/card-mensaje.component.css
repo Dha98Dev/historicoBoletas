@@ -1,0 +1,32 @@
+
+
+.contenedor-confirmacion.mostrar {
+    opacity: 1;
+    visibility: visible; /* Hace visible el contenedor */
+}
+
+
+.mensaje {
+    width: 100%;
+    background: #fafafa;
+    border-left: 8px solid var(--fondo-gris-oscuro);
+    transition: transform 0.3s;
+    border-left: 10px solid #333;
+}
+
+
+p {
+    margin-bottom: 0px !important;
+}
+
+.titulo {
+    font-size: 18px !important;
+}
+.small{
+    font-size: 13.5px;
+}
+
+@media(max-width:900px){
+    .mensaje{
+width: 90%;
+}}

@@ -12,6 +12,8 @@ import { NotificacionesService } from '../../../services/notificaciones.service'
 import { error } from 'jquery';
 import { CardToastComponent } from '../../../componentes/componentesCards/card-toast/card-toast.component';
 import { HistorialBoletasAgregarService } from '../../../services/historial-boletas-agregar.service';
+import { ModalMotivoBajaComponent } from '../../../componentes/componentesModales/modal-motivo-baja/modal-motivo-baja.component';
+import * as  Pako from 'pako';
 
 @Component({
   selector: 'app-carga-simple',
@@ -19,7 +21,7 @@ import { HistorialBoletasAgregarService } from '../../../services/historial-bole
   styleUrl: './carga-simple.component.css'
 })
 export class CargaSimpleComponent {
-  constructor(private tituloPagina: GetNombreService, private fb: FormBuilder, private userService: userService, private historialServiceGet: HistorialBoletasGetService, private Validaciones: ValidacionesService, private notificacionesService:NotificacionesService, private boletasAdd: HistorialBoletasAgregarService) { }
+  constructor(private tituloPagina: GetNombreService, private fb: FormBuilder, private userService: userService, private historialServiceGet: HistorialBoletasGetService, private Validaciones: ValidacionesService, private notificacionesService: NotificacionesService, private boletasAdd: HistorialBoletasAgregarService) { }
 
   datosGeneralesForm: FormGroup = {} as FormGroup
   calificacioneSecundaria: FormGroup = {} as FormGroup
@@ -35,15 +37,16 @@ export class CargaSimpleComponent {
   public fijarInformacion: boolean = false
   public animationClass: string = ''
   public iconos = Iconos
-  public boletaGuardada: boolean = false;
   public archivoCargado: archivos = {} as archivos;
-  public  hojaCertificado:hojaCertificado = {} as hojaCertificado
-  public dataToast:toastData = {} as toastData;
-  public EliminarArchivo:boolean=false
-  public hojaCargada:boolean=false 
-
-  @ViewChild('toast') toast!:CardToastComponent
+  public hojaCertificado: hojaCertificado = {} as hojaCertificado
+  public dataToast: toastData = {} as toastData;
+  public EliminarArchivo: boolean = false
+  public hojaCargada: boolean = false;
+  public autoincrementarFolio: boolean = false;
+  public folioActual:number = 0;
+  @ViewChild('toast') toast!: CardToastComponent
   @ViewChild('file', { static: false }) fileInput!: ElementRef;
+  @ViewChild('modalBaja') modalBaja!: ModalMotivoBajaComponent;
 
   ngOnInit(): void {
 
@@ -70,7 +73,7 @@ export class CargaSimpleComponent {
     }
     this.getPlanesEstudio();
     this.getNiveles()
-    
+
 
     this.datosGeneralesForm = this.fb.group({
       claveCct: ['', [Validators.required, Validators.pattern(/^18[A-Za-z]{3}[0-9]{4}[A-Za-z]$/), Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(10)]],
@@ -93,29 +96,30 @@ export class CargaSimpleComponent {
     })
 
     this.egresado = this.fb.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/), Validators.maxLength(60)]],
-      apellidoPaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(60)]],
-      apellidoMaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(60)]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.]*$/), Validators.maxLength(60)]],
+      apellidoPaterno: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.]+$/), Validators.maxLength(60)]],
+      apellidoMaterno: ['', [Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.]+$/), Validators.maxLength(60)]],
       curp: ['', [Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
-      folioBoleta: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/), Validators.maxLength(60)]],
-      promedioGral: ['', [Validators.required, Validators.pattern(/^[0-9]{1,2}(\.[0-9])?$/), Validators.max(10)]],
-
+      folioBoleta: ['', [ Validators.pattern(/^[a-zA-Z0-9]+(?:[-_][a-zA-Z0-9]+)*$/), Validators.maxLength(60)]],
+      promedioGral: ['', [ Validators.pattern(/^[0-9]{1,2}(\.[0-9])?$/), Validators.max(10)]],
+      motivoPromedioVacio:['', [Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜ.,\s]+$/), Validators.minLength(4)]
+    ]
     });
 
     this.getNiveles()
-    this.dataToast.mostrar=false;
+    this.dataToast.mostrar = false;
   }
 
   getNiveles() {
- let data= {token: this.userService.obtenerToken()}
- this.historialServiceGet.getNivelesEducativos(data).subscribe(response => {
-  if(!response.error){
-   this.nivelesEducativos=response.data
-  }
- })
+    let data = { token: this.userService.obtenerToken() }
+    this.historialServiceGet.getNivelesEducativos(data).subscribe(response => {
+      if (!response.error) {
+        this.nivelesEducativos = response.data
+      }
+    })
   }
 
-  
+
 
 
   getPlanesEstudio() {
@@ -259,45 +263,45 @@ export class CargaSimpleComponent {
 
 
   }
-  filtrarPlanEstudioByCiclo(){
-    let cicloEscolar:any=''
+  filtrarPlanEstudioByCiclo() {
+    let cicloEscolar: any = ''
     this.planesEstudio.forEach(plan => {
-      plan.selected=false;
+      plan.selected = false;
     })
-  
-   this.ciclosEscolares.forEach(plan => {
-    if (plan.valor == this.datosGeneralesForm.get('cicloEscolar')?.value) {
-      cicloEscolar=plan.nombre
-    }
-   })
-  
-   
-    let cicloSeparado= cicloEscolar.split('-')
+
+    this.ciclosEscolares.forEach(plan => {
+      if (plan.valor == this.datosGeneralesForm.get('cicloEscolar')?.value) {
+        cicloEscolar = plan.nombre
+      }
+    })
+
+
+    let cicloSeparado = cicloEscolar.split('-')
     let cicloInicio = parseInt(cicloSeparado[0])
-    let cicloFin=cicloSeparado[1]
-    let planesEstudio=[]
-  
-    let continuar=true
-  for (let i=this.planesEstudio.length -1; i>=0; i--) {
-    let nombrePlan = this.planesEstudio[i].nombre.split(' ')
-    // aqui vamos a obtener el numero siguiente  a plan 
-      let inicioPlan:any = nombrePlan[1]
-    
+    let cicloFin = cicloSeparado[1]
+    let planesEstudio = []
+
+    let continuar = true
+    for (let i = this.planesEstudio.length - 1; i >= 0; i--) {
+      let nombrePlan = this.planesEstudio[i].nombre.split(' ')
+      // aqui vamos a obtener el numero siguiente  a plan 
+      let inicioPlan: any = nombrePlan[1]
+
       planesEstudio.push(this.planesEstudio[i])
-      inicioPlan=parseInt(inicioPlan)
+      inicioPlan = parseInt(inicioPlan)
       if (continuar && inicioPlan <= cicloInicio) {
         this.planesEstudio[i].selected = true
-        this.datosGeneralesForm.patchValue({planEstudio: this.planesEstudio[i].valor})
+        this.datosGeneralesForm.patchValue({ planEstudio: this.planesEstudio[i].valor })
         this.datosGeneralesForm.controls['planEstudio'].markAsTouched()
         continuar = false;
         this.loader
       }
+    }
+
+    // this.ordernarPlanes(planesEstudio)
+    this.ordenarPlanesEstudioSelect()
   }
-  
-  // this.ordernarPlanes(planesEstudio)
-  this.ordenarPlanesEstudioSelect()
-  }
-  
+
 
   // estos siguentes dos metodos son para la animacion de cuando se fija la informacion de la cabecera
   toggleSelect() {
@@ -388,7 +392,7 @@ export class CargaSimpleComponent {
 
   cargarArchivos(event: any) {
     let archivo = event.target.files[0];
-    if(!archivo){
+    if (!archivo) {
       this.archivoCargado = {} as archivos
     }
     let nombre = archivo.name;
@@ -402,23 +406,23 @@ export class CargaSimpleComponent {
 
     reader.onload = () => {
       const base64Url = reader.result as string;
-      let url=base64Url.split(',')
-      let url64=url[1]
+      let url = base64Url.split(',')
+      let url64 = url[1]
       let tipoDocumento = event.target.name.split('-')
       tipoDocumento = tipoDocumento[0]
-      
-      const  documento: archivos = {
+
+      const documento: archivos = {
         "nombreArchivo": nombre.toString(),
         "tipo": type,
-        "extension":subtipo,
+        "extension": subtipo,
         "base64TextFile": url64,
-        "base64url":base64Url,
+        "base64url": base64Url,
         "isValid": false,
         "idFile": uuidv4(),
 
       };
 
-      this.hojaCertificado={
+      this.hojaCertificado = {
         "url_path": base64Url,
         "nombre_hoja": nombre.toString(),
         "tipo_archivo": type,
@@ -430,18 +434,18 @@ export class CargaSimpleComponent {
       this.archivoCargado = documento;
       this.imageFileValidator(this.archivoCargado);
     };
-    reader.readAsDataURL(archivo);   
-    this.EliminarArchivo=true; 
+    reader.readAsDataURL(archivo);
+    this.EliminarArchivo = true;
   }
 
   imageFileValidator(control: archivos) {
     const extension = control.extension;
-    
+
     if (extension != '') {
       const validExtensions = ['jpg', 'jpeg', 'png'];
       if (validExtensions.includes(extension)) {
         control.isValid = true;
-        this.dataToast={
+        this.dataToast = {
           titulo: 'Archivo subido',
           mensaje: `El archivo ${control.nombreArchivo} se ha subido correctamente`,
           icono: Iconos.UploadFile,
@@ -449,9 +453,9 @@ export class CargaSimpleComponent {
           mostrar: true
         }
       }
-      else{
+      else {
         control.isValid = false;
-        this.dataToast={
+        this.dataToast = {
           titulo: 'Archivo invalido',
           mensaje: `El archivo ${control.nombreArchivo} debe ser una imagen con extension jpg, jpeg o png`,
           icono: Iconos.Exclamation,
@@ -462,94 +466,206 @@ export class CargaSimpleComponent {
     }
 
   }
-  guardarBoleta(){
+  guardarBoleta() {
+    let motivoPromedioVacio = this.egresado.get('motivoPromedioVacio')?.value || null;
+    let folio = this.egresado.get('folioBoleta')?.value || null;
+    let promedio = this.egresado.get('promedioGral')?.value || null;
+    
+    console.log(motivoPromedioVacio, folio, promedio);
+    
+    if (
+      (folio !== null && promedio !== null && (motivoPromedioVacio === null || motivoPromedioVacio === '')) || 
+      (folio === null && promedio === null && motivoPromedioVacio !== null && motivoPromedioVacio !== '')
+    ) {
     const isObjectEmpty = (obj: object): boolean => {
       return Object.keys(obj).length === 0;
     };
-    
-  if((this.datosGeneralesForm.valid && this.egresado.valid) && (!isObjectEmpty(this.archivoCargado ) || this.hojaCargada) ){    
-  let data = {...this.egresado.value, ...this.datosGeneralesForm.value,...this.archivoCargado, token:this.userService.obtenerToken() }
 
-    let descripcionIds = this.getDatosDeIdentificadores( data.cicloEscolar, data.turno)
-    data = {...data,...descripcionIds}
+    if ((this.datosGeneralesForm.valid && this.egresado.valid) && (!isObjectEmpty(this.archivoCargado) || this.hojaCargada)) {
+      this.archivoCargado.base64url = ''
+      let data = { ...this.egresado.value, ...this.datosGeneralesForm.value, ...this.archivoCargado, token: this.userService.obtenerToken() }
+      data.base64TextFile=this.compressBase64(data.base64TextFile)
+      let descripcionIds = this.getDatosDeIdentificadores(data.cicloEscolar, data.turno)
+      data = { ...data, ...descripcionIds }
+      console.log('data enviada', data)
+      this.boletasAdd.cargarBoletaSoloPromedio(data).subscribe(response => {
+        if (!response.error) {
+          this.notificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
+          this.EliminarArchivo = false
+          if (this.fijarInformacion) {
+            let folio=this.egresado.get('folio')?.value
+            this.egresado.reset()
+            this.hojaCertificado = response.data
+            this.hojaCertificado.url_path = this.tituloPagina.urlImagenes + this.hojaCertificado.url_path
+            this.hojaCargada = true
 
-    this.boletasAdd.cargarBoletaSoloPromedio(data).subscribe(response =>{
-      if(!response.error){
-        this.notificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
-        this.EliminarArchivo=false
-        if(this.fijarInformacion) {
-          this.egresado.reset()
-          this.hojaCertificado=response.data
-          this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
-        }else{
-          this.datosGeneralesForm.reset()
-          this.egresado.reset()
-          this.archivoCargado={} as archivos
-          this.hojaCertificado= {} as hojaCertificado
+          } else {
+            this.datosGeneralesForm.reset()
+            this.egresado.reset()
+            this.archivoCargado = {} as archivos
+            this.hojaCertificado = {} as hojaCertificado
+            this.folioActual =0
+          }
+          if(this.autoincrementarFolio){
+            this.iterarFolio(folio)
         }
-      }else{
-        this.notificacionesService.mostrarAlertaConIcono('error al agregar boleta', response.mensaje +response.data, 'error' )
-      }
-    })
+        } else {
+          this.notificacionesService.mostrarAlertaConIcono('error al agregar boleta', response.mensaje + response.data, 'error')
+        }
+      })
+    }
+    else {
+      this.notificacionesService.mostrarAlertaConIcono('llenado de formulario', 'todos los campos son requeridos', 'error')
+      this.datosGeneralesForm.markAllAsTouched();
+      this.egresado.markAllAsTouched()
+    }
+    
   }
+  else if((parseFloat(promedio) >0 && folio == '') || (folio != '' &&  promedio =='' ) ){
+    this.notificacionesService.mostrarAlertaConIcono('llenado de formulario', 'El folio y el promedio son requeridos, no puede llenar solo uno de los campos', 'warning')
+  }
+  // en caso de que las condiciones no se cumplan vamos a abrir el modal para que se ingrese el motivo del por que el folio esta vacio y la calificacion es = 0
   else{
-    this.notificacionesService.mostrarAlertaConIcono('llenado de formulario', 'todos los campos son requeridos', 'error' )
-  }
+    this.modalBaja.mostrar()
+  }  
   }
 
-  getDatosDeIdentificadores(cicloEscolarId: string,turnoId:string,  ){
+  getDatosDeIdentificadores(cicloEscolarId: string, turnoId: string,) {
     let turno = this.Turnos.filter((turno) => turno.valor == turnoId)
     let cicloEscolar = this.ciclosEscolares.filter((cicloEscolar) => cicloEscolar.valor == cicloEscolarId)
-    return {turnoDes: turno[0].nombre, cicloDes: cicloEscolar[0].nombre}
+    return { turnoDes: turno[0].nombre, cicloDes: cicloEscolar[0].nombre }
   }
-  getHojaCertificado(){
-    let form = this.datosGeneralesForm 
+  getHojaCertificado() {
+    let form = this.datosGeneralesForm
     if (this.datosGeneralesForm.valid) {
-      let data = {"ctClave": form.get('claveCct')?.value, "idCiclo": form.get('cicloEscolar')?.value, 'idTurno': form.get('turno')?.value,  'grupo': form.get('grupo')?.value,'token' : this.userService.obtenerToken()}
-      this.historialServiceGet.getHojaCertificado(data).subscribe(response =>{
-        if(!response.error){
-          let dataToast:toastData ={
-            titulo:'hoja de certificados encontrada',
-            mensaje:'La fotografia de la hoja  perteneciente a la informacion ingresada ya se encuentra en el servidor',
-            icono:this.iconos.Check,
-            valido:true,
-            mostrar:true
-          } 
-          this.hojaCargada=true
-          this.dataToast=dataToast
-          this.hojaCertificado=response.data
-          this.hojaCertificado.url_path= this.tituloPagina.urlImagenes+ this.hojaCertificado.url_path
+      let data = { "ctClave": form.get('claveCct')?.value, "idCiclo": form.get('cicloEscolar')?.value, 'idTurno': form.get('turno')?.value, 'grupo': form.get('grupo')?.value, 'token': this.userService.obtenerToken() }
+      this.historialServiceGet.getHojaCertificado(data).subscribe(response => {
+        if (!response.error) {
+          let dataToast: toastData = {
+            titulo: 'hoja de certificados encontrada',
+            mensaje: 'La fotografia de la hoja  perteneciente a la informacion ingresada ya se encuentra en el servidor',
+            icono: this.iconos.Check,
+            valido: true,
+            mostrar: true
+          }
+          this.hojaCargada = true
+          this.dataToast = dataToast
+          this.hojaCertificado = response.data
+          this.hojaCertificado.url_path = this.tituloPagina.urlImagenes + this.hojaCertificado.url_path
           this.EliminarArchivo = false
           this.mostrarToast(7)
         }
-        else{
-          let dataToast:toastData ={
-            titulo:'Error al buscar hoja de certificado',
+        else {
+          let dataToast: toastData = {
+            titulo: 'Error al buscar hoja de certificado',
             mensaje: 'Aun no hay fotografia de los certificados de la información ingresada',
-            icono:this.iconos.XToCloseRounded,
-            valido:false,
-            mostrar:true
-          
+            icono: this.iconos.XToCloseRounded,
+            valido: false,
+            mostrar: true
+
           }
-          this.hojaCargada=false
-          this.hojaCertificado={} as hojaCertificado
-          this.dataToast=dataToast
+          this.hojaCargada = false
+          this.hojaCertificado = {} as hojaCertificado
+          this.dataToast = dataToast
           this.mostrarToast(7)
         }
       })
     }
   }
 
-  mostrarToast(tiempo:number){
-    this.dataToast.mostrar=true;
+  mostrarToast(tiempo: number) {
+    this.dataToast.mostrar = true;
     setTimeout(() => {
-      this.dataToast.mostrar=false;
-    }, tiempo*1000);
+      this.dataToast.mostrar = false;
+    }, tiempo * 1000);
   }
-  eliminarHojaCargada(){
-    this.archivoCargado={} as archivos
-    this.hojaCertificado={} as hojaCertificado
-    this.fileInput.nativeElement.value=''
+  eliminarHojaCargada() {
+    this.archivoCargado = {} as archivos
+    this.hojaCertificado = {} as hojaCertificado
+    this.fileInput.nativeElement.value = ''
   }
+
+  limpiarFormulario() {
+    location.reload()
+  }
+  incrementFolio() {
+    this.autoincrementarFolio = this.autoincrementarFolio ? false : true
+  }
+
+
+  iterarFolio(folioForm:string):void{
+    let folio:string | number=folioForm
+    if (this.autoincrementarFolio) {
+      folio=folio.trim()
+      folio= parseInt(folio)
+    this.folioActual=folio+1
+    this.egresado.patchValue({folioBoleta:this.folioActual})
+    console.log(this.folioActual)
+    this.notificacionesService.Toastify('Se ha autoincrementado el folio','success')
+    }
+  }
+
+  recibirMotivo(motivo:string){
+    if (motivo != '') {
+      this.egresado.patchValue({motivoPromedioVacio:motivo})
+      // console.log(this.egresado.get('motivoPromedioVacio')?.value)
+      this.modalBaja.ocultar()
+      this.guardarBoleta()
+    }
+ 
+  }
+  compressBase64(base64String: string): string {
+    // Convertir Base64 a un Uint8Array
+    const binaryString = atob(base64String);
+    const binaryLength = binaryString.length;
+    const uint8Array = new Uint8Array(binaryLength);
+    for (let i = 0; i < binaryLength; i++) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
+  
+    // Comprimir con gzip
+    const compressedData = Pako.gzip(uint8Array);
+  
+    // Convertir el Uint8Array comprimido a Base64
+    return this.uint8ArrayToBase64(compressedData);
+  }
+  
+  // Convertir Uint8Array a Base64
+  uint8ArrayToBase64(uint8Array: Uint8Array): string {
+    let binary = '';
+    for (let i = 0; i < uint8Array.byteLength; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(binary);
+  }
+
+  compressImage(file: File, quality: number = 0.8): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event: any) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+  
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+  
+          canvas.toBlob(
+            (blob) => {
+              if (blob) resolve(blob);
+              else reject(new Error('Error al comprimir la imagen'));
+            },
+            'image/jpeg', // Tipo de imagen
+            quality // Calidad (0.1 - 1)
+          );
+        };
+      };
+    });
+  }
+  
 
 }

@@ -47,8 +47,12 @@ z-index: -100;
     border-radius: 20px;
     
   }
+  .icono{
+    overflow: hidden;
+  }
   .icono>img{
 width: 100%;
+border-radius: 20px 20px 0px 0px;
   }
   form>p, form>small{
     align-self: flex-start;

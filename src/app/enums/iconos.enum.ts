@@ -38,5 +38,7 @@ export enum Iconos {
     RotateLeft ='fas fa-undo',
     Restore = 'fas fa-sync-alt',
     MoreFile='fas fa-file-signature',
-    List='fas fa-list'
+    List='fas fa-list',
+    Incrementar='far fa-arrow-alt-circle-up',
+    Search='fas fa-search',
   }

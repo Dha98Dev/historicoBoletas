@@ -181,14 +181,14 @@ if(tieneInformacion){
     })
   }
   else{
-    this.NotificacionesService.mostrarAlertaConIcono("Busqueda  para Filtar", "Debe de seleccionar y /o ingresar informacion para realizar la busqueda", 'warning')
+    this.NotificacionesService.mostrarAlertaConIcono("Parametros a filtrar", "Debe de seleccionar y /o ingresar información para realizar la búsqueda", 'warning')
     this.vacio = true;
     this.loader=false;
   }
   }
 
   validarBusquedaVacia(ValorCampo:string):boolean{
-return ValorCampo != ''  ? true : false;
+return ValorCampo != ''   ? true : false;
   }
 
   getCiclosEscolares() {

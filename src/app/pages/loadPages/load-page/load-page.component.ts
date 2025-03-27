@@ -127,7 +127,7 @@ export class LoadPageComponent {
       apellidoPaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)] ],
       apellidoMaterno: ['', [Validators.required,  Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),  Validators.maxLength(60)]],
       curp: ['', [  Validators.pattern(/^[A-Z]{1}[AEIOU]{1}[A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[HM]{1}(AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TL|TS|VZ|YN|ZS){1}[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]{1}\d{1}$/)]],
-      folioBoleta: ['', [Validators.required,  Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s-]+$/),  Validators.maxLength(60)]],
+      folioBoleta: ['', [Validators.required,  Validators.pattern(/^[a-zA-Z0-9]+(?:[-_][a-zA-Z0-9]+)*$/),  Validators.maxLength(60)]],
       promedioGral: ['',[Validators.required, Validators.pattern(/^\d+$/), Validators.min(0), Validators.max(10)]]
     });  
 
@@ -467,7 +467,8 @@ enviarInfo(){
   // })
   }else{
     this.NotificacionesService.mostrarAlertaSimple("Por favor, complete el formulario correctamente")
-    this.datosGeneralesForm.markAllAsTouched()
+    this.datosGeneralesForm.markAllAsTouched();
+    this.egresado.markAllAsTouched()
   }
 
 }

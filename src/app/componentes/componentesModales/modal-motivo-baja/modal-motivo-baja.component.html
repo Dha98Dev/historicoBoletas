@@ -1,0 +1,14 @@
+<div class="contenedor-confirmacion" [ngClass]="{'mostrar': mostrarModal}">
+    <div class="mensaje rounded d-flex flex-column py-5 px-2 animate__animated" [ngClass]="{'animate__zoomIn': mostrarModal}">
+        <p class="lead titulo fw-semibold fs-5">{{ titulo }}</p>
+        <div class="form-floating mt-5">
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" #textArea></textarea>
+            <label for="floatingTextarea2 fs-6" >Describa el motivo</label>
+          </div>
+        <div class="footer-modal d-flex justify-content-center gap-4 mt-3">
+            <button class="btn btn-lila" (click)="EmitirDatos()">Guardar Motivo</button>
+            <button class="btn btn-red" (click)="cancelar()">Cancelar</button>
+        </div>
+    </div>
+  </div>
+  

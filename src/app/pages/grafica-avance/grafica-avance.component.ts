@@ -71,15 +71,15 @@ public updateFlag:boolean = false;
 
   ngOnInit(){
 
-    this.tituloPagina.setNombre='Avance De Captura'
+    this.tituloPagina.setNombre='Avance de Captura'
 
     this.getInfoGraficas()
 
     this.chartOptions = {
-      title: { text: 'Avance por semana y Acumulado de Captura de Boletas' },
+      title: { text: 'Avance por Semana y Acumulado de Captura de Boletas' },
       xAxis: { 
         categories: [], // Inicializamos con un array vacío para las semanas
-        title: { text: 'Numero de la Semana en la que fue capturada' }
+        title: { text: 'Número de la Semana en la que fue Capturada' }
       },
       yAxis: { title: { text: 'Total de Boletas' } },
       series: [
@@ -99,17 +99,17 @@ public updateFlag:boolean = false;
     };
 
     this.chartOptionsMensual = {
-      title: { text: 'Avance mensual y Acumulado de Captura de Boletas' },
+      title: { text: 'Avance Mensual y Acumulado de Captura de Boletas' },
       xAxis: { 
         categories: [], // Inicializamos con un array vacío para las semanas
-        title: { text: 'Numero de Boletas Capturadas por mes' }
+        title: { text: 'Número de Boletas Capturadas por mes' }
       },
       yAxis: { title: { text: 'Total de Boletas' } },
       series: [
         {
           type: 'column',
           data: [], // Inicializamos el array vacío para el avance semanal
-          name: 'Boletas Capturadas mes',
+          name: 'Boletas Capturadas por Mes',
         },
         {
           type: 'line',
@@ -120,17 +120,17 @@ public updateFlag:boolean = false;
     };
 
     this.chartOptionsCapturistas = {
-      title: { text: 'Avance de Captura agrupado por Capturista' },
+      title: { text: 'Avance de Captura Agrupado por Capturista' },
       xAxis: { 
         categories: [], // Inicializamos con un array vacío para las semanas
-        title: { text: 'Numero de boletas capturadas ordenadas por Capturista' }
+        title: { text: 'Número de Boletas Capturadas Ordenadas por Capturista' }
       },
       yAxis: { title: { text: 'Total de Boletas' } },
       series: [
         {
           type: 'column',
           data: [], // Inicializamos el array vacío para el avance semanal
-          name: 'Boletas agrupadas por capturistas',
+          name: 'Boletas Agrupadas por Capturistas',
         },
         {
           type: 'line',
@@ -149,7 +149,7 @@ public updateFlag:boolean = false;
           }
       },
       title: {
-          text: 'Relacion de boletas que fueron revisadas y verificadas'
+          text: 'Relación de Boletas que Fueron Revisadas y Verificadas'
       },
       plotOptions: {
           pie: {
@@ -206,7 +206,7 @@ public updateFlag:boolean = false;
     const dataSeries = this.avanceSemanal.map(item => item.total_boletas);
     
     for (let i = 0; i < categoriasSemanas.length; i++) {
-      const element = categoriasSemanas[i].replace('Semana numero', 'Semana');
+      const element = categoriasSemanas[i].replace('Semana número', 'Semana');
       categoriasSemanas[i] = element;
     }
     
