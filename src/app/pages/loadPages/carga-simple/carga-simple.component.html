@@ -179,16 +179,8 @@
           <div class="body-form px-4 py-3">
             <!-- este es el div de los campos del egresado -->
             <div class="egresado d-flex gap-3 flex-wrap ">
-              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
-                <label>Ingrese el/los nombres</label>
-                <div class="input-val">
-                  <input (blur)="eliminarEspaciosBlancos(2,'nombre',1)" placeholder="ingrese nombre(s)" type="text"
-                    name="" class="form form-control" formControlName="nombre" id="nombre">
-                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'nombre') == 2"
-                    [smallIndicator]="true"></app-label-input-incompleto>
-                </div>
 
-              </div>
+
 
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese su Apellido Paterno</label>
@@ -196,13 +188,17 @@
                   <input (blur)="eliminarEspaciosBlancos(2,'apellidoPaterno',1)"
                     placeholder="ingrese al apellido paterno" type="text" name="" class="form form-control"
                     [value]="egresado.get('apellidoPaterno')?.value | uppercase" formControlName="apellidoPaterno"
-                    id="apellidoP">
+                    id="apellidoP" #inputApellido>
                   <app-label-input-incompleto *ngIf="getFieldStatus(3,'apellidoPaterno') == 2"
                     [smallIndicator]="true"></app-label-input-incompleto>
                 </div>
-
               </div>
 
+
+              
+              
+              
+              
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese su Apellido Materno </label>
                 <div class="input-val">
@@ -214,6 +210,21 @@
                 </div>
 
               </div>
+              
+              
+              <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
+                <label>Ingrese el/los nombres</label>
+                <div class="input-val">
+                  <input (blur)="eliminarEspaciosBlancos(2,'nombre',1)" placeholder="ingrese nombre(s)" type="text"
+                    name="" class="form form-control" formControlName="nombre" id="nombre" #inputApellido>
+                  <app-label-input-incompleto *ngIf="getFieldStatus(3,'nombre') == 2"
+                    [smallIndicator]="true"></app-label-input-incompleto>
+                </div>
+
+              </div>
+
+
+
 
               <div class="group-input d-flex flex-column  flex-grow-1 gap-2">
                 <label>Ingrese la Curp</label>
@@ -309,4 +320,4 @@
 
     <app-modal-motivo-baja #modalBaja [titulo]="'Ingrese el motivo por el que este registro no tendrá calificacion ni folio asignado'" (OnEmitInformacion)="recibirMotivo($event)" ></app-modal-motivo-baja>
 
-    <!-- <button (click)="modalBaja.mostrar()">mostrar modal de baja</button> -->
+    <button (click)="focus()">mostrar modal de baja</button>

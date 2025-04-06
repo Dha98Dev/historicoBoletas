@@ -47,6 +47,7 @@ export class CargaSimpleComponent {
   @ViewChild('toast') toast!: CardToastComponent
   @ViewChild('file', { static: false }) fileInput!: ElementRef;
   @ViewChild('modalBaja') modalBaja!: ModalMotivoBajaComponent;
+  @ViewChild('inputApellido') inputApellido!: ElementRef
 
   ngOnInit(): void {
 
@@ -498,7 +499,7 @@ export class CargaSimpleComponent {
             this.hojaCertificado = response.data
             this.hojaCertificado.url_path = this.tituloPagina.urlImagenes + this.hojaCertificado.url_path
             this.hojaCargada = true
-
+            this.inputApellido.nativeElement.focus()
           } else {
             this.datosGeneralesForm.reset()
             this.egresado.reset()
@@ -665,6 +666,10 @@ export class CargaSimpleComponent {
         };
       };
     });
+  }
+
+  focus(){
+    this.inputApellido.nativeElement.focus()
   }
   
 
