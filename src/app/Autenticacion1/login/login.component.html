@@ -16,14 +16,14 @@
         <small class="mb-5 ">Inicia sesion para acceder a la plataforma en segundos </small>
         <div class="contenedor-input">
           <input type="text" name="" id="usuario" placeholder="nombre de usuario" formControlName="usuario">
-          <label class="outline-danger  btn-icon text-white rounded px-2" *ngIf="isValidField('usuario')" > <i class="fas fa-exclamation-triangle"></i> {{getFieldError('usuario')!}} </label>
-          <label class="outline-success  text-white rounded px-2 btn-icon" *ngIf="login.get('usuario')?.valid"> <i class="fas fa-check-circle"></i> {{getFieldError('usuario')!}}</label>
+          <label class="w-50 outline-danger  btn-icon text-white rounded px-2" *ngIf="isValidField('usuario')" > <i class="fas fa-exclamation-triangle"></i> {{getFieldError('usuario')!}} </label>
+          <label class="w-50 outline-success  text-white rounded px-2 btn-icon" *ngIf="login.get('usuario')?.valid"> <i class="fas fa-check-circle"></i> {{getFieldError('usuario')!}}</label>
         </div>
   
         <div class="contenedor-input">
           <input type="password" name="" id="password" placeholder="contraseña" formControlName="password">
-          <label class="outline-danger  btn-icon text-white rounded px-2" *ngIf="isValidField('password')" ><i class="fas fa-exclamation-triangle"></i> {{getFieldError('password')!}} </label>
-          <label class="outline-success  text-white rounded px-2 btn-icon" *ngIf="login.get('password')?.valid"> <i class="fas fa-check-circle"></i> {{getFieldError('password')!}}</label>
+          <label class="w-50 outline-danger  btn-icon text-white rounded px-2" *ngIf="isValidField('password')" ><i class="fas fa-exclamation-triangle"></i> {{getFieldError('password')!}} </label>
+          <label class="w-50 outline-success  text-white rounded px-2 btn-icon" *ngIf="login.get('password')?.valid"> <i class="fas fa-check-circle"></i> {{getFieldError('password')!}}</label>
         </div>
   
         <button class="login-button" type="submit" >Ingresar</button>

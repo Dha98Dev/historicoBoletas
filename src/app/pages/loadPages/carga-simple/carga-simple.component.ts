@@ -77,7 +77,7 @@ export class CargaSimpleComponent {
 
 
     this.datosGeneralesForm = this.fb.group({
-      claveCct: ['', [Validators.required, Validators.pattern(/^18[A-Za-z]{3}[0-9]{4}[A-Za-z]$/), Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(10)]],
+      claveCct: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/), Validators.maxLength(10)]],
       cicloEscolar: ['', Validators.required],
       nivelEducativo: ['', Validators.required],
       planEstudio: ['', Validators.required],
@@ -470,6 +470,8 @@ export class CargaSimpleComponent {
   guardarBoleta() {
     let motivoPromedioVacio = this.egresado.get('motivoPromedioVacio')?.value || null;
     let folio = this.egresado.get('folioBoleta')?.value || null;
+    this.folioActual=parseInt(folio)
+    // this.iterarFolio(this.folioActual)
     let promedio = this.egresado.get('promedioGral')?.value || null;
     
     console.log(motivoPromedioVacio, folio, promedio);
@@ -485,13 +487,11 @@ export class CargaSimpleComponent {
     if ((this.datosGeneralesForm.valid && this.egresado.valid) && (!isObjectEmpty(this.archivoCargado) || this.hojaCargada)) {
       this.archivoCargado.base64url = ''
       let data = { ...this.egresado.value, ...this.datosGeneralesForm.value, ...this.archivoCargado, token: this.userService.obtenerToken() }
-      data.base64TextFile=this.compressBase64(data.base64TextFile)
       let descripcionIds = this.getDatosDeIdentificadores(data.cicloEscolar, data.turno)
       data = { ...data, ...descripcionIds }
       console.log('data enviada', data)
       this.boletasAdd.cargarBoletaSoloPromedio(data).subscribe(response => {
-        if (!response.error) {
-          this.notificacionesService.mostrarAlertaConIcono('boleta agregada', 'La boleta ha sido agregada correctamente', 'success')
+        if (!response.error) {0
           this.EliminarArchivo = false
           if (this.fijarInformacion) {
             let folio=this.egresado.get('folio')?.value
@@ -508,7 +508,7 @@ export class CargaSimpleComponent {
             this.folioActual =0
           }
           if(this.autoincrementarFolio){
-            this.iterarFolio(folio)
+            this.iterarFolio(this.folioActual)
         }
         } else {
           this.notificacionesService.mostrarAlertaConIcono('error al agregar boleta', response.mensaje + response.data, 'error')
@@ -594,12 +594,9 @@ export class CargaSimpleComponent {
   }
 
 
-  iterarFolio(folioForm:string):void{
-    let folio:string | number=folioForm
+  iterarFolio(folioForm:number):void{
     if (this.autoincrementarFolio) {
-      folio=folio.trim()
-      folio= parseInt(folio)
-    this.folioActual=folio+1
+    this.folioActual+=1
     this.egresado.patchValue({folioBoleta:this.folioActual})
     console.log(this.folioActual)
     this.notificacionesService.Toastify('Se ha autoincrementado el folio','success')
@@ -615,58 +612,7 @@ export class CargaSimpleComponent {
     }
  
   }
-  compressBase64(base64String: string): string {
-    // Convertir Base64 a un Uint8Array
-    const binaryString = atob(base64String);
-    const binaryLength = binaryString.length;
-    const uint8Array = new Uint8Array(binaryLength);
-    for (let i = 0; i < binaryLength; i++) {
-      uint8Array[i] = binaryString.charCodeAt(i);
-    }
-  
-    // Comprimir con gzip
-    const compressedData = Pako.gzip(uint8Array);
-  
-    // Convertir el Uint8Array comprimido a Base64
-    return this.uint8ArrayToBase64(compressedData);
-  }
-  
-  // Convertir Uint8Array a Base64
-  uint8ArrayToBase64(uint8Array: Uint8Array): string {
-    let binary = '';
-    for (let i = 0; i < uint8Array.byteLength; i++) {
-      binary += String.fromCharCode(uint8Array[i]);
-    }
-    return btoa(binary);
-  }
 
-  compressImage(file: File, quality: number = 0.8): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event: any) => {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-  
-          canvas.toBlob(
-            (blob) => {
-              if (blob) resolve(blob);
-              else reject(new Error('Error al comprimir la imagen'));
-            },
-            'image/jpeg', // Tipo de imagen
-            quality // Calidad (0.1 - 1)
-          );
-        };
-      };
-    });
-  }
 
   focus(){
     this.inputApellido.nativeElement.focus()
